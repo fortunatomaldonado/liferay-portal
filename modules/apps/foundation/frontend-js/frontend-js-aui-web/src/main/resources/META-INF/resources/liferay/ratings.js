@@ -73,6 +73,13 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
+						Liferay.on(
+							'sessionExpired',
+							function(event) {
+								A.bind(instance._updateScores('NaN'), instance);
+							}
+						);
+
 						instance._renderRatings();
 					},
 
@@ -115,10 +122,10 @@ AUI.add(
 						var voteLabel = '';
 
 						if (totalEntries == 1) {
-							voteLabel = Liferay.Language.get('vote');
+							voteLabel = 'Vote';
 						}
 						else {
-							voteLabel = Liferay.Language.get('votes');
+							voteLabel = 'Votes';
 						}
 
 						return Lang.sub(
@@ -164,10 +171,10 @@ AUI.add(
 						var stars = instance._ratingScoreNode.all('.icon-star').size();
 
 						if (stars == 1) {
-							message = Liferay.Language.get('star');
+							message = 'Star';
 						}
 						else {
-							message = Liferay.Language.get('stars');
+							message = 'Stars';
 						}
 
 						Liferay.Portal.ToolTip.show(event.currentTarget, stars + ' ' + message);
@@ -182,10 +189,10 @@ AUI.add(
 							var message = '';
 
 							if (averageScore == 1.0) {
-								message = Liferay.Language.get('the-average-rating-is-x-star-out-of-x');
+								message = 'The\x20average\x20rating\x20is\x20\x7b0\x7d\x20star\x20out\x20of\x20\x7b1\x7d\x2e';
 							}
 							else {
-								message = Liferay.Language.get('the-average-rating-is-x-stars-out-of-x');
+								message = 'The\x20average\x20rating\x20is\x20\x7b0\x7d\x20stars\x20out\x20of\x20\x7b1\x7d\x2e';
 							}
 
 							var averageRatingText = Lang.sub(
@@ -208,11 +215,11 @@ AUI.add(
 								var ratingScore = '';
 
 								if (score === i + 1) {
-									ratingMessage = i === 0 ? Liferay.Language.get('you-have-rated-this-x-star-out-of-x') : Liferay.Language.get('you-have-rated-this-x-stars-out-of-x');
+									ratingMessage = i === 0 ? 'You\x20have\x20rated\x20this\x20\x7b0\x7d\x20star\x20out\x20of\x20\x7b1\x7d\x2e' : 'You\x20have\x20rated\x20this\x20\x7b0\x7d\x20stars\x20out\x20of\x20\x7b1\x7d\x2e';
 									ratingScore = score;
 								}
 								else {
-									ratingMessage = i === 0 ? Liferay.Language.get('rate-this-x-star-out-of-x') : Liferay.Language.get('rate-this-x-stars-out-of-x');
+									ratingMessage = i === 0 ? 'Rate\x20this\x20\x7b0\x7d\x20star\x20out\x20of\x20\x7b1\x7d\x2e' : 'Rate\x20this\x20\x7b0\x7d\x20stars\x20out\x20of\x20\x7b1\x7d\x2e';
 									ratingScore = i + 1;
 								}
 
@@ -373,7 +380,7 @@ AUI.add(
 
 						var json = xhr.get(STR_RESPONSE_DATA);
 
-						var description = Liferay.Language.get('average');
+						var description = 'Average';
 
 						var averageScore = json.averageScore * instance.get(STR_SIZE);
 
@@ -496,61 +503,78 @@ AUI.add(
 						var instance = this;
 
 						var cssClasses = instance.ratings.get('cssClasses');
+						
 						var elements = instance.ratings.get('elements');
-
-						var cssClassesOn = cssClasses.on;
-
-						var ratingThumbDown = elements.item(1);
-
-						var ratingThumbDownCssClassOn = false;
-
-						if (ratingThumbDown) {
-							ratingThumbDownCssClassOn = ratingThumbDown.hasClass(cssClassesOn);
-						}
 
 						var ratingThumbUp = elements.item(0);
 
-						var ratingThumbUpCssClassOn = false;
+						var ratingThumbDown = elements.item(1);
 
-						if (ratingThumbUp) {
-							ratingThumbUpCssClassOn = ratingThumbUp.hasClass(cssClassesOn);
+						if (isNaN(thumbScore.negativeVotes)) {
+							var sessionTimeout = 'You\x20need\x20to\x20be\x20signed\x20in\x20to\x20rate\x2e';
+
+							ratingThumbUp.attr('title', sessionTimeout);
+							ratingThumbUp.addClass(cssClasses.off);
+							ratingThumbUp.removeClass(cssClasses.on);
+
+							ratingThumbDown.attr('title', sessionTimeout);
+							ratingThumbDown.addClass(cssClasses.off);
+							ratingThumbDown.removeClass(cssClasses.on);
+
+							instance.ratings.set('disabled', true);
 						}
+						else {
 
-						var thumbDownMessage = '';
-						var thumbUpMessage = '';
+							var cssClassesOn = cssClasses.on;
 
-						if (ratingThumbDown) {
-							if (ratingThumbDownCssClassOn) {
-								thumbDownMessage = Liferay.Language.get('you-have-rated-this-as-bad');
+							var ratingThumbDownCssClassOn = false;
+
+							if (ratingThumbDown) {
+								ratingThumbDownCssClassOn = ratingThumbDown.hasClass(cssClassesOn);
 							}
-							else {
-								thumbDownMessage = Liferay.Language.get('rate-this-as-bad');
+
+							var ratingThumbUpCssClassOn = false;
+
+							if (ratingThumbUp) {
+								ratingThumbUpCssClassOn = ratingThumbUp.hasClass(cssClassesOn);
 							}
 
-							ratingThumbDown.attr('title', thumbDownMessage);
+							var thumbDownMessage = '';
+							var thumbUpMessage = '';
 
-							ratingThumbDown.html(thumbScore.negativeVotes);
-						}
+							if (ratingThumbDown) {
+								if (ratingThumbDownCssClassOn) {
+									thumbDownMessage = 'You\x20have\x20rated\x20this\x20as\x20bad\x2e';
+								}
+								else {
+									thumbDownMessage = 'Rate\x20this\x20as\x20bad\x2e';
+								}
 
-						if (ratingThumbDown && ratingThumbUpCssClassOn) {
-							thumbUpMessage = Liferay.Language.get('you-have-rated-this-as-good');
-						}
-						else if (ratingThumbDown && !ratingThumbUpCssClassOn) {
-							thumbUpMessage = Liferay.Language.get('rate-this-as-good');
-						}
-						else if (!ratingThumbDown && ratingThumbUpCssClassOn) {
-							thumbUpMessage = Liferay.Language.get('unlike-this');
-						}
-						else if (!ratingThumbDown && !ratingThumbUpCssClassOn) {
-							thumbUpMessage = Liferay.Language.get('like-this');
-						}
+								ratingThumbDown.attr('title', thumbDownMessage);
 
-						if (ratingThumbUp) {
-							ratingThumbUp.attr('title', thumbUpMessage);
+								ratingThumbDown.html(thumbScore.negativeVotes);
+							}
 
-							ratingThumbUp.html(thumbScore.positiveVotes);
+							if (ratingThumbDown && ratingThumbUpCssClassOn) {
+								thumbUpMessage = 'You\x20have\x20rated\x20this\x20as\x20good\x2e';
+							}
+							else if (ratingThumbDown && !ratingThumbUpCssClassOn) {
+								thumbUpMessage = 'Rate\x20this\x20as\x20good\x2e';
+							}
+							else if (!ratingThumbDown && ratingThumbUpCssClassOn) {
+								thumbUpMessage = 'Unlike\x20This';
+							}
+							else if (!ratingThumbDown && !ratingThumbUpCssClassOn) {
+								thumbUpMessage = 'Like\x20This';
+							}
+
+							if (ratingThumbUp) {
+								ratingThumbUp.attr('title', thumbUpMessage);
+
+								ratingThumbUp.html(thumbScore.positiveVotes);
+							}
 						}
-					}
+					},
 				}
 			}
 		);
