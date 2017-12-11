@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.scheduler.SchedulerClusterInvokingThreadLocal;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -560,32 +559,16 @@ public class ClusterSchedulerEngine
 				return;
 			}
 			catch (Exception e) {
-				StringBundler sb = new StringBundler(7);
+				StringBundler sb = new StringBundler(5);
 
 				sb.append(
 					"Unable to load memory clustered jobs from master in ");
 				sb.append(_callMasterTimeout);
 				sb.append(" seconds, you might need to increase value set to ");
 				sb.append("\"clusterable.advice.call.master.timeout\", ");
-				sb.append("will retry in ");
-				sb.append(_callMasterTimeout);
-				sb.append(" seconds");
+				sb.append("will retry again");
 
 				_log.error(sb.toString(), e);
-			}
-
-			try {
-				Thread.sleep(_callMasterTimeout);
-			}
-			catch (InterruptedException ie) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"Give up the master call retry waiting due to " +
-							"interruption",
-						ie);
-				}
-
-				return;
 			}
 		}
 	}
@@ -640,9 +623,6 @@ public class ClusterSchedulerEngine
 
 		ClusterableContextThreadLocal.putThreadLocalContext(
 			PLUGIN_READY, pluginReady);
-		ClusterableContextThreadLocal.putThreadLocalContext(
-			SCHEDULER_CLUSTER_INVOKING,
-			SchedulerClusterInvokingThreadLocal.isEnabled());
 	}
 
 	protected void setClusterExecutor(ClusterExecutor clusterExecutor) {
@@ -690,9 +670,6 @@ public class ClusterSchedulerEngine
 	protected static final String PLUGIN_READY = "plugin.ready";
 
 	protected static final String PORTAL_READY = "portal.ready";
-
-	protected static final String SCHEDULER_CLUSTER_INVOKING =
-		"scheduler.cluster.invoking";
 
 	private static void _addMemoryClusteredJob(
 			SchedulerResponse schedulerResponse, String osgiServiceIdentifier)

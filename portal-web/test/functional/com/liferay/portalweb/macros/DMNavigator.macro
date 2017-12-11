@@ -38,17 +38,9 @@
 	</command>
 
 	<command name="gotoDocumentCP">
-		<var name="key_dmDocumentTitle" value="${dmDocumentTitle}" />
-
-		<if>
-			<condition function="IsElementPresent" locator1="Icon#DISPLAY_STYLE_DESCRIPTIVE_ACTIVE" />
-			<then>
-				<execute function="AssertClick" locator1="DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_TITLE" value1="${dmDocumentTitle}" />
-			</then>
-			<else>
-				<execute function="AssertClick" locator1="DocumentsAndMedia#ICON_DOCUMENT_TITLE_LINK" value1="${dmDocumentTitle}" />
-			</else>
-		</if>
+		<execute macro="LexiconEntry#gotoEntry">
+			<var name="rowEntry" value="${dmDocumentTitle}" />
+		</execute>
 	</command>
 
 	<command name="gotoDocumentDetails">
@@ -76,11 +68,7 @@
 	</command>
 
 	<command name="gotoDocumentType">
-		<execute function="Click" locator1="Icon#HEADER_VERTICAL_ELLIPSIS" />
-
-		<execute function="AssertClick" locator1="MenuItem#ANY_MENU_ITEM" value1="Document Types">
-			<var name="key_menuItem" value="Document Types" />
-		</execute>
+		<execute function="AssertClick" locator1="NavBar#DOCUMENT_TYPES" value1="Document Types" />
 	</command>
 
 	<command name="gotoDocumentVersion">

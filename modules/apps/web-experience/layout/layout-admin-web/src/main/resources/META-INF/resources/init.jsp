@@ -22,8 +22,9 @@
 taglib uri="http://liferay.com/tld/aui" prefix="aui" %><%@
 taglib uri="http://liferay.com/tld/expando" prefix="liferay-expando" %><%@
 taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
-taglib uri="http://liferay.com/tld/layout" prefix="liferay-layout" %><%@
 taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
+taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %><%@
+taglib uri="http://liferay.com/tld/soy" prefix="soy" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
@@ -33,11 +34,17 @@ page import="com.liferay.document.library.kernel.util.DLValidatorUtil" %><%@
 page import="com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys" %><%@
 page import="com.liferay.exportimport.kernel.staging.LayoutStagingUtil" %><%@
 page import="com.liferay.exportimport.kernel.staging.StagingUtil" %><%@
+page import="com.liferay.layout.admin.web.internal.display.context.LayoutPageTemplateDisplayContext" %><%@
 page import="com.liferay.layout.admin.web.internal.display.context.LayoutsAdminDisplayContext" %><%@
-page import="com.liferay.layout.admin.web.internal.display.context.LayoutsPrototypeTreeDisplayContext" %><%@
-page import="com.liferay.layout.admin.web.internal.display.context.LayoutsTreeDisplayContext" %><%@
 page import="com.liferay.layout.admin.web.internal.display.context.OrphanPortletsDisplayContext" %><%@
 page import="com.liferay.layout.admin.web.internal.util.comparator.ThemeNameComparator" %><%@
+page import="com.liferay.layout.page.template.constants.LayoutPageTemplateActionKeys" %><%@
+page import="com.liferay.layout.page.template.exception.DuplicateLayoutPageTemplateCollectionException" %><%@
+page import="com.liferay.layout.page.template.exception.LayoutPageTemplateCollectionNameException" %><%@
+page import="com.liferay.layout.page.template.model.LayoutPageTemplateCollection" %><%@
+page import="com.liferay.layout.page.template.model.LayoutPageTemplateEntry" %><%@
+page import="com.liferay.layout.page.template.service.permission.LayoutPageTemplateCollectionPermission" %><%@
+page import="com.liferay.layout.page.template.service.permission.LayoutPageTemplateEntryPermission" %><%@
 page import="com.liferay.portal.kernel.bean.BeanParamUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker" %><%@
 page import="com.liferay.portal.kernel.dao.search.ResultRow" %><%@
@@ -54,7 +61,6 @@ page import="com.liferay.portal.kernel.exception.SitemapChangeFrequencyException
 page import="com.liferay.portal.kernel.exception.SitemapIncludeException" %><%@
 page import="com.liferay.portal.kernel.exception.SitemapPagePriorityException" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
-page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
 page import="com.liferay.portal.kernel.layoutconfiguration.util.RuntimePageUtil" %><%@
 page import="com.liferay.portal.kernel.model.ColorScheme" %><%@
 page import="com.liferay.portal.kernel.model.Group" %><%@

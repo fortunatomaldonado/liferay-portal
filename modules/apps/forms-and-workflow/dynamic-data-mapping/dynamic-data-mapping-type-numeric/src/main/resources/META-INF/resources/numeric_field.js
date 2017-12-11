@@ -80,7 +80,7 @@ AUI.add(
 
 						var inputGroup = container.one('.input-group-container');
 
-						inputGroup.insert(container.one('.help-block'), 'after');
+						inputGroup.insert(container.one('.form-feedback-indicator'), 'after');
 					},
 
 					_onNumericFieldKeyPress: function(event) {
@@ -88,7 +88,7 @@ AUI.add(
 
 						var charCode = (typeof event.which == 'number') ? event.which : event.keyCode;
 
-						if ((charCode >= 48 && charCode <= 57) || charCode === 46) {
+						if (charCode < 32 || (charCode >= 48 && charCode <= 57) || charCode === 46) {
 							return true;
 						}
 

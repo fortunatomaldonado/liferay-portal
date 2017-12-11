@@ -38,10 +38,8 @@ import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.persistence.CompanyProvider;
 import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
@@ -305,7 +303,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append("groupId=");
 		msg.append(groupId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -356,7 +354,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append("groupId=");
 		msg.append(groupId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -1183,7 +1181,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append("fragmentCollectionId=");
 		msg.append(fragmentCollectionId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -1236,7 +1234,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append("fragmentCollectionId=");
 		msg.append(fragmentCollectionId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -1720,7 +1718,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append(", fragmentCollectionId=");
 		msg.append(fragmentCollectionId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -1778,7 +1776,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append(", fragmentCollectionId=");
 		msg.append(fragmentCollectionId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -2450,7 +2448,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 			msg.append(", name=");
 			msg.append(name);
 
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
+			msg.append("}");
 
 			if (_log.isDebugEnabled()) {
 				_log.debug(msg.toString());
@@ -2515,7 +2513,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 			if (name == null) {
 				query.append(_FINDER_COLUMN_G_N_NAME_1);
 			}
-			else if (name.equals(StringPool.BLANK)) {
+			else if (name.equals("")) {
 				query.append(_FINDER_COLUMN_G_N_NAME_3);
 			}
 			else {
@@ -2622,7 +2620,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 			if (name == null) {
 				query.append(_FINDER_COLUMN_G_N_NAME_1);
 			}
-			else if (name.equals(StringPool.BLANK)) {
+			else if (name.equals("")) {
 				query.append(_FINDER_COLUMN_G_N_NAME_3);
 			}
 			else {
@@ -2792,9 +2790,8 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 					if ((groupId != fragmentEntry.getGroupId()) ||
 							(fragmentCollectionId != fragmentEntry.getFragmentCollectionId()) ||
 							!StringUtil.wildcardMatches(
-								fragmentEntry.getName(), name,
-								CharPool.UNDERLINE, CharPool.PERCENT,
-								CharPool.BACK_SLASH, false)) {
+								fragmentEntry.getName(), name, '_', '%', '\\',
+								false)) {
 						list = null;
 
 						break;
@@ -2825,7 +2822,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 			if (name == null) {
 				query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_1);
 			}
-			else if (name.equals(StringPool.BLANK)) {
+			else if (name.equals("")) {
 				query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_3);
 			}
 			else {
@@ -2927,7 +2924,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append(", name=");
 		msg.append(name);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -2990,7 +2987,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		msg.append(", name=");
 		msg.append(name);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchEntryException(msg.toString());
 	}
@@ -3094,7 +3091,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_3);
 		}
 		else {
@@ -3283,7 +3280,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_3);
 		}
 		else {
@@ -3435,7 +3432,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_3);
 		}
 		else {
@@ -3616,7 +3613,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 			if (name == null) {
 				query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_1);
 			}
-			else if (name.equals(StringPool.BLANK)) {
+			else if (name.equals("")) {
 				query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_3);
 			}
 			else {
@@ -3689,7 +3686,7 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_FCI_LIKEN_NAME_3);
 		}
 		else {
@@ -4305,12 +4302,12 @@ public class FragmentEntryPersistenceImpl extends BasePersistenceImpl<FragmentEn
 		for (Serializable primaryKey : uncachedPrimaryKeys) {
 			query.append((long)primaryKey);
 
-			query.append(StringPool.COMMA);
+			query.append(",");
 		}
 
 		query.setIndex(query.index() - 1);
 
-		query.append(StringPool.CLOSE_PARENTHESIS);
+		query.append(")");
 
 		String sql = query.toString();
 

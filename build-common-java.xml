@@ -318,8 +318,8 @@
 		</if>
 	</target>
 
-	<target depends="jar,jar-javadoc,jar-sources" name="publish-portal-release">
-		<publish-portal-artifact >
+	<target depends="check-stale-release,jar,jar-javadoc,jar-sources" name="publish-portal-release">
+		<publish-portal-artifact>
 			<attach classifier="javadoc" file="${artifact.name}-javadoc.jar" />
 			<attach classifier="sources" file="${artifact.name}-sources.jar" />
 		</publish-portal-artifact>

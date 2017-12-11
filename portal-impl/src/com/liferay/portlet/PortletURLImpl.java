@@ -14,6 +14,9 @@
 
 package com.liferay.portlet;
 
+import com.liferay.petra.encryptor.Encryptor;
+import com.liferay.petra.encryptor.EncryptorException;
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -36,7 +39,6 @@ import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Base64;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -53,8 +55,6 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.security.lang.DoPrivilegedUtil;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.util.Encryptor;
-import com.liferay.util.EncryptorException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -414,8 +414,10 @@ public class PortletURLImpl
 			!mappedCacheability.equals(PORTLET)) {
 
 			throw new IllegalArgumentException(
-				"Cacheability " + cacheability + " is not FULL, " + FULL +
-					", PAGE, " + PAGE + ", or PORTLET, " + PORTLET);
+				StringBundler.concat(
+					"Cacheability ", cacheability, " is not FULL, ",
+					String.valueOf(FULL), ", PAGE, ", PAGE, ", or PORTLET, ",
+					String.valueOf(PORTLET)));
 		}
 
 		if (_portletRequest instanceof ResourceRequest) {
@@ -715,7 +717,9 @@ public class PortletURLImpl
 			biConsumer.accept("p_p_lifecycle", "2");
 		}
 
-		if (_windowStateString != null) {
+		if ((_windowStateString != null) &&
+			!_cacheability.equals(ResourceURL.FULL)) {
+
 			biConsumer.accept("p_p_state", _windowStateString);
 		}
 
@@ -723,7 +727,9 @@ public class PortletURLImpl
 			biConsumer.accept("p_p_state_rcv", "1");
 		}
 
-		if (_portletModeString != null) {
+		if ((_portletModeString != null) &&
+			!_cacheability.equals(ResourceURL.FULL)) {
+
 			biConsumer.accept("p_p_mode", _portletModeString);
 		}
 
@@ -946,7 +952,10 @@ public class PortletURLImpl
 
 		Map<String, String[]> renderParams = _params;
 
-		if (_copyCurrentRenderParameters) {
+		if (_copyCurrentRenderParameters &&
+			!(_lifecycle.equals(PortletRequest.RESOURCE_PHASE) &&
+			 _cacheability.equals(ResourceURL.FULL))) {
+
 			renderParams = _mergeWithRenderParameters(renderParams);
 		}
 
@@ -958,11 +967,13 @@ public class PortletURLImpl
 				continue;
 			}
 
-			String publicRenderParameterName = getPublicRenderParameterName(
-				name);
+			if (!_lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
+				String publicRenderParameterName = getPublicRenderParameterName(
+					name);
 
-			if (Validator.isNotNull(publicRenderParameterName)) {
-				name = publicRenderParameterName;
+				if (Validator.isNotNull(publicRenderParameterName)) {
+					name = publicRenderParameterName;
+				}
 			}
 
 			for (String value : values) {
@@ -1078,7 +1089,10 @@ public class PortletURLImpl
 
 		Map<String, String[]> renderParams = _params;
 
-		if (_copyCurrentRenderParameters) {
+		if (_copyCurrentRenderParameters &&
+			!(_lifecycle.equals(PortletRequest.RESOURCE_PHASE) &&
+			 _cacheability.equals(ResourceURL.FULL))) {
+
 			renderParams = _mergeWithRenderParameters(renderParams);
 		}
 
@@ -1094,11 +1108,13 @@ public class PortletURLImpl
 				continue;
 			}
 
-			String publicRenderParameterName = getPublicRenderParameterName(
-				name);
+			if (_lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
+				String publicRenderParameterName = getPublicRenderParameterName(
+					name);
 
-			if (Validator.isNotNull(publicRenderParameterName)) {
-				name = publicRenderParameterName;
+				if (Validator.isNotNull(publicRenderParameterName)) {
+					name = publicRenderParameterName;
+				}
 			}
 
 			for (String value : values) {
@@ -1130,8 +1146,7 @@ public class PortletURLImpl
 			}
 		}
 
-		String navigationalState = Base64.toURLSafe(
-			Base64.encode(parameterBytes));
+		String navigationalState = Base64.encodeToURL(parameterBytes);
 
 		sb.append(navigationalState);
 
@@ -1239,6 +1254,10 @@ public class PortletURLImpl
 		_removePublicRenderParameters = new LinkedHashSet<>();
 		_secure = PortalUtil.isSecure(request);
 		_wsrp = ParamUtil.getBoolean(request, "wsrp");
+
+		if (lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
+			_copyCurrentRenderParameters = true;
+		}
 
 		if (!portlet.isUndeployedPortlet()) {
 			Set<String> autopropagatedParameters =

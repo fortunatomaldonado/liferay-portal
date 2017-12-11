@@ -18,12 +18,12 @@ import com.ecyrd.jspwiki.WikiContext;
 import com.ecyrd.jspwiki.WikiException;
 import com.ecyrd.jspwiki.WikiPage;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AggregateResourceBundleLoader;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -31,8 +31,8 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.language.LanguageResources;
 import com.liferay.wiki.configuration.WikiGroupServiceConfiguration;
+import com.liferay.wiki.engine.BaseWikiEngine;
 import com.liferay.wiki.engine.WikiEngine;
-import com.liferay.wiki.engine.input.editor.common.BaseInputEditorWikiEngine;
 import com.liferay.wiki.exception.PageContentException;
 import com.liferay.wiki.service.WikiPageLocalService;
 
@@ -62,7 +62,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	property = {"service.ranking:Integer=-1000"}, service = WikiEngine.class
 )
-public class JSPWikiEngine extends BaseInputEditorWikiEngine {
+public class JSPWikiEngine extends BaseWikiEngine {
 
 	public static String decodeJSPWikiName(String jspWikiName) {
 		return StringUtil.replace(
@@ -193,6 +193,11 @@ public class JSPWikiEngine extends BaseInputEditorWikiEngine {
 		WikiContext wikiContext = new WikiContext(engine, jspWikiPage);
 
 		return _decodeJSPWikiContent(engine.textToHTML(wikiContext, content));
+	}
+
+	@Override
+	protected ServletContext getEditPageServletContext() {
+		return _wikiEngineInputEditorServletContext;
 	}
 
 	protected LiferayJSPWikiEngine getEngine(long nodeId) throws WikiException {
@@ -353,9 +358,9 @@ public class JSPWikiEngine extends BaseInputEditorWikiEngine {
 				url = linkValues.substring(0, pos);
 			}
 
-			String newLink =
-				"[[" + _encodeJSPWikiName(url) + "|" +
-					_encodeJSPWikiName(name) + "]]";
+			String newLink = StringBundler.concat(
+				"[[", _encodeJSPWikiName(url), "|", _encodeJSPWikiName(name),
+				"]]");
 
 			content = StringUtil.replace(content, link, newLink);
 		}
@@ -387,6 +392,12 @@ public class JSPWikiEngine extends BaseInputEditorWikiEngine {
 	private Properties _properties = new Properties();
 	private ResourceBundleLoader _resourceBundleLoader;
 	private ServletContext _servletContext;
+
+	@Reference(
+		target = "(osgi.web.symbolicname=com.liferay.wiki.engine.input.editor.common)"
+	)
+	private ServletContext _wikiEngineInputEditorServletContext;
+
 	private WikiGroupServiceConfiguration _wikiGroupServiceConfiguration;
 	private WikiPageLocalService _wikiPageLocalService;
 

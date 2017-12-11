@@ -14,6 +14,7 @@
 
 package com.liferay.alloy.mvc;
 
+import com.liferay.alloy.mvc.internal.json.web.service.AlloyControllerInvokerManager;
 import com.liferay.alloy.mvc.internal.json.web.service.AlloyMockUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
@@ -22,6 +23,7 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONSerializable;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -318,6 +320,15 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		}
 	}
 
+	@SuppressWarnings("unused")
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
+		rollbackFor = {Exception.class}
+	)
+	public void invoke(Method method) throws Exception {
+		method.invoke(this);
+	}
+
 	@Override
 	public void persistModel(BaseModel<?> baseModel) throws Exception {
 		if (!(baseModel instanceof PersistedModel)) {
@@ -534,14 +545,12 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	protected void executeResource(Method method) throws Exception {
 		try {
 			if (method != null) {
-				Class<?> superClass = clazz.getSuperclass();
-
-				Method invokeMethod = superClass.getDeclaredMethod(
+				Method invokeMethod = clazz.getMethod(
 					"invoke", new Class<?>[] {Method.class});
 
 				ServiceBeanMethodInvocationFactoryUtil.proceed(
-					this, BaseAlloyControllerImpl.class, invokeMethod,
-					new Object[] {method}, new String[] {"transactionAdvice"});
+					this, clazz, invokeMethod, new Object[] {method},
+					new String[] {"transactionAdvice"});
 			}
 		}
 		catch (Exception e) {
@@ -1058,13 +1067,16 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		user = themeDisplay.getUser();
 	}
 
-	@SuppressWarnings("unused")
-	@Transactional(
-		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
-		rollbackFor = {Exception.class}
-	)
-	protected void invoke(Method method) throws Exception {
-		method.invoke(this);
+	protected JSONSerializable invokeAlloyController(
+			String controller, String lifecycle, String action,
+			Object[] parameters)
+		throws Exception {
+
+		AlloyControllerInvokerManager alloyControllerInvokerManager =
+			alloyPortlet.getAlloyInvokerManager();
+
+		return alloyControllerInvokerManager.invokeAlloyController(
+			controller, lifecycle, action, parameters);
 	}
 
 	protected boolean isRespondingTo() {
@@ -1275,9 +1287,9 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 		String simpleClassName = modelClassName.substring(pos + 7);
 
-		String serviceClassName =
-			modelClassName.substring(0, pos) + ".service." + simpleClassName +
-				"LocalService";
+		String serviceClassName = StringBundler.concat(
+			modelClassName.substring(0, pos), ".service.", simpleClassName,
+			"LocalService");
 
 		IdentifiableOSGiService identifiableOSGiService =
 			IdentifiableOSGiServiceUtil.getIdentifiableOSGiService(
@@ -1554,8 +1566,9 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 		if (log.isDebugEnabled()) {
 			log.debug(
-				"Touch " + portlet.getRootPortletId() + " by including " +
-					touchPath);
+				StringBundler.concat(
+					"Touch ", portlet.getRootPortletId(), " by including ",
+					touchPath));
 		}
 
 		portletContext.setAttribute(

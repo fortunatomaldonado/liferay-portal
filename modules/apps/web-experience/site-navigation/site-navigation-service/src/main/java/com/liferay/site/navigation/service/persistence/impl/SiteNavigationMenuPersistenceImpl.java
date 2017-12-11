@@ -32,10 +32,8 @@ import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.persistence.CompanyProvider;
 import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
@@ -305,7 +303,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		msg.append("groupId=");
 		msg.append(groupId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchMenuException(msg.toString());
 	}
@@ -356,7 +354,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		msg.append("groupId=");
 		msg.append(groupId);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchMenuException(msg.toString());
 	}
@@ -1067,9 +1065,8 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 				for (SiteNavigationMenu siteNavigationMenu : list) {
 					if ((groupId != siteNavigationMenu.getGroupId()) ||
 							!StringUtil.wildcardMatches(
-								siteNavigationMenu.getName(), name,
-								CharPool.UNDERLINE, CharPool.PERCENT,
-								CharPool.BACK_SLASH, true)) {
+								siteNavigationMenu.getName(), name, '_', '%',
+								'\\', true)) {
 						list = null;
 
 						break;
@@ -1098,7 +1095,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 			if (name == null) {
 				query.append(_FINDER_COLUMN_G_N_NAME_1);
 			}
-			else if (name.equals(StringPool.BLANK)) {
+			else if (name.equals("")) {
 				query.append(_FINDER_COLUMN_G_N_NAME_3);
 			}
 			else {
@@ -1193,7 +1190,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		msg.append(", name=");
 		msg.append(name);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchMenuException(msg.toString());
 	}
@@ -1249,7 +1246,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		msg.append(", name=");
 		msg.append(name);
 
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
+		msg.append("}");
 
 		throw new NoSuchMenuException(msg.toString());
 	}
@@ -1347,7 +1344,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_N_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_N_NAME_3);
 		}
 		else {
@@ -1526,7 +1523,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_N_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_N_NAME_3);
 		}
 		else {
@@ -1671,7 +1668,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_N_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_N_NAME_3);
 		}
 		else {
@@ -1843,7 +1840,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 			if (name == null) {
 				query.append(_FINDER_COLUMN_G_N_NAME_1);
 			}
-			else if (name.equals(StringPool.BLANK)) {
+			else if (name.equals("")) {
 				query.append(_FINDER_COLUMN_G_N_NAME_3);
 			}
 			else {
@@ -1910,7 +1907,7 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		if (name == null) {
 			query.append(_FINDER_COLUMN_G_N_NAME_1);
 		}
-		else if (name.equals(StringPool.BLANK)) {
+		else if (name.equals("")) {
 			query.append(_FINDER_COLUMN_G_N_NAME_3);
 		}
 		else {
@@ -2418,12 +2415,12 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		for (Serializable primaryKey : uncachedPrimaryKeys) {
 			query.append((long)primaryKey);
 
-			query.append(StringPool.COMMA);
+			query.append(",");
 		}
 
 		query.setIndex(query.index() - 1);
 
-		query.append(StringPool.CLOSE_PARENTHESIS);
+		query.append(")");
 
 		String sql = query.toString();
 

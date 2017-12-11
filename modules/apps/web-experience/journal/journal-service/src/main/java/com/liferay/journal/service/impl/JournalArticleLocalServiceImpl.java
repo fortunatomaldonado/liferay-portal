@@ -69,6 +69,7 @@ import com.liferay.journal.util.JournalConverter;
 import com.liferay.journal.util.comparator.ArticleIDComparator;
 import com.liferay.journal.util.comparator.ArticleVersionComparator;
 import com.liferay.journal.util.impl.JournalUtil;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.xml.XMLUtil;
 import com.liferay.portal.kernel.comment.CommentManagerUtil;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -131,7 +132,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -291,8 +291,8 @@ public class JournalArticleLocalServiceImpl
 	 * @param  smallImageFile the web content article's small image file
 	 * @param  images the web content's images
 	 * @param  articleURL the web content article's accessible URL
-	 * @param  validateReferences whether the article references are validated
-	 *         or not
+	 * @param  latestVersion whether the article references and structure fields
+	 *         are validated or not, as it is needed for the latest version only
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         UUID, creation date, modification date, expando bridge
 	 *         attributes, guest permissions, group permissions, asset category
@@ -318,7 +318,7 @@ public class JournalArticleLocalServiceImpl
 			boolean neverReview, boolean indexable, boolean smallImage,
 			String smallImageURL, File smallImageFile,
 			Map<String, byte[]> images, String articleURL,
-			boolean validateReferences, ServiceContext serviceContext)
+			boolean latestVersion, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Article
@@ -372,9 +372,9 @@ public class JournalArticleLocalServiceImpl
 			user.getCompanyId(), groupId, classNameId, articleId, autoArticleId,
 			version, titleMap, content, ddmStructureKey, ddmTemplateKey,
 			displayDate, expirationDate, smallImage, smallImageURL,
-			smallImageFile, smallImageBytes, serviceContext);
+			smallImageFile, smallImageBytes, latestVersion, serviceContext);
 
-		if (validateReferences) {
+		if (latestVersion) {
 			validateReferences(
 				groupId, ddmStructureKey, ddmTemplateKey, layoutUuid,
 				smallImage, smallImageURL, smallImageBytes, 0, content);
@@ -1879,9 +1879,10 @@ public class JournalArticleLocalServiceImpl
 
 		if (articles.isEmpty()) {
 			throw new NoSuchArticleException(
-				"No approved JournalArticle exists with the key {groupId=" +
-					groupId + ", className=" + className + ", classPK=" +
-						classPK + "}");
+				StringBundler.concat(
+					"No approved JournalArticle exists with the key {groupId=",
+					String.valueOf(groupId), ", className=", className,
+					", classPK=", String.valueOf(classPK), "}"));
 		}
 
 		return articles.get(0);
@@ -2932,8 +2933,9 @@ public class JournalArticleLocalServiceImpl
 
 		if (article == null) {
 			throw new NoSuchArticleException(
-				"No approved JournalArticle exists with the key {groupId=" +
-					groupId + ", articleId=" + articleId + "}");
+				StringBundler.concat(
+					"No approved JournalArticle exists with the key {groupId=",
+					String.valueOf(groupId), ", articleId=", articleId, "}"));
 		}
 
 		return article;
@@ -2965,8 +2967,9 @@ public class JournalArticleLocalServiceImpl
 
 		if (articles.isEmpty()) {
 			throw new NoSuchArticleException(
-				"No JournalArticle exists with the key {groupId=" + groupId +
-					", urlTitle=" + urlTitle + "}");
+				StringBundler.concat(
+					"No JournalArticle exists with the key {groupId=",
+					String.valueOf(groupId), ", urlTitle=", urlTitle, "}"));
 		}
 
 		Date now = new Date();
@@ -3183,8 +3186,10 @@ public class JournalArticleLocalServiceImpl
 
 		if (articles.isEmpty()) {
 			throw new NoSuchArticleException(
-				"No JournalArticle exists with the key {groupId=" + groupId +
-					", className=" + className + ", classPK =" + classPK + "}");
+				StringBundler.concat(
+					"No JournalArticle exists with the key {groupId=",
+					String.valueOf(groupId), ", className=", className,
+					", classPK =", String.valueOf(classPK), "}"));
 		}
 
 		return articles.get(0);
@@ -3211,8 +3216,10 @@ public class JournalArticleLocalServiceImpl
 
 		if (article == null) {
 			throw new NoSuchArticleException(
-				"No JournalArticle exists with the key {groupId=" + groupId +
-					", urlTitle=" + urlTitle + ", status=" + status + "}");
+				StringBundler.concat(
+					"No JournalArticle exists with the key {groupId=",
+					String.valueOf(groupId), ", urlTitle=", urlTitle,
+					", status=", String.valueOf(status), "}"));
 		}
 
 		return article;
@@ -3692,9 +3699,16 @@ public class JournalArticleLocalServiceImpl
 		List<JournalArticle> articles = journalArticlePersistence.findByG_A(
 			groupId, articleId);
 
+		String treePath = null;
+
 		for (JournalArticle article : articles) {
 			article.setFolderId(newFolderId);
-			article.setTreePath(article.buildTreePath());
+
+			if (treePath == null) {
+				treePath = article.buildTreePath();
+			}
+
+			article.setTreePath(treePath);
 
 			journalArticlePersistence.update(article);
 		}
@@ -5426,8 +5440,8 @@ public class JournalArticleLocalServiceImpl
 	 * @param  images the web content's images (optionally <code>null</code>)
 	 * @param  articleURL the web content article's accessible URL (optionally
 	 *         <code>null</code>)
-	 * @param  validateReferences whether the article references are validated
-	 *         or not
+	 * @param  latestVersion whether the article references and structure fields
+	 *         are validated or not, as it is needed for the latest version only
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         modification date, expando bridge attributes, asset category IDs,
 	 *         asset tag names, asset link entry IDs, asset priority, workflow
@@ -5455,7 +5469,7 @@ public class JournalArticleLocalServiceImpl
 			boolean neverReview, boolean indexable, boolean smallImage,
 			String smallImageURL, File smallImageFile,
 			Map<String, byte[]> images, String articleURL,
-			boolean validateReferences, ServiceContext serviceContext)
+			boolean latestVersion, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Article
@@ -5478,7 +5492,7 @@ public class JournalArticleLocalServiceImpl
 
 		boolean imported = ExportImportThreadLocal.isImportInProcess();
 
-		double latestVersion = latestArticle.getVersion();
+		double latestArticleVersion = latestArticle.getVersion();
 
 		boolean addNewVersion = false;
 
@@ -5486,13 +5500,13 @@ public class JournalArticleLocalServiceImpl
 			article = getArticle(groupId, articleId, version);
 		}
 		else {
-			if ((version > 0) && (version != latestVersion)) {
+			if ((version > 0) && (version != latestArticleVersion)) {
 				StringBundler sb = new StringBundler(4);
 
 				sb.append("Version ");
 				sb.append(version);
 				sb.append(" is not the same as ");
-				sb.append(latestVersion);
+				sb.append(latestArticleVersion);
 
 				throw new ArticleVersionException(sb.toString());
 			}
@@ -5551,9 +5565,9 @@ public class JournalArticleLocalServiceImpl
 			user.getCompanyId(), groupId, latestArticle.getClassNameId(),
 			titleMap, content, ddmStructureKey, ddmTemplateKey, displayDate,
 			expirationDate, smallImage, smallImageURL, smallImageFile,
-			smallImageBytes, serviceContext);
+			smallImageBytes, latestVersion, serviceContext);
 
-		if (validateReferences) {
+		if (latestVersion) {
 			validateReferences(
 				groupId, ddmStructureKey, ddmTemplateKey, layoutUuid,
 				smallImage, smallImageURL, smallImageBytes,
@@ -6347,9 +6361,11 @@ public class JournalArticleLocalServiceImpl
 				}
 				catch (Exception e) {
 					_log.error(
-						"Unable to send email to notify the change of status " +
-							"to " + msg + " for article " + article.getId() +
-								": " + e.getMessage());
+						StringBundler.concat(
+							"Unable to send email to notify the change of ",
+							"status to ", msg, " for article ",
+							String.valueOf(article.getId()), ": ",
+							e.getMessage()));
 				}
 			}
 
@@ -7288,8 +7304,10 @@ public class JournalArticleLocalServiceImpl
 		try {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					"Transforming " + article.getArticleId() + " " +
-						article.getVersion() + " " + languageId);
+					StringBundler.concat(
+						"Transforming ", article.getArticleId(),
+						StringPool.SPACE, String.valueOf(article.getVersion()),
+						StringPool.SPACE, languageId));
 			}
 
 			// Try with specified template first (in the current group and the
@@ -8197,7 +8215,7 @@ public class JournalArticleLocalServiceImpl
 			Map<Locale, String> titleMap, String content,
 			String ddmStructureKey, String ddmTemplateKey, Date displayDate,
 			Date expirationDate, boolean smallImage, String smallImageURL,
-			File smallImageFile, byte[] smallImageBytes,
+			File smallImageFile, byte[] smallImageBytes, boolean latestVersion,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -8210,8 +8228,10 @@ public class JournalArticleLocalServiceImpl
 
 				LocaleException le = new LocaleException(
 					LocaleException.TYPE_CONTENT,
-					"The locale " + articleDefaultLocale +
-						" is not available in site with groupId" + groupId);
+					StringBundler.concat(
+						"The locale ", articleDefaultLocale.getLanguage(),
+						" is not available in site with groupId",
+						String.valueOf(groupId)));
 
 				le.setSourceAvailableLocales(
 					Collections.singleton(articleDefaultLocale));
@@ -8245,8 +8265,10 @@ public class JournalArticleLocalServiceImpl
 			classNameLocalService.getClassNameId(JournalArticle.class),
 			ddmStructureKey, true);
 
-		validateDDMStructureFields(
-			ddmStructure, classNameId, content, articleDefaultLocale);
+		if (latestVersion) {
+			validateDDMStructureFields(
+				ddmStructure, classNameId, content, articleDefaultLocale);
+		}
 
 		if (Validator.isNotNull(ddmTemplateKey)) {
 			DDMTemplate ddmTemplate = ddmTemplateLocalService.getTemplate(
@@ -8306,34 +8328,37 @@ public class JournalArticleLocalServiceImpl
 			String content, String ddmStructureKey, String ddmTemplateKey,
 			Date displayDate, Date expirationDate, boolean smallImage,
 			String smallImageURL, File smallImageFile, byte[] smallImageBytes,
-			ServiceContext serviceContext)
+			boolean latestVersion, ServiceContext serviceContext)
 		throws PortalException {
 
 		if (!autoArticleId) {
 			validate(articleId);
 		}
 
-		JournalArticle article = journalArticlePersistence.fetchByG_A_V(
-			groupId, articleId, version);
+		if (!ExportImportThreadLocal.isImportInProcess() || autoArticleId) {
+			List<JournalArticle> articles = journalArticlePersistence.findByG_A(
+				groupId, articleId);
 
-		if (article != null) {
-			StringBundler sb = new StringBundler(7);
+			if (!articles.isEmpty()) {
+				StringBundler sb = new StringBundler(7);
 
-			sb.append("{groupId=");
-			sb.append(groupId);
-			sb.append(", articleId=");
-			sb.append(articleId);
-			sb.append(", version=");
-			sb.append(version);
-			sb.append("}");
+				sb.append("{groupId=");
+				sb.append(groupId);
+				sb.append(", articleId=");
+				sb.append(articleId);
+				sb.append(", version=");
+				sb.append(version);
+				sb.append("}");
 
-			throw new DuplicateArticleIdException(sb.toString());
+				throw new DuplicateArticleIdException(sb.toString());
+			}
 		}
 
 		validate(
 			companyId, groupId, classNameId, titleMap, content, ddmStructureKey,
 			ddmTemplateKey, displayDate, expirationDate, smallImage,
-			smallImageURL, smallImageFile, smallImageBytes, serviceContext);
+			smallImageURL, smallImageFile, smallImageBytes, latestVersion,
+			serviceContext);
 	}
 
 	protected void validate(String articleId) throws PortalException {
@@ -8428,8 +8453,10 @@ public class JournalArticleLocalServiceImpl
 		}
 
 		throw new InvalidDDMStructureException(
-			"Invalid structure " + ddmStructure.getStructureId() +
-				" for folder " + folderId);
+			StringBundler.concat(
+				"Invalid structure ",
+				String.valueOf(ddmStructure.getStructureId()), " for folder ",
+				String.valueOf(folderId)));
 	}
 
 	protected void validateReferences(

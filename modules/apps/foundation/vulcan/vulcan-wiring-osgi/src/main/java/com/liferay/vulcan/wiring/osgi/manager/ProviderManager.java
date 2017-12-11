@@ -29,8 +29,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Provides methods to provide instances of classes with a valid {@link
- * Provider}.
+ * Manages services that have a {@link Provider}.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
@@ -40,15 +39,15 @@ import org.osgi.service.component.annotations.Reference;
 public class ProviderManager extends BaseManager<Provider> {
 
 	/**
-	 * Returns an instance of type T if a valid {@link Provider} can be found.
-	 * Returns <code>Optional#empty()</code> otherwise.
+	 * Returns the instance of type {@code T} if a valid {@code Provider} can be
+	 * found. Returns {@code Optional#empty()} otherwise.
 	 *
-	 * @param  clazz the type class to be provided.
-	 * @param  httpServletRequest the current request.
-	 * @return the instance of T, if a valid {@link Provider} is present;
-	 *         <code>Optional#empty()</code> otherwise.
+	 * @param  clazz the class type {@code T}
+	 * @param  httpServletRequest the current request
+	 * @return the instance of {@code T}, if a valid {@code Provider} is
+	 *         present; {@code Optional#empty()} otherwise
 	 */
-	public <T> Optional<T> provide(
+	public <T> Optional<T> provideOptional(
 		Class<T> clazz, HttpServletRequest httpServletRequest) {
 
 		Optional<Provider> optional = getServiceOptional(clazz);
@@ -60,18 +59,36 @@ public class ProviderManager extends BaseManager<Provider> {
 		);
 	}
 
+	/**
+	 * Returns an instance of type T if a valid {@link Provider} can be found.
+	 * Returns {@code null} otherwise.
+	 *
+	 * @param  clazz the type class to be provided.
+	 * @param  httpServletRequest the current request.
+	 * @return the instance of T, if a valid {@link Provider} is present; {@code
+	 *         null} otherwise.
+	 * @review
+	 */
+	public <T> T provideOrNull(
+		Class<T> clazz, HttpServletRequest httpServletRequest) {
+
+		Optional<T> optional = provideOptional(clazz, httpServletRequest);
+
+		return optional.orElse(null);
+	}
+
 	@Reference(cardinality = MULTIPLE, policy = DYNAMIC, policyOption = GREEDY)
 	protected void setServiceReference(
 		ServiceReference<Provider> serviceReference) {
 
-		addService(serviceReference, Provider.class);
+		addService(serviceReference);
 	}
 
 	@SuppressWarnings("unused")
 	protected void unsetServiceReference(
 		ServiceReference<Provider> serviceReference) {
 
-		removeService(serviceReference, Provider.class);
+		removeService(serviceReference);
 	}
 
 }

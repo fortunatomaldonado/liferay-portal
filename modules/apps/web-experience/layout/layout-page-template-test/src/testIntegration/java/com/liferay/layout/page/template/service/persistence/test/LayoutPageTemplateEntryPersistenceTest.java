@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PersistenceTestRule;
@@ -137,7 +136,7 @@ public class LayoutPageTemplateEntryPersistenceTest {
 
 		newLayoutPageTemplateEntry.setModifiedDate(RandomTestUtil.nextDate());
 
-		newLayoutPageTemplateEntry.setLayoutPageTemplateFolderId(RandomTestUtil.nextLong());
+		newLayoutPageTemplateEntry.setLayoutPageTemplateCollectionId(RandomTestUtil.nextLong());
 
 		newLayoutPageTemplateEntry.setName(RandomTestUtil.randomString());
 
@@ -162,8 +161,8 @@ public class LayoutPageTemplateEntryPersistenceTest {
 		Assert.assertEquals(Time.getShortTimestamp(
 				existingLayoutPageTemplateEntry.getModifiedDate()),
 			Time.getShortTimestamp(newLayoutPageTemplateEntry.getModifiedDate()));
-		Assert.assertEquals(existingLayoutPageTemplateEntry.getLayoutPageTemplateFolderId(),
-			newLayoutPageTemplateEntry.getLayoutPageTemplateFolderId());
+		Assert.assertEquals(existingLayoutPageTemplateEntry.getLayoutPageTemplateCollectionId(),
+			newLayoutPageTemplateEntry.getLayoutPageTemplateCollectionId());
 		Assert.assertEquals(existingLayoutPageTemplateEntry.getName(),
 			newLayoutPageTemplateEntry.getName());
 	}
@@ -185,9 +184,9 @@ public class LayoutPageTemplateEntryPersistenceTest {
 
 	@Test
 	public void testCountByG_N() throws Exception {
-		_persistence.countByG_N(RandomTestUtil.nextLong(), StringPool.BLANK);
+		_persistence.countByG_N(RandomTestUtil.nextLong(), "");
 
-		_persistence.countByG_N(0L, StringPool.NULL);
+		_persistence.countByG_N(0L, "null");
 
 		_persistence.countByG_N(0L, (String)null);
 	}
@@ -195,9 +194,9 @@ public class LayoutPageTemplateEntryPersistenceTest {
 	@Test
 	public void testCountByG_L_LikeN() throws Exception {
 		_persistence.countByG_L_LikeN(RandomTestUtil.nextLong(),
-			RandomTestUtil.nextLong(), StringPool.BLANK);
+			RandomTestUtil.nextLong(), "");
 
-		_persistence.countByG_L_LikeN(0L, 0L, StringPool.NULL);
+		_persistence.countByG_L_LikeN(0L, 0L, "null");
 
 		_persistence.countByG_L_LikeN(0L, 0L, (String)null);
 	}
@@ -235,8 +234,8 @@ public class LayoutPageTemplateEntryPersistenceTest {
 		return OrderByComparatorFactoryUtil.create("LayoutPageTemplateEntry",
 			"layoutPageTemplateEntryId", true, "groupId", true, "companyId",
 			true, "userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "layoutPageTemplateFolderId", true, "name",
-			true);
+			"modifiedDate", true, "layoutPageTemplateCollectionId", true,
+			"name", true);
 	}
 
 	@Test
@@ -480,7 +479,7 @@ public class LayoutPageTemplateEntryPersistenceTest {
 
 		layoutPageTemplateEntry.setModifiedDate(RandomTestUtil.nextDate());
 
-		layoutPageTemplateEntry.setLayoutPageTemplateFolderId(RandomTestUtil.nextLong());
+		layoutPageTemplateEntry.setLayoutPageTemplateCollectionId(RandomTestUtil.nextLong());
 
 		layoutPageTemplateEntry.setName(RandomTestUtil.randomString());
 

@@ -28,7 +28,6 @@ import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageConstants;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -166,6 +165,8 @@ public class DDMFormFieldTemplateContextFactory {
 		setDDMFormFieldTemplateContextValue(
 			ddmFormField, ddmFormFieldEvaluationResult,
 			ddmFormFieldTemplateContext, ddmFormFieldValue.getValue());
+		setDDMFormFieldTemplateContextValueChanged(
+			ddmFormFieldEvaluationResult, ddmFormFieldTemplateContext);
 		setDDMFormFieldTemplateContextValueLocalizableValue(
 			ddmFormFieldTemplateContext, ddmFormFieldValue.getValue());
 		setDDMFormFieldTemplateContextValidation(
@@ -541,20 +542,21 @@ public class DDMFormFieldTemplateContextFactory {
 			Object evaluationResultValue =
 				ddmFormFieldEvaluationResult.getValue();
 
-			if (evaluationResultValue instanceof JSONObject) {
-				JSONObject jsonObject = (JSONObject)evaluationResultValue;
-
-				ddmFormFieldTemplateContext.put(
-					"value",
-					_jsonFactory.looseDeserialize(jsonObject.toJSONString()));
-			}
-			else {
-				ddmFormFieldTemplateContext.put("value", evaluationResultValue);
-			}
+			ddmFormFieldTemplateContext.put("value", evaluationResultValue);
 		}
 		else if (value != null) {
 			ddmFormFieldTemplateContext.put("value", value.getString(_locale));
 		}
+	}
+
+	protected void setDDMFormFieldTemplateContextValueChanged(
+		DDMFormFieldEvaluationResult ddmFormFieldEvaluationResult,
+		Map<String, Object> ddmFormFieldTemplateContext) {
+
+		ddmFormFieldTemplateContext.put(
+			"valueChanged",
+			GetterUtil.getBoolean((Boolean)
+				ddmFormFieldEvaluationResult.getProperty("valueChanged")));
 	}
 
 	protected void setDDMFormFieldTemplateContextValueLocalizableValue(
@@ -600,7 +602,7 @@ public class DDMFormFieldTemplateContextFactory {
 	private DDMFormFieldEvaluationResult _getDDMFormFieldEvaluationResult(
 		DDMFormFieldValue ddmFormFieldValue) {
 
-		return _ddmFormEvaluationResult.geDDMFormFieldEvaluationResult(
+		return _ddmFormEvaluationResult.getDDMFormFieldEvaluationResult(
 			ddmFormFieldValue.getName(), ddmFormFieldValue.getInstanceId());
 	}
 

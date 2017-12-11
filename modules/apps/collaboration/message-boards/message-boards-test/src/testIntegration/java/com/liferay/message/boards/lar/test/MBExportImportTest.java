@@ -17,13 +17,12 @@ package com.liferay.message.boards.lar.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.exportimport.test.util.lar.BasePortletExportImportTestCase;
+import com.liferay.message.boards.constants.MBPortletKeys;
 import com.liferay.message.boards.kernel.model.MBCategoryConstants;
 import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.model.MBThread;
 import com.liferay.message.boards.kernel.service.MBMessageLocalServiceUtil;
 import com.liferay.message.boards.kernel.service.MBThreadLocalServiceUtil;
-import com.liferay.message.boards.web.constants.MBPortletKeys;
-import com.liferay.message.boards.web.exportimport.data.handler.MBPortletDataHandler;
 import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -63,7 +62,7 @@ public class MBExportImportTest extends BasePortletExportImportTestCase {
 
 	@Override
 	public String getNamespace() {
-		return MBPortletDataHandler.NAMESPACE;
+		return "message_boards";
 	}
 
 	@Override

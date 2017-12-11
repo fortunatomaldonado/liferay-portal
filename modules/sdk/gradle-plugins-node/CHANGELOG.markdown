@@ -167,6 +167,21 @@ when executing the `check` task.
 project with the values provided by the task properties of
 `PublishNodeModuleTask` when publishing a package to the NPM registry.
 
+## 3.2.1 - 2017-10-10
+
+### Fixed
+- [LPS-75175]: Fix the `downloadNode` task's circular dependency when setting
+the `node.global` property to `true` in the root project.
+
+## 4.0.0 - 2017-11-20
+
+### Changed
+- [LPS-75965]: Download the Node.js Windows distribution if running on Windows.
+
+### Removed
+- [LPS-75965]: The `downloadNode.nodeExeUrl` and `node.nodeExeUrl` properties
+are no longer available.
+
 [LPS-66906]: https://issues.liferay.com/browse/LPS-66906
 [LPS-67023]: https://issues.liferay.com/browse/LPS-67023
 [LPS-67573]: https://issues.liferay.com/browse/LPS-67573
@@ -186,3 +201,5 @@ project with the values provided by the task properties of
 [LPS-73472]: https://issues.liferay.com/browse/LPS-73472
 [LPS-74770]: https://issues.liferay.com/browse/LPS-74770
 [LPS-74933]: https://issues.liferay.com/browse/LPS-74933
+[LPS-75175]: https://issues.liferay.com/browse/LPS-75175
+[LPS-75965]: https://issues.liferay.com/browse/LPS-75965

@@ -14,7 +14,7 @@
 
 package com.liferay.configuration.admin.web.internal.portlet.action;
 
-import com.liferay.configuration.admin.web.internal.constants.ConfigurationAdminPortletKeys;
+import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
 import com.liferay.configuration.admin.web.internal.exporter.ConfigurationExporter;
 import com.liferay.configuration.admin.web.internal.model.ConfigurationModel;
 import com.liferay.configuration.admin.web.internal.util.AttributeDefinitionUtil;
@@ -179,7 +179,7 @@ public class ExportConfigurationMVCResourceCommand
 		for (ConfigurationModel factoryInstance : factoryInstances) {
 			String curPid = factoryInstance.getID();
 
-			String curFileName = getFileName(null, curPid);
+			String curFileName = getFileName(factoryPid, curPid);
 
 			zipWriter.addEntry(
 				curFileName,

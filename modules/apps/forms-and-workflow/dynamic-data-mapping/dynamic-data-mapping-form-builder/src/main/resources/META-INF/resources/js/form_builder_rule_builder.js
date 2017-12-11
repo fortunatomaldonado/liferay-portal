@@ -1,8 +1,6 @@
 AUI.add(
 	'liferay-ddm-form-builder-rule-builder',
 	function(A) {
-		var Settings = Liferay.DDM.Settings;
-
 		var SoyTemplateUtil = Liferay.DDM.SoyTemplateUtil;
 
 		var MAP_ACTION_DESCRIPTIONS = {
@@ -113,6 +111,10 @@ AUI.add(
 										condition.operands.forEach(
 											function(operand) {
 												operand.label = instance._getFieldLabel(operand.value);
+
+												if (!operand.label) {
+													operand.label = operand.value;
+												}
 											}
 										);
 									}
@@ -256,7 +258,7 @@ AUI.add(
 						};
 
 						A.io.request(
-							Settings.getDataProviderInstancesURL,
+							Liferay.DDM.Settings.getDataProviderInstancesURL,
 							{
 								data: payload,
 								method: 'GET',
@@ -395,7 +397,7 @@ AUI.add(
 
 						if (!roles.length) {
 							A.io.request(
-								Settings.getRolesURL,
+								Liferay.DDM.Settings.getRolesURL,
 								{
 									data: payload,
 									method: 'GET',

@@ -14,8 +14,11 @@
 
 package com.liferay.vulcan.application.internal.endpoint;
 
+import com.google.gson.JsonObject;
+
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.endpoint.RootEndpoint;
+import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
 import com.liferay.vulcan.resource.RelatedCollection;
@@ -26,10 +29,13 @@ import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.uri.Path;
+import com.liferay.vulcan.url.ServerURL;
 import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 
 import java.io.InputStream;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -68,8 +74,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotAllowedException(
-				"POST method is not allowed for path " + name)
+			_getNotAllowedExceptionSupplier("POST", name)
 		).map(
 			function -> function.apply(new RootIdentifier() {})
 		).map(
@@ -95,9 +100,8 @@ public class RootEndpointImpl implements RootEndpoint {
 			function -> function.apply(body)
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotAllowedException(
-				"POST method is not allowed for path " + name + "/" + id + "/" +
-					nestedName)
+			_getNotAllowedExceptionSupplier(
+				"POST", String.join("/", name, id, nestedName))
 		);
 	}
 
@@ -111,8 +115,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotAllowedException(
-				"DELETE method is not allowed for path " + name + "/" + id)
+			_getNotAllowedExceptionSupplier("DELETE", name + "/" + id)
 		).getUnchecked(
 		).accept(
 			new Path(name, id)
@@ -144,7 +147,7 @@ public class RootEndpointImpl implements RootEndpoint {
 
 		return binaryFunctionTry.mapFailMatching(
 			NoSuchElementException.class,
-			_getSupplierNotFoundException(name + "/" + id + "/" + binaryId)
+			_getNotFoundExceptionSupplier(String.join("/", name, id, binaryId))
 		).flatMap(
 			binaryFunction -> _getInputStreamTry(name, id, binaryFunction)
 		);
@@ -162,7 +165,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			_getSupplierNotFoundException(name + "/" + id)
+			_getNotFoundExceptionSupplier(name + "/" + id)
 		).map(
 			function -> function.apply(new Path(name, id))
 		);
@@ -177,7 +180,7 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class, _getSupplierNotFoundException(name)
+			NoSuchElementException.class, _getNotFoundExceptionSupplier(name)
 		).map(
 			function -> function.apply(new Path())
 		).map(
@@ -186,13 +189,41 @@ public class RootEndpointImpl implements RootEndpoint {
 	}
 
 	@Override
+	public String getHome() {
+		List<String> rootCollectionResourceNames =
+			_collectionResourceManager.getRootCollectionResourceNames();
+
+		Optional<ServerURL> optional = _providerManager.provideOptional(
+			ServerURL.class, _httpServletRequest);
+
+		ServerURL serverURL = optional.orElseThrow(
+			() -> new VulcanDeveloperError.MustHaveProvider(ServerURL.class));
+
+		JsonObject resourcesJsonObject = new JsonObject();
+
+		rootCollectionResourceNames.forEach(
+			name -> {
+				String url = serverURL.getServerURL() + "/p/" + name;
+
+				JsonObject jsonObject = new JsonObject();
+
+				jsonObject.addProperty("href", url);
+
+				resourcesJsonObject.add(name, jsonObject);
+			});
+
+		JsonObject rootJsonObject = new JsonObject();
+
+		rootJsonObject.add("resources", resourcesJsonObject);
+
+		return rootJsonObject.toString();
+	}
+
+	@Override
 	public <T> Try<Page<T>> getNestedCollectionPageTry(
 		String name, String id, String nestedName) {
 
 		Try<Routes<T>> routesTry = _getRoutesTry(nestedName);
-
-		Supplier<NotFoundException> supplierNotFoundException =
-			_getSupplierNotFoundException(name + "/" + id + "/" + nestedName);
 
 		return routesTry.map(
 			Routes::getPageFunctionOptional
@@ -205,7 +236,9 @@ public class RootEndpointImpl implements RootEndpoint {
 		).map(
 			Optional::get
 		).mapFailMatching(
-			NoSuchElementException.class, supplierNotFoundException
+			NoSuchElementException.class,
+			_getNotFoundExceptionSupplier(
+				String.join("/", name, id, nestedName))
 		);
 	}
 
@@ -221,8 +254,7 @@ public class RootEndpointImpl implements RootEndpoint {
 			Optional::get
 		).mapFailMatching(
 			NoSuchElementException.class,
-			() -> new NotAllowedException(
-				"PUT method is not allowed for path " + name + "/" + id)
+			_getNotAllowedExceptionSupplier("PUT", name + "/" + id)
 		).map(
 			function -> function.apply(new Path(name, id))
 		).map(
@@ -321,6 +353,19 @@ public class RootEndpointImpl implements RootEndpoint {
 		};
 	}
 
+	private Supplier<NotAllowedException> _getNotAllowedExceptionSupplier(
+		String method, String path) {
+
+		return () -> new NotAllowedException(
+			method + " method is not allowed for path " + path);
+	}
+
+	private Supplier<NotFoundException> _getNotFoundExceptionSupplier(
+		String name) {
+
+		return () -> new NotFoundException("No endpoint found at path " + name);
+	}
+
 	private <T> Try<Routes<T>> _getRoutesTry(String name) {
 		Try<Optional<Routes<T>>> optionalTry = Try.success(
 			_collectionResourceManager.getRoutesOptional(
@@ -334,16 +379,13 @@ public class RootEndpointImpl implements RootEndpoint {
 		);
 	}
 
-	private Supplier<NotFoundException> _getSupplierNotFoundException(
-		String name) {
-
-		return () -> new NotFoundException("No endpoint found at path " + name);
-	}
-
 	@Reference
 	private CollectionResourceManager _collectionResourceManager;
 
 	@Context
 	private HttpServletRequest _httpServletRequest;
+
+	@Reference
+	private ProviderManager _providerManager;
 
 }

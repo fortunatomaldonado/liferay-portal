@@ -15,19 +15,19 @@
 package com.liferay.message.boards.lar.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.exportimport.kernel.lar.DataLevel;
 import com.liferay.exportimport.kernel.lar.ManifestSummary;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
+import com.liferay.message.boards.constants.MBPortletKeys;
 import com.liferay.message.boards.kernel.model.MBCategory;
 import com.liferay.message.boards.kernel.model.MBCategoryConstants;
 import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.model.MBThread;
-import com.liferay.message.boards.kernel.service.MBBanLocalServiceUtil;
 import com.liferay.message.boards.kernel.service.MBCategoryLocalServiceUtil;
 import com.liferay.message.boards.kernel.service.MBCategoryServiceUtil;
 import com.liferay.message.boards.kernel.service.MBMessageLocalServiceUtil;
-import com.liferay.message.boards.kernel.service.MBThreadFlagLocalServiceUtil;
-import com.liferay.message.boards.web.constants.MBPortletKeys;
-import com.liferay.message.boards.web.exportimport.data.handler.MBPortletDataHandler;
+import com.liferay.message.boards.service.MBBanLocalServiceUtil;
+import com.liferay.message.boards.service.MBThreadFlagLocalServiceUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
@@ -110,12 +110,10 @@ public class MBPortletDataHandlerTest extends BasePortletDataHandlerTestCase {
 
 	@Override
 	protected void addParameters(Map<String, String[]> parameterMap) {
+		addBooleanParameter(parameterMap, "message_boards", "messages", true);
 		addBooleanParameter(
-			parameterMap, MBPortletDataHandler.NAMESPACE, "messages", true);
-		addBooleanParameter(
-			parameterMap, MBPortletDataHandler.NAMESPACE, "thread-flags", true);
-		addBooleanParameter(
-			parameterMap, MBPortletDataHandler.NAMESPACE, "user-bans", true);
+			parameterMap, "message_boards", "thread-flags", true);
+		addBooleanParameter(parameterMap, "message_boards", "user-bans", true);
 	}
 
 	@Override
@@ -172,8 +170,28 @@ public class MBPortletDataHandlerTest extends BasePortletDataHandlerTestCase {
 	}
 
 	@Override
+	protected DataLevel getDataLevel() {
+		return DataLevel.SITE;
+	}
+
+	@Override
 	protected String getPortletId() {
 		return MBPortletKeys.MESSAGE_BOARDS;
+	}
+
+	@Override
+	protected boolean isDataPortalLevel() {
+		return false;
+	}
+
+	@Override
+	protected boolean isDataPortletInstanceLevel() {
+		return false;
+	}
+
+	@Override
+	protected boolean isDataSiteLevel() {
+		return true;
 	}
 
 }

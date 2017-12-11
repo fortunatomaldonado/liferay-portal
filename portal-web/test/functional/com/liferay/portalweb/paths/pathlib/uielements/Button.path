@@ -55,7 +55,7 @@
 </tr>
 <tr>
 	<td>ADD_ENTRY</td>
-	<td>//button[contains(.,'Add Entry')]</td>
+	<td>//button[contains(.,'Add Entry')]|//a[@data-original-title='Add Entry']</td>
 	<td></td>
 </tr>
 <tr>
@@ -270,7 +270,7 @@
 </tr>
 <tr>
 	<td>COLOR_EFFECT</td>
-	<td>//a[@class='btn']//*[name()='svg'][@data-icon='effects']</td>
+	<td>//a[contains(@class, 'btn')]//*[name()='svg'][@data-icon='effects']</td>
 	<td></td>
 </tr>
 <tr>
@@ -299,8 +299,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>COPY_FROM_LIVE</td>
-	<td>//button[contains(.,'Copy from Live')]</td>
+	<td>CREATE_CERTIFICATE</td>
+	<td>//button[contains(.,'Create Certificate')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -341,6 +341,11 @@
 <tr>
 	<td>DOWNLOAD</td>
 	<td>//a[contains(@class,'btn') and contains(.,'Download')] | //button[contains(.,'Download')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>DOWNLOAD_CERTIFICATE</td>
+	<td>//a[contains(.,'Download Certificate')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -385,7 +390,7 @@
 </tr>
 <tr>
 	<td>FILTER_EFFECT</td>
-	<td>//a[@class='btn' and (@data-control='effects')]//*[name()='svg'][contains(@class,'lexicon-icon')]</td>
+	<td>//a[contains(@class,'btn') and (@data-control='effects')]//*[name()='svg'][contains(@class,'lexicon-icon')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -465,12 +470,12 @@
 </tr>
 <tr>
 	<td>MOVE_AVAILABLE_TO_CURRENT</td>
-	<td>//button[@title='Move selected items from Available to Current.']</td>
+	<td>//div[@id='metadataContent']//button[@title='Move selected items from Available to Current.']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>MOVE_CURRENT_TO_AVAILABLE</td>
-	<td>//button[@title='Move selected items from Current to Available.']</td>
+	<td>//div[@id='metadataContent']//button[@title='Move selected items from Current to Available.']</td>
 	<td></td>
 </tr>
 <tr>
@@ -549,11 +554,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>PUBLISH_TO_LIVE</td>
-	<td>//button[contains(.,'Publish to Live')]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>RECYCLE_BIN</td>
 	<td>//a[@data-qa-id='recycle-binButton']</td>
 	<td></td>
@@ -581,6 +581,11 @@
 <tr>
 	<td>REORDER</td>
 	<td>//button[span[@class='icon-bar'][3]]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>REPLACE_CERTIFICATE</td>
+	<td>//button[contains(.,'Replace Certificate')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -744,13 +749,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>TAB_SUBMIT_BTN</td>
+	<td>//button[contains(@type,'submit') and contains(.,'${key_tab}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>SUBMIT_FOR_PUBLICATION</td>
 	<td>//button[contains(.,'Submit for Publication')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>TRANSFORM</td>
-	<td>//a[@class='btn']//*[name()='svg'][@data-icon='transform']</td>
+	<td>//a[contains(@class, 'btn')]//*[name()='svg'][@data-icon='transform']</td>
 	<td></td>
 </tr>
 <tr>

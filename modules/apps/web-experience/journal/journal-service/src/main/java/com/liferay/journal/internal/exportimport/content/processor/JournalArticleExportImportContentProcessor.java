@@ -15,6 +15,11 @@
 package com.liferay.journal.internal.exportimport.content.processor;
 
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
+import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.dynamic.data.mapping.model.DDMStructure;
+import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
+import com.liferay.dynamic.data.mapping.storage.Fields;
+import com.liferay.dynamic.data.mapping.util.DDMFormValuesTransformer;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -23,6 +28,7 @@ import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.exception.NoSuchArticleException;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
+import com.liferay.journal.util.JournalConverter;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -71,6 +77,31 @@ public class JournalArticleExportImportContentProcessor
 			boolean escapeContent)
 		throws Exception {
 
+		JournalArticle article = (JournalArticle)stagedModel;
+
+		DDMStructure ddmStructure = article.getDDMStructure();
+
+		Fields fields = _getDDMStructureFields(ddmStructure, content);
+
+		if (fields != null) {
+			DDMFormValues ddmFormValues = _journalConverter.getDDMFormValues(
+				ddmStructure, fields);
+
+			DDMFormValuesTransformer ddmFormValuesTransformer =
+				new DDMFormValuesTransformer(ddmFormValues);
+
+			ImageExportDDMFormFieldValueTransformer
+				imageExportDDMFormFieldValueTransformer =
+					new ImageExportDDMFormFieldValueTransformer(
+						content, _dlAppService, exportReferencedContent,
+						portletDataContext, stagedModel);
+
+			ddmFormValuesTransformer.addTransformer(
+				imageExportDDMFormFieldValueTransformer);
+
+			ddmFormValuesTransformer.transform();
+		}
+
 		content = replaceExportJournalArticleReferences(
 			portletDataContext, stagedModel, content, exportReferencedContent);
 
@@ -88,6 +119,33 @@ public class JournalArticleExportImportContentProcessor
 			PortletDataContext portletDataContext, StagedModel stagedModel,
 			String content)
 		throws Exception {
+
+		JournalArticle article = (JournalArticle)stagedModel;
+
+		DDMStructure ddmStructure = article.getDDMStructure();
+
+		Fields fields = _getDDMStructureFields(ddmStructure, content);
+
+		if (fields != null) {
+			DDMFormValues ddmFormValues = _journalConverter.getDDMFormValues(
+				ddmStructure, fields);
+
+			DDMFormValuesTransformer ddmFormValuesTransformer =
+				new DDMFormValuesTransformer(ddmFormValues);
+
+			ImageImportDDMFormFieldValueTransformer
+				imageImportDDMFormFieldValueTransformer =
+					new ImageImportDDMFormFieldValueTransformer(
+						content, _dlAppService, portletDataContext,
+						stagedModel);
+
+			ddmFormValuesTransformer.addTransformer(
+				imageImportDDMFormFieldValueTransformer);
+
+			ddmFormValuesTransformer.transform();
+
+			content = imageImportDDMFormFieldValueTransformer.getContent();
+		}
 
 		content = replaceImportJournalArticleReferences(
 			portletDataContext, stagedModel, content);
@@ -218,8 +276,9 @@ public class JournalArticleExportImportContentProcessor
 
 				if (_log.isDebugEnabled()) {
 					_log.debug(
-						"Replacing " + jsonData + " with " +
-							journalArticleReference);
+						StringBundler.concat(
+							"Replacing ", jsonData, " with ",
+							journalArticleReference));
 				}
 
 				dynamicContentElement.clearContent();
@@ -340,8 +399,10 @@ public class JournalArticleExportImportContentProcessor
 					if (journalArticle == null) {
 						NoSuchArticleException nsae =
 							new NoSuchArticleException(
-								"No JournalArticle exists with the key " +
-									"{resourcePrimKey=" + classPK + "}");
+								StringBundler.concat(
+									"No JournalArticle exists with the key ",
+									"{resourcePrimKey=",
+									String.valueOf(classPK), "}"));
 
 						if (throwable == null) {
 							throwable = nsae;
@@ -365,6 +426,24 @@ public class JournalArticleExportImportContentProcessor
 		}
 	}
 
+	private Fields _getDDMStructureFields(
+		DDMStructure ddmStructure, String content) {
+
+		if (ddmStructure == null) {
+			return null;
+		}
+
+		try {
+			Fields fields = _journalConverter.getDDMFields(
+				ddmStructure, content);
+
+			return fields;
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		JournalArticleExportImportContentProcessor.class);
 
@@ -373,10 +452,16 @@ public class JournalArticleExportImportContentProcessor
 		_defaultTextExportImportContentProcessor;
 
 	@Reference
+	private DLAppService _dlAppService;
+
+	@Reference
 	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private JournalArticleLocalService _journalArticleLocalService;
+
+	@Reference
+	private JournalConverter _journalConverter;
 
 	@Reference
 	private JSONFactory _jsonFactory;
