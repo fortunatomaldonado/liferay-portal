@@ -25,6 +25,7 @@ import com.liferay.portal.osgi.debug.declarative.service.internal.configuration.
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -73,7 +74,8 @@ public class UnsatisfiedComponentScanner {
 	}
 
 	private static void _scanUnsatisfiedComponents(
-		ServiceComponentRuntime serviceComponentRuntime) {
+		ServiceComponentRuntime serviceComponentRuntime)
+		throws InvalidSyntaxException {
 
 		if (_log.isInfoEnabled()) {
 			Bundle bundle = FrameworkUtil.getBundle(
@@ -118,6 +120,9 @@ public class UnsatisfiedComponentScanner {
 						"Stopped scanning for unsatisfied declarative " +
 							"service components");
 				}
+			}
+			catch (InvalidSyntaxException e) {
+				e.printStackTrace();
 			}
 		}
 
