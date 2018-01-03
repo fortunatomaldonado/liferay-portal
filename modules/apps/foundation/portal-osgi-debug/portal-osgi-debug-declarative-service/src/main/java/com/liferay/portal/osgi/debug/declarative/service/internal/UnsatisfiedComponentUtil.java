@@ -14,11 +14,20 @@
 
 package com.liferay.portal.osgi.debug.declarative.service.internal;
 
+import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.util.StringBundler;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Dictionary;
+import java.util.List;
 
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
@@ -30,7 +39,8 @@ import org.osgi.service.component.runtime.dto.UnsatisfiedReferenceDTO;
 public class UnsatisfiedComponentUtil {
 
 	public static String listUnsatisfiedComponents(
-		ServiceComponentRuntime serviceComponentRuntime, Bundle... bundles) {
+		ServiceComponentRuntime serviceComponentRuntime, Bundle... bundles)
+		throws InvalidSyntaxException {
 
 		StringBundler sb = new StringBundler();
 
@@ -96,7 +106,7 @@ public class UnsatisfiedComponentUtil {
 
 	private static void _listUnsatisfiedComponents(
 		ServiceComponentRuntime serviceComponentRuntime, Bundle bundle,
-		StringBundler sb) {
+		StringBundler sb) throws InvalidSyntaxException {
 
 		if (bundle.getState() != Bundle.ACTIVE) {
 			return;
@@ -113,10 +123,54 @@ public class UnsatisfiedComponentUtil {
 		sb.append(bundle.getBundleId());
 		sb.append(", name: ");
 		sb.append(bundle.getSymbolicName());
-		sb.append(", version: ");
+		sb.append(", required version: ");
 		sb.append(bundle.getVersion());
+		_mismatchReleaseCheck(bundle, sb);
 		sb.append("}");
 		sb.append(unsatisfiedInformation);
+	}
+
+	private static void _mismatchReleaseCheck(Bundle bundle, StringBundler sb)
+		throws InvalidSyntaxException {
+		Dictionary<String, String> headers = bundle.getHeaders();
+
+		String requireSchemaVersion = headers.get(
+			"Liferay-Require-SchemaVersion");
+
+		if (Validator.isNull(requireSchemaVersion)) {
+			return;
+		}
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		String bundleSymbolicName = bundle.getSymbolicName();
+
+		String filterString = "(release.bundle.symbolic.name=" +bundleSymbolicName+ ")";
+
+		ServiceReference[] serviceReferences =
+			bundleContext.getServiceReferences(
+				Release.class.getName(), filterString);
+
+		List<String> publishSchemaVersions = new ArrayList<>();
+
+		if (serviceReferences != null) {
+			for (ServiceReference serviceReference : serviceReferences) {
+				String publishSchemaVersion =
+					(String) serviceReference.getProperty(
+						"release.schema.version");
+
+				if (publishSchemaVersion.equals(requireSchemaVersion)) {
+					return;
+				}
+
+				publishSchemaVersions.add(publishSchemaVersion);
+			}
+		}
+
+		if (!publishSchemaVersions.isEmpty()) {
+			sb.append(", current version: ");
+			sb.append(StringUtil.merge(publishSchemaVersions));
+		}
 	}
 
 }
