@@ -120,12 +120,11 @@
 					el = instance._getImgElement(imageSrc, selectedItem, fileEntryAttributeName);
 				}
 
-				var firstLineBreak = CKEDITOR.dom.element.createFromHtml('<br>');
-				var secondLineBreak = CKEDITOR.dom.element.createFromHtml('<br>');
+				var lineBreak = CKEDITOR.dom.element.createFromHtml('<br>');
 
 				editor.insertElement(el);
-				editor.insertElement(firstLineBreak);
-				editor.insertElement(secondLineBreak);
+				editor.insertElement(lineBreak);
+				editor.insertElement(lineBreak);
 
 				editor.setData(editor.getData());
 			}
