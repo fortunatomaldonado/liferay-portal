@@ -538,10 +538,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmStorageLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmStorageLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1116,10 +1116,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmStorageLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmStorageLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1844,10 +1844,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		qPos.add(structureId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmStorageLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmStorageLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2371,10 +2371,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		qPos.add(structureVersionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmStorageLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmStorageLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

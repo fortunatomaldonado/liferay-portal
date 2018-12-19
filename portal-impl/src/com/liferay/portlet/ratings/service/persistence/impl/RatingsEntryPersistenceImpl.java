@@ -539,10 +539,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ratingsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ratingsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1114,10 +1114,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ratingsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ratingsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1670,10 +1670,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ratingsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ratingsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2826,10 +2826,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		qPos.add(score);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ratingsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ratingsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

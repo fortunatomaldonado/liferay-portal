@@ -519,10 +519,10 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1049,10 +1049,10 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 		qPos.add(kaleoDefinitionVersionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1576,10 +1576,10 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 		qPos.add(kaleoInstanceId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2383,10 +2383,10 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskInstanceToken);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

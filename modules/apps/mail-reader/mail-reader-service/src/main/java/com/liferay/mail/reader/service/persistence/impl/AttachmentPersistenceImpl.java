@@ -507,10 +507,10 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 		qPos.add(messageId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(attachment);
+			Object[] objs = orderByComparator.getOrderByConditionValues(attachment);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -518,10 +518,10 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		qPos.add(userGroupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
+			Object[] objs = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1027,10 +1027,10 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
+			Object[] objs = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1535,10 +1535,10 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		qPos.add(roleId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
+			Object[] objs = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2076,10 +2076,10 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
+			Object[] objs = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2623,10 +2623,10 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		qPos.add(roleId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
+			Object[] objs = orderByComparator.getOrderByConditionValues(userGroupGroupRole);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

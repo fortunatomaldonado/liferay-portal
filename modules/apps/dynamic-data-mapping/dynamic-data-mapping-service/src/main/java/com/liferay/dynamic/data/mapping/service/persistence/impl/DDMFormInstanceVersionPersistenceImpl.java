@@ -530,10 +530,10 @@ public class DDMFormInstanceVersionPersistenceImpl extends BasePersistenceImpl<D
 		qPos.add(formInstanceId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmFormInstanceVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmFormInstanceVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1319,10 +1319,10 @@ public class DDMFormInstanceVersionPersistenceImpl extends BasePersistenceImpl<D
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmFormInstanceVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmFormInstanceVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

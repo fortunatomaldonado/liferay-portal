@@ -548,10 +548,10 @@ public class DDMDataProviderInstancePersistenceImpl extends BasePersistenceImpl<
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1383,10 +1383,10 @@ public class DDMDataProviderInstancePersistenceImpl extends BasePersistenceImpl<
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1917,10 +1917,10 @@ public class DDMDataProviderInstancePersistenceImpl extends BasePersistenceImpl<
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2234,10 +2234,10 @@ public class DDMDataProviderInstancePersistenceImpl extends BasePersistenceImpl<
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3260,10 +3260,10 @@ public class DDMDataProviderInstancePersistenceImpl extends BasePersistenceImpl<
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmDataProviderInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

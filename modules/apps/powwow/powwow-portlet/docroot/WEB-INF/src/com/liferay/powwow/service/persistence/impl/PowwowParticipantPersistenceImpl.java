@@ -528,10 +528,10 @@ public class PowwowParticipantPersistenceImpl extends BasePersistenceImpl<Powwow
 		qPos.add(powwowMeetingId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(powwowParticipant);
+			Object[] objs = orderByComparator.getOrderByConditionValues(powwowParticipant);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1554,10 +1554,10 @@ public class PowwowParticipantPersistenceImpl extends BasePersistenceImpl<Powwow
 		qPos.add(type);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(powwowParticipant);
+			Object[] objs = orderByComparator.getOrderByConditionValues(powwowParticipant);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

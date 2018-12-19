@@ -513,10 +513,10 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 		qPos.add(roleId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourceTypePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourceTypePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1117,10 +1117,10 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 		qPos.add(roleId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourceTypePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourceTypePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

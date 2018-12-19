@@ -515,10 +515,10 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTransition);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1043,10 +1043,10 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		qPos.add(kaleoDefinitionVersionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTransition);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1555,10 +1555,10 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		qPos.add(kaleoNodeId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTransition);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

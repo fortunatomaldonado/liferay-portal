@@ -545,10 +545,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1370,10 +1370,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1898,10 +1898,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2210,10 +2210,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2766,10 +2766,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(active);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3334,10 +3334,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3685,10 +3685,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4870,10 +4870,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(active);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5195,10 +5195,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(active);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -6055,10 +6055,10 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		qPos.add(active);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarResource);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarResource);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

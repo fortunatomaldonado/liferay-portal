@@ -538,10 +538,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1063,10 +1063,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		qPos.add(scope);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1828,10 +1828,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		qPos.add(roleId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2382,10 +2382,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3004,10 +3004,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3687,10 +3687,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4368,10 +4368,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		qPos.add(roleId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5953,10 +5953,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		qPos.add(viewActionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(resourcePermission);
+			Object[] objs = orderByComparator.getOrderByConditionValues(resourcePermission);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

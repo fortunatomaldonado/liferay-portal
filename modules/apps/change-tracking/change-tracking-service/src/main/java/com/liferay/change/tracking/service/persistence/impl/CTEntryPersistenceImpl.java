@@ -523,10 +523,10 @@ public class CTEntryPersistenceImpl extends BasePersistenceImpl<CTEntry>
 		qPos.add(resourcePrimKey);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ctEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ctEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1058,10 +1058,10 @@ public class CTEntryPersistenceImpl extends BasePersistenceImpl<CTEntry>
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ctEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ctEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

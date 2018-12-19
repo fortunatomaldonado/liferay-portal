@@ -526,10 +526,10 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lock);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lock);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1095,10 +1095,10 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lock);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lock);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1635,10 +1635,10 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lock);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lock);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -535,10 +535,10 @@ public class LVEntryLocalizationVersionPersistenceImpl
 		qPos.add(lvEntryLocalizationId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1284,10 +1284,10 @@ public class LVEntryLocalizationVersionPersistenceImpl
 		qPos.add(lvEntryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1836,10 +1836,10 @@ public class LVEntryLocalizationVersionPersistenceImpl
 		qPos.add(version);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2425,10 +2425,10 @@ public class LVEntryLocalizationVersionPersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lvEntryLocalizationVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

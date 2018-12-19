@@ -514,10 +514,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1023,10 +1023,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1532,10 +1532,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(completed);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2037,10 +2037,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2614,10 +2614,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3543,10 +3543,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4123,10 +4123,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5116,10 +5116,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -6185,10 +6185,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(completed);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -7225,10 +7225,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -8278,10 +8278,10 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		qPos.add(completed);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(backgroundTask);
+			Object[] objs = orderByComparator.getOrderByConditionValues(backgroundTask);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

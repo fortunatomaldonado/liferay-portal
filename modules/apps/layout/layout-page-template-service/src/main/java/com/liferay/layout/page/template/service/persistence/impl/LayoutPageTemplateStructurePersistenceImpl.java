@@ -548,10 +548,10 @@ public class LayoutPageTemplateStructurePersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateStructure);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateStructure);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1386,10 +1386,10 @@ public class LayoutPageTemplateStructurePersistenceImpl
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateStructure);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateStructure);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1920,10 +1920,10 @@ public class LayoutPageTemplateStructurePersistenceImpl
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateStructure);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateStructure);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

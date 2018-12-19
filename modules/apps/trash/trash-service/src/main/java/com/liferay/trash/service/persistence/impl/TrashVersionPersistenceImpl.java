@@ -502,10 +502,10 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 		qPos.add(entryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(trashVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(trashVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1036,10 +1036,10 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(trashVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(trashVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

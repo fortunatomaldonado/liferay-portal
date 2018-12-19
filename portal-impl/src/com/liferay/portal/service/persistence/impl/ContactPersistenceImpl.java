@@ -504,10 +504,10 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(contact);
+			Object[] objs = orderByComparator.getOrderByConditionValues(contact);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1006,10 +1006,10 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		qPos.add(accountId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(contact);
+			Object[] objs = orderByComparator.getOrderByConditionValues(contact);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1541,10 +1541,10 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(contact);
+			Object[] objs = orderByComparator.getOrderByConditionValues(contact);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

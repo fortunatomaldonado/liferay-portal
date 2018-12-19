@@ -544,10 +544,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1369,10 +1369,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1901,10 +1901,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(calendarId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2426,10 +2426,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(calendarResourceId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2956,10 +2956,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(parentCalendarBookingId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3488,10 +3488,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(recurringCalendarBookingId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4499,10 +4499,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5331,10 +5331,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarBooking);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

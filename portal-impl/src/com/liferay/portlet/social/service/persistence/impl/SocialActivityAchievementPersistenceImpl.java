@@ -518,10 +518,10 @@ public class SocialActivityAchievementPersistenceImpl
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1061,10 +1061,10 @@ public class SocialActivityAchievementPersistenceImpl
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1637,10 +1637,10 @@ public class SocialActivityAchievementPersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2206,10 +2206,10 @@ public class SocialActivityAchievementPersistenceImpl
 		qPos.add(firstInGroup);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3073,10 +3073,10 @@ public class SocialActivityAchievementPersistenceImpl
 		qPos.add(firstInGroup);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivityAchievement);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

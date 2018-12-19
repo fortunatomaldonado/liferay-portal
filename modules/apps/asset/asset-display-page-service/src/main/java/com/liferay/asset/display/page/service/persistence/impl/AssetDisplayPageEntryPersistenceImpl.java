@@ -543,10 +543,10 @@ public class AssetDisplayPageEntryPersistenceImpl extends BasePersistenceImpl<As
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1373,10 +1373,10 @@ public class AssetDisplayPageEntryPersistenceImpl extends BasePersistenceImpl<As
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1902,10 +1902,10 @@ public class AssetDisplayPageEntryPersistenceImpl extends BasePersistenceImpl<As
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2432,10 +2432,10 @@ public class AssetDisplayPageEntryPersistenceImpl extends BasePersistenceImpl<As
 		qPos.add(layoutPageTemplateEntryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetDisplayPageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

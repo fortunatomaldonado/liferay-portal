@@ -541,10 +541,10 @@ public class OAuth2ScopeGrantPersistenceImpl extends BasePersistenceImpl<OAuth2S
 		qPos.add(oAuth2ApplicationScopeAliasesId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(oAuth2ScopeGrant);
+			Object[] objs = orderByComparator.getOrderByConditionValues(oAuth2ScopeGrant);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

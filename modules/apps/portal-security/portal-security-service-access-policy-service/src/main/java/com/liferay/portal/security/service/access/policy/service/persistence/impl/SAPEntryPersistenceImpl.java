@@ -534,10 +534,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -865,10 +865,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1501,10 +1501,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1848,10 +1848,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2437,10 +2437,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2745,10 +2745,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3326,10 +3326,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		qPos.add(defaultSAPEntry);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3650,10 +3650,10 @@ public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 		qPos.add(defaultSAPEntry);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sapEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sapEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -758,10 +758,10 @@ public class MemberRequestPersistenceImpl extends BasePersistenceImpl<MemberRequ
 		qPos.add(receiverUserId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(memberRequest);
+			Object[] objs = orderByComparator.getOrderByConditionValues(memberRequest);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1296,10 +1296,10 @@ public class MemberRequestPersistenceImpl extends BasePersistenceImpl<MemberRequ
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(memberRequest);
+			Object[] objs = orderByComparator.getOrderByConditionValues(memberRequest);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

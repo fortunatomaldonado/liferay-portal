@@ -533,10 +533,10 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(mdrRule);
+			Object[] objs = orderByComparator.getOrderByConditionValues(mdrRule);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1350,10 +1350,10 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(mdrRule);
+			Object[] objs = orderByComparator.getOrderByConditionValues(mdrRule);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1877,10 +1877,10 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 		qPos.add(ruleGroupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(mdrRule);
+			Object[] objs = orderByComparator.getOrderByConditionValues(mdrRule);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -536,10 +536,10 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(journalFeed);
+			Object[] objs = orderByComparator.getOrderByConditionValues(journalFeed);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1355,10 +1355,10 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(journalFeed);
+			Object[] objs = orderByComparator.getOrderByConditionValues(journalFeed);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1878,10 +1878,10 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(journalFeed);
+			Object[] objs = orderByComparator.getOrderByConditionValues(journalFeed);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2187,10 +2187,10 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(journalFeed);
+			Object[] objs = orderByComparator.getOrderByConditionValues(journalFeed);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

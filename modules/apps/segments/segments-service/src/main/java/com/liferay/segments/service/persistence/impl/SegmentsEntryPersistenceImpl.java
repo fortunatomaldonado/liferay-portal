@@ -515,10 +515,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -827,10 +827,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1402,10 +1402,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1953,10 +1953,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		qPos.add(active);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2277,10 +2277,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		qPos.add(active);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3145,10 +3145,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3765,10 +3765,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4130,10 +4130,10 @@ public class SegmentsEntryPersistenceImpl extends BasePersistenceImpl<SegmentsEn
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(segmentsEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(segmentsEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

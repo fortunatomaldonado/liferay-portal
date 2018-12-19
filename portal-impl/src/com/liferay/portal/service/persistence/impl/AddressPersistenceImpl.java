@@ -533,10 +533,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1107,10 +1107,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1631,10 +1631,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2132,10 +2132,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2668,10 +2668,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3243,10 +3243,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3860,10 +3860,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(mailing);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4488,10 +4488,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		qPos.add(primary);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(address);
+			Object[] objs = orderByComparator.getOrderByConditionValues(address);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -504,10 +504,10 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		qPos.add(entryId1);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1005,10 +1005,10 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		qPos.add(entryId2);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1540,10 +1540,10 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		qPos.add(entryId2);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2081,10 +2081,10 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		qPos.add(type);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2622,10 +2622,10 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		qPos.add(type);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

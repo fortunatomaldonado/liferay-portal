@@ -704,10 +704,10 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 		qPos.add(modifiedDate);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(status);
+			Object[] objs = orderByComparator.getOrderByConditionValues(status);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1203,10 +1203,10 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 		qPos.add(online);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(status);
+			Object[] objs = orderByComparator.getOrderByConditionValues(status);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1735,10 +1735,10 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 		qPos.add(online);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(status);
+			Object[] objs = orderByComparator.getOrderByConditionValues(status);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

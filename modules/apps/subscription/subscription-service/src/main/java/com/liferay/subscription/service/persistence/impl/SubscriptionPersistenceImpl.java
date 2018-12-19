@@ -509,10 +509,10 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(subscription);
+			Object[] objs = orderByComparator.getOrderByConditionValues(subscription);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1010,10 +1010,10 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(subscription);
+			Object[] objs = orderByComparator.getOrderByConditionValues(subscription);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1544,10 +1544,10 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(subscription);
+			Object[] objs = orderByComparator.getOrderByConditionValues(subscription);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2086,10 +2086,10 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(subscription);
+			Object[] objs = orderByComparator.getOrderByConditionValues(subscription);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2661,10 +2661,10 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(subscription);
+			Object[] objs = orderByComparator.getOrderByConditionValues(subscription);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

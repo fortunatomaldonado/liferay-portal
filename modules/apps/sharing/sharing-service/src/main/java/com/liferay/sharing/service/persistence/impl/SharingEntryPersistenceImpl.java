@@ -535,10 +535,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1354,10 +1354,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1877,10 +1877,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2383,10 +2383,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(fromUserId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2887,10 +2887,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(toUserId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3409,10 +3409,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3956,10 +3956,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4498,10 +4498,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5074,10 +5074,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5657,10 +5657,10 @@ public class SharingEntryPersistenceImpl extends BasePersistenceImpl<SharingEntr
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(sharingEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(sharingEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

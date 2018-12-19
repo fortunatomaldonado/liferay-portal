@@ -549,10 +549,10 @@ public class CalendarNotificationTemplatePersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarNotificationTemplate);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarNotificationTemplate);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1387,10 +1387,10 @@ public class CalendarNotificationTemplatePersistenceImpl
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarNotificationTemplate);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarNotificationTemplate);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1927,10 +1927,10 @@ public class CalendarNotificationTemplatePersistenceImpl
 		qPos.add(calendarId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(calendarNotificationTemplate);
+			Object[] objs = orderByComparator.getOrderByConditionValues(calendarNotificationTemplate);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

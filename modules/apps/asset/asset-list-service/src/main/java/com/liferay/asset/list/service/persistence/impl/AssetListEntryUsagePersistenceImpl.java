@@ -542,10 +542,10 @@ public class AssetListEntryUsagePersistenceImpl extends BasePersistenceImpl<Asse
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1367,10 +1367,10 @@ public class AssetListEntryUsagePersistenceImpl extends BasePersistenceImpl<Asse
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1913,10 +1913,10 @@ public class AssetListEntryUsagePersistenceImpl extends BasePersistenceImpl<Asse
 		qPos.add(assetListEntryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2460,10 +2460,10 @@ public class AssetListEntryUsagePersistenceImpl extends BasePersistenceImpl<Asse
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
+			Object[] objs = orderByComparator.getOrderByConditionValues(assetListEntryUsage);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

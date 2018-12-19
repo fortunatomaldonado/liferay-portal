@@ -528,10 +528,10 @@ public class VersionedEntryVersionPersistenceImpl extends BasePersistenceImpl<Ve
 		qPos.add(versionedEntryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(versionedEntryVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(versionedEntryVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1268,10 +1268,10 @@ public class VersionedEntryVersionPersistenceImpl extends BasePersistenceImpl<Ve
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(versionedEntryVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(versionedEntryVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1815,10 +1815,10 @@ public class VersionedEntryVersionPersistenceImpl extends BasePersistenceImpl<Ve
 		qPos.add(version);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(versionedEntryVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(versionedEntryVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

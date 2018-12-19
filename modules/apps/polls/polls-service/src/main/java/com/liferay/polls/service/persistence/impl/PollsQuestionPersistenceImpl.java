@@ -539,10 +539,10 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsQuestion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsQuestion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1361,10 +1361,10 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsQuestion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsQuestion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1887,10 +1887,10 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsQuestion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsQuestion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2198,10 +2198,10 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsQuestion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsQuestion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

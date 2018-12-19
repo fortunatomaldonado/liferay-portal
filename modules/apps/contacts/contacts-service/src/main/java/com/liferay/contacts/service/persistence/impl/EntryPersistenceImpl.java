@@ -502,10 +502,10 @@ public class EntryPersistenceImpl extends BasePersistenceImpl<Entry>
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(entry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(entry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -499,10 +499,10 @@ public class LVEntryPersistenceImpl extends BasePersistenceImpl<LVEntry>
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(lvEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(lvEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

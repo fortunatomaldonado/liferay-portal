@@ -529,10 +529,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(module);
+			Object[] objs = orderByComparator.getOrderByConditionValues(module);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1101,10 +1101,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(module);
+			Object[] objs = orderByComparator.getOrderByConditionValues(module);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1620,10 +1620,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		qPos.add(appId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(module);
+			Object[] objs = orderByComparator.getOrderByConditionValues(module);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2159,10 +2159,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(module);
+			Object[] objs = orderByComparator.getOrderByConditionValues(module);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2705,10 +2705,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(module);
+			Object[] objs = orderByComparator.getOrderByConditionValues(module);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

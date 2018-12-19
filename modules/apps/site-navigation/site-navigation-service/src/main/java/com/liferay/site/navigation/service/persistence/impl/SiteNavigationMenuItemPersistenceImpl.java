@@ -544,10 +544,10 @@ public class SiteNavigationMenuItemPersistenceImpl extends BasePersistenceImpl<S
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1376,10 +1376,10 @@ public class SiteNavigationMenuItemPersistenceImpl extends BasePersistenceImpl<S
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1924,10 +1924,10 @@ public class SiteNavigationMenuItemPersistenceImpl extends BasePersistenceImpl<S
 		qPos.add(siteNavigationMenuId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2455,10 +2455,10 @@ public class SiteNavigationMenuItemPersistenceImpl extends BasePersistenceImpl<S
 		qPos.add(parentSiteNavigationMenuItemId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3013,10 +3013,10 @@ public class SiteNavigationMenuItemPersistenceImpl extends BasePersistenceImpl<S
 		qPos.add(parentSiteNavigationMenuItemId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3587,10 +3587,10 @@ public class SiteNavigationMenuItemPersistenceImpl extends BasePersistenceImpl<S
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenuItem);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -543,10 +543,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1370,10 +1370,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1901,10 +1901,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2447,10 +2447,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		qPos.add(fragmentEntryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3033,10 +3033,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3620,10 +3620,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4245,10 +4245,10 @@ public class FragmentEntryLinkPersistenceImpl extends BasePersistenceImpl<Fragme
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
+			Object[] objs = orderByComparator.getOrderByConditionValues(fragmentEntryLink);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -519,10 +519,10 @@ public class DDMStructureVersionPersistenceImpl extends BasePersistenceImpl<DDMS
 		qPos.add(structureId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmStructureVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmStructureVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1305,10 +1305,10 @@ public class DDMStructureVersionPersistenceImpl extends BasePersistenceImpl<DDMS
 		qPos.add(status);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddmStructureVersion);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddmStructureVersion);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

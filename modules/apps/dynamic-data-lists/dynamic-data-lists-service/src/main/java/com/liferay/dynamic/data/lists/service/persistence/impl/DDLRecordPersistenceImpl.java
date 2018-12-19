@@ -533,10 +533,10 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddlRecord);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddlRecord);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1351,10 +1351,10 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddlRecord);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddlRecord);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1876,10 +1876,10 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddlRecord);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddlRecord);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2383,10 +2383,10 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		qPos.add(recordSetId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddlRecord);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddlRecord);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2917,10 +2917,10 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddlRecord);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddlRecord);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3485,10 +3485,10 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(ddlRecord);
+			Object[] objs = orderByComparator.getOrderByConditionValues(ddlRecord);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

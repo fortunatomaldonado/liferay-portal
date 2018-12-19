@@ -523,10 +523,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1054,10 +1054,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		qPos.add(kaleoDefinitionVersionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1582,10 +1582,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		qPos.add(kaleoInstanceId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2114,10 +2114,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		qPos.add(kaleoTaskInstanceTokenId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2669,10 +2669,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3236,10 +3236,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		qPos.add(assigneeClassPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3824,10 +3824,10 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		qPos.add(assigneeClassPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
+			Object[] objs = orderByComparator.getOrderByConditionValues(kaleoTaskAssignmentInstance);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

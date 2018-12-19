@@ -513,10 +513,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1023,10 +1023,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1529,10 +1529,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2045,10 +2045,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(activitySetId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2768,10 +2768,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(classNameId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3284,10 +3284,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(receiverUserId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3824,10 +3824,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4410,10 +4410,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(classPK);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5003,10 +5003,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(type);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5688,10 +5688,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		qPos.add(receiverUserId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(socialActivity);
+			Object[] objs = orderByComparator.getOrderByConditionValues(socialActivity);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

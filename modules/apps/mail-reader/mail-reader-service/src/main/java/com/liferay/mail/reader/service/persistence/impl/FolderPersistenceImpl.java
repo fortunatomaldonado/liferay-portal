@@ -507,10 +507,10 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 		qPos.add(accountId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(folder);
+			Object[] objs = orderByComparator.getOrderByConditionValues(folder);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

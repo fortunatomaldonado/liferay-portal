@@ -533,10 +533,10 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsVote);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsVote);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1351,10 +1351,10 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsVote);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsVote);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1877,10 +1877,10 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		qPos.add(questionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsVote);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsVote);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2378,10 +2378,10 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		qPos.add(choiceId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsVote);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsVote);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2911,10 +2911,10 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(pollsVote);
+			Object[] objs = orderByComparator.getOrderByConditionValues(pollsVote);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

@@ -534,10 +534,10 @@ public class SyncDevicePersistenceImpl extends BasePersistenceImpl<SyncDevice>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(syncDevice);
+			Object[] objs = orderByComparator.getOrderByConditionValues(syncDevice);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1109,10 +1109,10 @@ public class SyncDevicePersistenceImpl extends BasePersistenceImpl<SyncDevice>
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(syncDevice);
+			Object[] objs = orderByComparator.getOrderByConditionValues(syncDevice);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1630,10 +1630,10 @@ public class SyncDevicePersistenceImpl extends BasePersistenceImpl<SyncDevice>
 		qPos.add(userId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(syncDevice);
+			Object[] objs = orderByComparator.getOrderByConditionValues(syncDevice);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2179,10 +2179,10 @@ public class SyncDevicePersistenceImpl extends BasePersistenceImpl<SyncDevice>
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(syncDevice);
+			Object[] objs = orderByComparator.getOrderByConditionValues(syncDevice);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

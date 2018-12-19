@@ -530,10 +530,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1349,10 +1349,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1872,10 +1872,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2377,10 +2377,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2921,10 +2921,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3448,10 +3448,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		qPos.add(fileVersionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4016,10 +4016,10 @@ public class AMImageEntryPersistenceImpl extends BasePersistenceImpl<AMImageEntr
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(amImageEntry);
+			Object[] objs = orderByComparator.getOrderByConditionValues(amImageEntry);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

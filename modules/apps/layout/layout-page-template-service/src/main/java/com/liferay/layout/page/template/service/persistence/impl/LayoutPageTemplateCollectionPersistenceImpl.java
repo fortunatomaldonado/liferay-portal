@@ -552,10 +552,10 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1391,10 +1391,10 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1927,10 +1927,10 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2249,10 +2249,10 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3103,10 +3103,10 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3464,10 +3464,10 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
+			Object[] objs = orderByComparator.getOrderByConditionValues(layoutPageTemplateCollection);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 

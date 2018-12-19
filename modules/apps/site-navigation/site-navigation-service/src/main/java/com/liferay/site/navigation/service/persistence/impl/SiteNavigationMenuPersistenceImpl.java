@@ -544,10 +544,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1369,10 +1369,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -1898,10 +1898,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -2212,10 +2212,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(groupId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3053,10 +3053,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -3406,10 +3406,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4032,10 +4032,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(type);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4358,10 +4358,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(type);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -4958,10 +4958,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(auto);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
@@ -5284,10 +5284,10 @@ public class SiteNavigationMenuPersistenceImpl extends BasePersistenceImpl<SiteN
 		qPos.add(auto);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
+			Object[] objs = orderByComparator.getOrderByConditionValues(siteNavigationMenu);
 
-			for (Object value : values) {
-				qPos.add(value);
+			for (Object obj : objs) {
+				qPos.add(obj);
 			}
 		}
 
