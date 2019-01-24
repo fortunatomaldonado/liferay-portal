@@ -14,8 +14,6 @@
 
 package com.liferay.frontend.theme.favicon.servlet.internal;
 
-import com.liferay.portal.kernel.model.LayoutSet;
-import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -53,7 +51,7 @@ public class FaviconServlet extends HttpServlet {
 
 		String contextPath = request.getAttribute("CURRENT_URL").toString();
 
-		if(!contextPath.equals("/o/favicon.ico")) {
+		if (!contextPath.equals("/o/favicon.ico")) {
 			contextPath = contextPath.replace("/favicon", "");
 
 			response.sendRedirect(contextPath + "/images/favicon.ico");
