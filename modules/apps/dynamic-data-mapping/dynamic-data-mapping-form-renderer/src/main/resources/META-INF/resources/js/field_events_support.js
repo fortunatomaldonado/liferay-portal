@@ -90,6 +90,7 @@ AUI.add(
 
 				instance.bindInputEvent('blur', instance._onInputBlur, true);
 				instance.bindInputEvent('focus', instance._onInputFocus, true);
+				instance.bindInputEvent('mousedown', instance._onInputMousedown, true);
 				instance.bindInputEvent(instance.getChangeEventName(), instance._onValueChange, true);
 			},
 
@@ -123,6 +124,25 @@ AUI.add(
 
 					Liferay.fire(
 						'ddmFieldFocus',
+						{
+							fieldName: instance.get('fieldName'),
+							formId: root.getFormId(),
+							page: root.getCurrentPage() || 1
+						}
+					);
+				}
+			},
+
+			_fireMousedownEvent: function() {
+				var instance = this;
+
+				var root = instance.getRoot();
+
+				if (root) {
+					var now = new Date();
+
+					Liferay.fire(
+						'ddmFieldMousedown',
 						{
 							fieldName: instance.get('fieldName'),
 							formId: root.getFormId(),
@@ -176,6 +196,14 @@ AUI.add(
 				instance.fire('focus', instance._getEventPayload(event));
 
 				instance._fireFocusEvent();
+			},
+
+			_onInputMousedown: function(event) {
+				var instance = this;
+
+				instance.fire('mousedown', instance._getEventPayload(event));
+
+				instance._fireMousedownEvent();
 			},
 
 			_onValueChange: function(event) {

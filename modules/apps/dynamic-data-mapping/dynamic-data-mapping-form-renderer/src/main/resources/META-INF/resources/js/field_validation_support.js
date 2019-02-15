@@ -24,6 +24,7 @@ AUI.add(
 				instance._eventHandlers.push(
 					instance.after('focus', instance._afterFocus),
 					instance.after('blur', instance._afterBlur),
+					instance.after('mousedown', instance._afterMousedown),
 					instance.after('validChange', instance._afterValidChange)
 				);
 			},
@@ -82,6 +83,14 @@ AUI.add(
 
 			_afterFocus: function() {
 				var instance = this;
+
+				instance.hideErrorMessage();
+			},
+
+			_afterMousedown: function() {
+				var instance = this;
+
+				console.log("mousedown");
 
 				instance.hideErrorMessage();
 			},
