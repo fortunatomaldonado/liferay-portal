@@ -78,11 +78,11 @@ public class SelectDDMFormFieldTemplateContextContributor
 			ddmFormFieldOptionsFactory.create(
 				ddmFormField, ddmFormFieldRenderingContext);
 
-		parameters.put(
-			"options",
-			getOptions(
-				ddmFormFieldOptions, ddmFormFieldRenderingContext.getLocale(),
-				ddmFormFieldRenderingContext));
+		List<Object> options = getOptions(
+			ddmFormFieldOptions, ddmFormFieldRenderingContext.getLocale(),
+			ddmFormFieldRenderingContext);
+
+		parameters.put("options", options);
 
 		Map<String, String> stringsMap = new HashMap<>();
 
@@ -117,11 +117,19 @@ public class SelectDDMFormFieldTemplateContextContributor
 			parameters.put("predefinedValue", predefinedValue);
 		}
 
-		parameters.put(
-			"value",
-			getValue(
-				GetterUtil.getString(
-					ddmFormFieldRenderingContext.getValue(), "[]")));
+		if (options != null && options.size() != 0) {
+			parameters.put(
+				"value",
+				getValue(
+					GetterUtil.getString(
+						ddmFormFieldRenderingContext.getValue(), "[]")));
+		}
+		else {
+			parameters.put(
+				"value",
+				getValue(
+					GetterUtil.getString("", "[]")));
+		}
 
 		return parameters;
 	}

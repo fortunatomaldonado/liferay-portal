@@ -59,7 +59,7 @@ class Select extends Component {
 	}
 
 	prepareStateForRender(state) {
-		const {predefinedValue, value} = state;
+		const {dataSourceType, predefinedValue, value} = state;
 		const {fixedOptions, multiple, options} = this;
 		const predefinedValueArray = this._getArrayValue(predefinedValue);
 		let valueArray = this._getArrayValue(value);
@@ -94,6 +94,11 @@ class Select extends Component {
 
 		if (!multiple) {
 			newOptions = [emptyOption, ...newOptions];
+		}
+
+		if (dataSourceType === 'from-autofill' && newOptions.length === 1 && newOptions[0].value === '') {
+			valueArray = [];
+			state.value = [];
 		}
 
 		return {
