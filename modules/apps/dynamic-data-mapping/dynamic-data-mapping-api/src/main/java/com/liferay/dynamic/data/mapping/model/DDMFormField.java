@@ -145,7 +145,7 @@ public class DDMFormField implements Serializable {
 
 		if ((ddmFormFieldOptions != null) &&
 			Validator.isNotNull(dataSourceType) &&
-			!dataSourceType.equals("manual")) {
+			(!dataSourceType.equals("manual") && !dataSourceType.equals("data-provider") && !dataSourceType.equals("from-autofill"))) {
 
 			Locale defaultLocale = ddmFormFieldOptions.getDefaultLocale();
 
@@ -292,6 +292,10 @@ public class DDMFormField implements Serializable {
 		}
 
 		return false;
+	}
+
+	public void setDataSourceType(String dataSourceType) {
+		_properties.put("dataSourceType", dataSourceType);
 	}
 
 	public void setDataType(String dataType) {
