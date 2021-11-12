@@ -24,6 +24,10 @@ html#{$cadmin-selector} {
 			}
 		}
 
+		input.form-control.form-control.input-group-inset.input-group-inset-after{
+			z-index: auto;
+		}
+
 		.lfr-ddm-field-group {
 			margin-bottom: 20px;
 		}
