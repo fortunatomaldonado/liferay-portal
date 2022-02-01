@@ -39,6 +39,10 @@ int mfaCheckerIndex = ParamUtil.getInteger(request, "mfaCheckerIndex");
 	<liferay-ui:error key="mfaVerificationFailed" message="multi-factor-authentication-has-failed" />
 
 	<%
+	const pageContent = pageContext.getOut();
+
+	pageContent.flush();
+
 	browserMFAChecker.includeBrowserVerification(request, response, mfaUserId);
 	%>
 
