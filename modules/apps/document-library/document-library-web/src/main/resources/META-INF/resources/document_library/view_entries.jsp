@@ -172,7 +172,7 @@ DLViewEntriesDisplayContext dlViewEntriesDisplayContext = new DLViewEntriesDispl
 
 												<div class="autofit-col autofit-col-expand">
 													<div class="table-title">
-														<aui:a href="<%= dlViewEntriesDisplayContext.getViewFileEntryURL(fileEntry) %>"><%= latestFileVersion.getTitle() %></aui:a>
+														<aui:a cssClass="text-truncate" href="<%= dlViewEntriesDisplayContext.getViewFileEntryURL(fileEntry) %>" title="<%= latestFileVersion.getTitle() %>"><%= latestFileVersion.getTitle() %></aui:a>
 													</div>
 												</div>
 											</div>
