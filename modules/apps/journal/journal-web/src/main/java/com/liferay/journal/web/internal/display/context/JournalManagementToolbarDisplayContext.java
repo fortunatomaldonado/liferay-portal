@@ -597,6 +597,7 @@ public class JournalManagementToolbarDisplayContext
 						UnsafeConsumer<DropdownItem, Exception> unsafeConsumer =
 							dropdownItem -> {
 								dropdownItem.setHref(portletURL);
+								dropdownItem.setIcon("web-content");
 								dropdownItem.setLabel(
 									HtmlUtil.escape(
 										ddmStructure.getUnambiguousName(
