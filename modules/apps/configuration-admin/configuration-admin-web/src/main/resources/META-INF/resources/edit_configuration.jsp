@@ -134,7 +134,7 @@ renderResponse.setTitle(categoryDisplayName);
 					%>
 
 					<h2>
-						<%= HtmlUtil.escape(configurationTitle) %>
+						<p style="padding-bottom: 10px;"><%= HtmlUtil.escape(configurationTitle) %></p>
 
 						<c:if test="<%= configurationModel.hasScopeConfiguration(configurationScopeDisplayContext.getScope()) %>">
 							<liferay-ui:icon-menu
@@ -209,6 +209,16 @@ renderResponse.setTitle(categoryDisplayName);
 						</c:if>
 					</h2>
 
+					<%
+					String configurationModelDescription = (componentResourceBundle != null) ? LanguageUtil.format(componentResourceBundle, configurationModel.getDescription(), configurationModel.getDescriptionArguments()) : configurationModel.getDescription();
+					%>
+
+					<c:if test="<%= !Validator.isBlank(configurationModelDescription) %>">
+						<p class="text-secondary">
+							<%= configurationModelDescription %>
+						</p>
+					</c:if>
+
 					<c:if test="<%= configurationModel.hasScopeConfiguration(configurationScopeDisplayContext.getScope()) && configurationModel.isReadOnly() %>">
 						<aui:alert closeable="<%= false %>" id="readonlyAlert" type="info">
 							<liferay-ui:message key="this-configuration-is-read-only" />
@@ -222,16 +232,6 @@ renderResponse.setTitle(categoryDisplayName);
 					</c:if>
 
 					<liferay-util:dynamic-include key='<%= "com.liferay.configuration.admin.web#/edit_configuration.jsp#" + configurationModel.getFactoryPid() + "#pre" %>' />
-
-					<%
-					String configurationModelDescription = (componentResourceBundle != null) ? LanguageUtil.format(componentResourceBundle, configurationModel.getDescription(), configurationModel.getDescriptionArguments()) : configurationModel.getDescription();
-					%>
-
-					<c:if test="<%= !Validator.isBlank(configurationModelDescription) %>">
-						<p class="text-default">
-							<strong><%= configurationModelDescription %></strong>
-						</p>
-					</c:if>
 
 					<%
 					ConfigurationFormRenderer configurationFormRenderer = (ConfigurationFormRenderer)request.getAttribute(ConfigurationAdminWebKeys.CONFIGURATION_FORM_RENDERER);
