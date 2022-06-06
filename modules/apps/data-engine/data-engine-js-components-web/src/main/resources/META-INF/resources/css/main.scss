@@ -43,7 +43,7 @@
 }
 
 .ddm-field-container {
-	padding: 0 12px;
+	padding: 0;
 }
 
 body .ddm-user-view-content {
@@ -160,7 +160,7 @@ body .ddm-user-view-content {
 
 	.lfr-ddm-form-page {
 		display: none;
-		padding: 0;
+		padding: 10px 0;
 
 		&.active {
 			display: block;
