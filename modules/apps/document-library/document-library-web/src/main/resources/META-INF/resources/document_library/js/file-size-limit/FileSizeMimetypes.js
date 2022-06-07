@@ -37,7 +37,7 @@ const FileSizeField = ({
 	const [sizeErrorMessage, setSizeErrorMessage] = useState('');
 
 	return (
-		<ClayLayout.Row className="size-limit-row">
+		<ClayLayout.Row className="form-group size-limit-row">
 			<ClayLayout.Col md="6">
 				<label htmlFor="mimeType">
 					{Liferay.Language.get('mime-type-field-label')}
@@ -153,8 +153,6 @@ const FileSizePerMimeType = ({
 
 	return (
 		<>
-			<p className="text-muted">{Liferay.Language.get(description)}</p>
-
 			{sizesList.map((item, index) => (
 				<FileSizeField
 					handleAddClick={addRow}
@@ -166,6 +164,8 @@ const FileSizePerMimeType = ({
 					size={item.size}
 				/>
 			))}
+
+			<p className="text-muted">{Liferay.Language.get(description)}</p>
 		</>
 	);
 };
