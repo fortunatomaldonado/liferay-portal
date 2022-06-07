@@ -30,7 +30,7 @@ const FileSizeField = ({
 	portletNamespace,
 	size = '',
 }) => (
-	<ClayLayout.Row className="mt-4">
+	<ClayLayout.Row className="form-group mt-4">
 		<ClayLayout.Col md="6">
 			<label htmlFor="mimeType">
 				{Liferay.Language.get('mime-type-field-label')}
@@ -125,8 +125,6 @@ const FileSizePerMimeType = ({
 
 	return (
 		<>
-			<p className="text-muted">{Liferay.Language.get(description)}</p>
-
 			{sizesList.map((item, index) => (
 				<FileSizeField
 					handleAddClick={addRow}
@@ -138,6 +136,8 @@ const FileSizePerMimeType = ({
 					size={item.size}
 				/>
 			))}
+
+			<p className="text-muted">{Liferay.Language.get(description)}</p>
 		</>
 	);
 };
