@@ -67,7 +67,7 @@ else {
 				</c:if>
 
 				<div class="portrait-icons">
-					<div class="btn-group button-holder">
+					<div class="button-holder" style="margin: 24px 0;">
 						<aui:button cssClass="btn btn-secondary edit-logo modify-link" value="change" />
 
 						<aui:button cssClass="btn btn-secondary delete-logo modify-link" disabled="<%= defaultLogo && (fileEntryId == 0) %>" value="delete" />
