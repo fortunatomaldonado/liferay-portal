@@ -3081,6 +3081,18 @@ AUI.add(
 						.get('container')
 						.all('> fieldset > div > .field-wrapper');
 				},
+
+				setLabel(label) {
+					const instance = this;
+
+					const containerNode = instance.get('container')._node;
+
+					const fieldSet = containerNode.getElementsByClassName(
+						'legend'
+					)[0];
+
+					fieldSet.textContent = label;
+				},
 			},
 		});
 
@@ -3458,6 +3470,24 @@ AUI.add(
 		});
 
 		FieldTypes['ddm-geolocation'] = GeolocationField;
+
+		const ParagraphField = A.Component.create({
+			EXTENDS: Field,
+
+			prototype: {
+				setLabel(label) {
+					const instance = this;
+
+					const containerNode = instance.get('container')._node;
+
+					const paragraph = containerNode.firstElementChild;
+
+					paragraph.textContent = label;
+				},
+			},
+		});
+
+		FieldTypes['ddm-paragraph'] = ParagraphField;
 
 		const TextHTMLField = A.Component.create({
 			EXTENDS: Field,
