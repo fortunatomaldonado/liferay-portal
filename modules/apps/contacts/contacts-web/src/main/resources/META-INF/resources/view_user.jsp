@@ -151,6 +151,7 @@ request.setAttribute("view_user.jsp-user", user2);
 				%>
 
 				<liferay-ui:icon
+					cssClass="float-right"
 					icon="pencil"
 					markupView="lexicon"
 					url="<%= editDetailsURL.toString() %>"
