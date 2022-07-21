@@ -94,6 +94,7 @@ AUI.add(
 					allDay: calendarBooking.allDay,
 					calendarBookingId: calendarBooking.calendarBookingId,
 					calendarId: calendarBooking.calendarId,
+					calendarResourceName: calendarBooking.calendarResourceName,
 					content: calendarBooking.title,
 					description: calendarBooking.description,
 					endDate: endDate.getTime(),

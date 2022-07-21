@@ -22,6 +22,7 @@ import com.liferay.calendar.recurrence.Recurrence;
 import com.liferay.calendar.recurrence.RecurrenceSerializer;
 import com.liferay.calendar.service.CalendarBookingService;
 import com.liferay.calendar.service.CalendarResourceLocalService;
+import com.liferay.calendar.service.CalendarResourceLocalServiceUtil;
 import com.liferay.calendar.service.CalendarService;
 import com.liferay.calendar.util.JCalendarUtil;
 import com.liferay.calendar.util.RecurrenceUtil;
@@ -168,6 +169,15 @@ public class CalendarUtil {
 			"calendarBookingId", calendarBooking.getCalendarBookingId()
 		).put(
 			"calendarId", calendarBooking.getCalendarId()
+		).put(
+			"calendarResourceName",
+			() -> {
+				CalendarResource calendarResource =
+					CalendarResourceLocalServiceUtil.getCalendarResource(
+						calendarBooking.getCalendarResourceId());
+
+				return calendarResource.getName(themeDisplay.getLocale());
+			}
 		).put(
 			"description",
 			calendarBooking.getDescription(themeDisplay.getLocale())
