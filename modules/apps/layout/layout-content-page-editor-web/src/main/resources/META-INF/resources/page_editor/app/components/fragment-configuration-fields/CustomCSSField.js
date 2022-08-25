@@ -117,7 +117,7 @@ function CustomCSSHelp() {
 				>
 					<ClayIcon
 						className="text-secondary"
-						symbol="info-panel-open"
+						symbol="question-circle-full"
 					/>
 				</span>
 			}
