@@ -71,7 +71,7 @@ export default function ({currentURL, namespace, redirect}) {
 		const buttons = [
 			createButton({
 				action: 'cancel',
-				buttonClass: 'btn-link',
+				buttonClass: 'btn-outline-borderless',
 				label: Liferay.Language.get('cancel'),
 				type: 'button',
 			}),
@@ -89,6 +89,9 @@ export default function ({currentURL, namespace, redirect}) {
 			}),
 		];
 
+		buttons[0]
+			.querySelector('.btn-outline-borderless')
+			.classList.add('btn-outline-secondary');
 		buttons.forEach((button) => footer.appendChild(button));
 	}
 
