@@ -179,7 +179,10 @@ if (portletTitleBasedNavigation) {
 							fileBrowserParams="<%= fileBrowserParams %>"
 							name="contentEditor"
 							placeholder="content"
-						/>
+							required="<%= true %>"
+						>
+							<aui:validator name="required" />
+						</liferay-editor:editor>
 
 						<aui:input name="content" type="hidden" />
 					</div>
