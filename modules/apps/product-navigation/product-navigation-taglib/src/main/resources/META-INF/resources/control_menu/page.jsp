@@ -50,7 +50,7 @@ for (ProductNavigationControlMenuCategory productNavigationControlMenuCategory :
 	<div class="cadmin control-menu-container">
 		<liferay-util:dynamic-include key="com.liferay.product.navigation.taglib#/page.jsp#pre" />
 
-		<div class="control-menu control-menu-level-1 control-menu-level-1-<%= applicationsMenuApp ? "light" : "dark" %> d-print-none" data-qa-id="controlMenu" id="<portlet:namespace />ControlMenu">
+		<div aria-label="<liferay-ui:message key="main-navigation" />" class="control-menu control-menu-level-1 control-menu-level-1-<%= applicationsMenuApp ? "light" : "dark" %> d-print-none" data-qa-id="controlMenu" id="<portlet:namespace />ControlMenu" role="navigation">
 			<clay:container-fluid>
 				<h1 class="sr-only"><liferay-ui:message key="admin-header" /></h1>
 
