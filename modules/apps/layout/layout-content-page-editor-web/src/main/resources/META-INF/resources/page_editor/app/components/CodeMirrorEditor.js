@@ -71,6 +71,19 @@ const CodeMirrorEditor = ({
 				autoCloseTags: true,
 				autoRefresh: true,
 				extraKeys: {
+					'Ctrl-M'(cm) {
+						if (
+							!cm.state.keyMaps.some(
+								(key) => key.name === 'tabAccessibility'
+							)
+						) {
+							cm.addKeyMap({
+								'Shift-Tab': false,
+								'Tab': false,
+								'name': 'tabAccessibility',
+							});
+						}
+					},
 					'Ctrl-Space': 'autocomplete',
 				},
 				globalVars: true,
@@ -87,6 +100,10 @@ const CodeMirrorEditor = ({
 
 			codeMirror.on('change', (cm) => {
 				onChange(cm.getValue());
+			});
+
+			codeMirror.on('focus', (cm) => {
+				cm.removeKeyMap('tabAccessibility');
 			});
 
 			codeMirror.setSize(null, '100%');

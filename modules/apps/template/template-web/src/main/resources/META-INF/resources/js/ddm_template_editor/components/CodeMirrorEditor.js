@@ -70,6 +70,19 @@ export function CodeMirrorEditor({
 				autoCloseTags: true,
 				autoRefresh: true,
 				extraKeys: {
+					'Ctrl-M'(cm) {
+						if (
+							!cm.state.keyMaps.some(
+								(key) => key.name === 'tabAccessibility'
+							)
+						) {
+							cm.addKeyMap({
+								'Shift-Tab': false,
+								'Tab': false,
+								'name': 'tabAccessibility',
+							});
+						}
+					},
 					'Ctrl-Space': 'autocomplete',
 				},
 				foldGutter: true,
@@ -190,6 +203,10 @@ export function CodeMirrorEditor({
 			};
 
 			editor.on('change', handleEditorChange);
+
+			editor.on('focus', (cm) => {
+				cm.removeKeyMap('tabAccessibility');
+			});
 
 			return () => {
 				editor.off('change', handleEditorChange);
