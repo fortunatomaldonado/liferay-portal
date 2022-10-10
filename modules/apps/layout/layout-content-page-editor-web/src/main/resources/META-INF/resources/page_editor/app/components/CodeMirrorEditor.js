@@ -98,6 +98,13 @@ const CodeMirrorEditor = ({
 				value: initialContent,
 			});
 
+			codeMirror.display.input
+				.getField()
+				.setAttribute('aria-label', 'HTML Editor');
+			codeMirror.display.input
+				.getField()
+				.setAttribute('aria-describedby', 'HTMLSRDescription');
+
 			codeMirror.on('change', (cm) => {
 				onChange(cm.getValue());
 			});
@@ -111,7 +118,16 @@ const CodeMirrorEditor = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	return <div className={classNames(className, 'h-100')} ref={ref} />;
+	return (
+		<>
+			<div hidden id="HTMLSRDescription">
+				{Liferay.Language.get(
+					'press-Ctrl-M-then-Tab-to-move-focus-from-editor'
+				)}
+			</div>
+			<div className={classNames(className, 'h-100')} ref={ref} />
+		</>
+	);
 };
 
 export default CodeMirrorEditor;

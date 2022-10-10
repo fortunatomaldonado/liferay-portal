@@ -304,6 +304,16 @@ const CodeMirrorEditor = ({
 				viewportMargin: Infinity,
 			});
 
+			codeMirror.display.input
+				.getField()
+				.setAttribute('aria-label', `${MODES[mode].name} Editor`);
+			codeMirror.display.input
+				.getField()
+				.setAttribute(
+					'aria-describedby',
+					`${MODES[mode].name}SRDescription`
+				);
+
 			codeMirror.on('change', (cm) => {
 				onChange(cm.getValue());
 			});
@@ -375,6 +385,11 @@ const CodeMirrorEditor = ({
 				/>
 			)}
 
+			<div hidden id={`${MODES[mode].name}SRDescription`}>
+				{Liferay.Language.get(
+					'press-Ctrl-M-then-Tab-to-move-focus-from-editor'
+				)}
+			</div>
 			<div className="codemirror-editor-wrapper" ref={ref}></div>
 
 			{codeFooterText && <FixedText text={codeFooterText} />}

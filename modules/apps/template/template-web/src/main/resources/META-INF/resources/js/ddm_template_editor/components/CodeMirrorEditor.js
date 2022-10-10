@@ -120,6 +120,13 @@ export function CodeMirrorEditor({
 				}
 			}
 
+			editor.display.input
+				.getField()
+				.setAttribute('aria-label', 'Template Editor');
+			editor.display.input
+				.getField()
+				.setAttribute('aria-describedby', 'TemplateSRDescription');
+
 			const getWordContext = (cm) => {
 				const currentRange = cm.findWordAt({
 					...cm.getCursor(),
@@ -253,10 +260,17 @@ export function CodeMirrorEditor({
 	}, [editor, inputChannel]);
 
 	return (
-		<div
-			className="ddm_template_editor__CodeMirrorEditor"
-			ref={setEditorWrapper}
-		/>
+		<>
+			<div hidden id="TemplateSRDescription">
+				{Liferay.Language.get(
+					'press-Ctrl-M-then-Tab-to-move-focus-from-editor'
+				)}
+			</div>
+			<div
+				className="ddm_template_editor__CodeMirrorEditor"
+				ref={setEditorWrapper}
+			/>
+		</>
 	);
 }
 
