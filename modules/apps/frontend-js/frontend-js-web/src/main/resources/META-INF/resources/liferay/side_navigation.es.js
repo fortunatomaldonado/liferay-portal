@@ -673,6 +673,7 @@ SideNavigation.prototype = {
 
 		if (closed) {
 			setStyles(menu, {
+				display: 'none',
 				width: px(width),
 			});
 
@@ -1229,6 +1230,10 @@ SideNavigation.prototype = {
 		}
 
 		this.setWidth();
+
+		setStyles(menu, {
+			display: 'block',
+		});
 	},
 
 	showSimpleSidenav() {
@@ -1359,6 +1364,10 @@ SideNavigation.prototype = {
 					'closed.lexicon.sidenav',
 					instance
 				);
+
+				setStyles(menu, {
+					display: 'none',
+				});
 			}
 			else {
 				setClasses(toggler, {
