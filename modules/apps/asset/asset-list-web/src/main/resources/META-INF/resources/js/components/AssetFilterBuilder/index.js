@@ -247,6 +247,7 @@ function Rule({
 						monospaced
 						onClick={onDeleteRule}
 						small
+						title={Liferay.Language.get('delete')}
 					>
 						<ClayIcon symbol="trash" />
 					</ClayButton>
@@ -349,6 +350,7 @@ function AssetFilterBuilder({
 							monospaced
 							onClick={handleAddRule}
 							small
+							title={Liferay.Language.get('add')}
 						>
 							<ClayIcon symbol="plus" />
 						</ClayButton>
