@@ -66,21 +66,21 @@ public class FragmentEntryProcessorHelperImpl
 
 	@Override
 	public String getEditableValue(JSONObject jsonObject, Locale locale) {
-		String value = jsonObject.getString(
-			_language.getLanguageId(locale), null);
+		Object value = jsonObject.get(_language.getLanguageId(locale));
 
 		if (value != null) {
-			return value;
+			return jsonObject.getString(_language.getLanguageId(locale));
 		}
 
-		value = jsonObject.getString(
+		value = jsonObject.get(
 			_language.getLanguageId(LocaleUtil.getSiteDefault()));
 
-		if (Validator.isNull(value)) {
-			value = jsonObject.getString("defaultValue");
+		if (value == null) {
+			return jsonObject.getString("defaultValue");
 		}
 
-		return value;
+		return jsonObject.getString(
+			_language.getLanguageId(LocaleUtil.getSiteDefault()));
 	}
 
 	@Override
