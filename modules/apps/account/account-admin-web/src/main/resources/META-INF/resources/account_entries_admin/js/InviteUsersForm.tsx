@@ -191,6 +191,7 @@ function InviteUsersForm({
 
 			<ClayLayout.SheetFooter>
 				<ClayButton
+					className="mb-4"
 					displayType="secondary"
 					onClick={() => {
 						setInputGroups([
