@@ -33,7 +33,7 @@ const BaseUser = ({
 	updateSelectedItem = () => {},
 	userId = null,
 }) => {
-	const [search, setSearch] = useState(null);
+	const [search, setSearch] = useState(null | '');
 	const [networkStatus, setNetworkStatus] = useState(4);
 	const [user, setUser] = useState({
 		emailAddress,
