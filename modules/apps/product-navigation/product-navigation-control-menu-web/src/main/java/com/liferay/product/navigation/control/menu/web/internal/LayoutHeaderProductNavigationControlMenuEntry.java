@@ -87,7 +87,7 @@ public class LayoutHeaderProductNavigationControlMenuEntry
 
 		Writer writer = httpServletResponse.getWriter();
 
-		StringBundler sb = new StringBundler(18);
+		StringBundler sb = new StringBundler(20);
 
 		sb.append("<div class=\"");
 		sb.append(_getCssClass(httpServletRequest));
@@ -108,7 +108,9 @@ public class LayoutHeaderProductNavigationControlMenuEntry
 		if (_hasDraftLayout(httpServletRequest) &&
 			_hasEditPermission(httpServletRequest)) {
 
-			sb.append("<sup class=\"flex-shrink-0 small\">*</sup>");
+			sb.append("<sup aria-label=\"");
+			sb.append(_language.get(httpServletRequest, "draft"));
+			sb.append("\" class=\"flex-shrink-0 small\">*</sup>");
 		}
 
 		sb.append("</span>");
