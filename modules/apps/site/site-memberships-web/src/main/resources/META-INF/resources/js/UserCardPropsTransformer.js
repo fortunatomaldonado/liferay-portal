@@ -16,9 +16,29 @@ import {ACTIONS} from './actions';
 
 export default function propsTransformer({
 	actions,
+	inputName,
+	inputValue,
 	portletNamespace,
+	selectable,
+	selected,
 	...props
 }) {
+	const updatedSelected = () => {
+		if (!selectable) {
+			return selected;
+		}
+
+		const input = document.querySelector(
+			`input[name="${inputName}"][value="${inputValue}"]`
+		);
+
+		if (input && input.closest(`.card-page-item.active`)) {
+			return true;
+		}
+
+		return selected;
+	};
+
 	return {
 		...props,
 		actions: actions?.map((item) => {
@@ -35,5 +55,9 @@ export default function propsTransformer({
 				},
 			};
 		}),
+		inputName,
+		inputValue,
+		selectable,
+		selected: updatedSelected(),
 	};
 }
