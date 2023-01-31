@@ -324,6 +324,8 @@ const NotificationsInfo = ({
 
 				if (recipientType === 'assetCreator') {
 					recipientDetails = {assignmentType: ['user']};
+					delete selectedItem.data.notifications?.recipients?.[notificationIndex].emailAddress;
+					delete selectedItem.data.notifications?.recipients?.[notificationIndex].sectionsData;
 				}
 				else if (recipientType === 'taskAssignees') {
 					recipientDetails = {assignmentType: ['taskAssignees']};
