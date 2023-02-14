@@ -87,14 +87,14 @@ public class LayoutHeaderProductNavigationControlMenuEntry
 
 		Writer writer = httpServletResponse.getWriter();
 
-		StringBundler sb = new StringBundler(18);
+		StringBundler sb = new StringBundler(23);
 
-		sb.append("<div class=\"");
+		sb.append("<div tabindex=\"0\" class=\"");
 		sb.append(_getCssClass(httpServletRequest));
 		sb.append("\"><span class=\"align-items-center ");
 		sb.append("control-menu-level-1-heading d-flex mr-1\" ");
 		sb.append("data-qa-id=\"headerTitle\"><h1 class=\"");
-		sb.append("lfr-portal-tooltip h4 mb-0\" title=\"");
+		sb.append("lfr-portal-tooltip h4 mb-0\" aria-hidden=\"true\" title=\"");
 
 		String headerTitle = HtmlUtil.escapeAttribute(
 			_getHeaderTitle(httpServletRequest));
@@ -104,11 +104,19 @@ public class LayoutHeaderProductNavigationControlMenuEntry
 		sb.append("\">");
 		sb.append(headerTitle);
 		sb.append("</h1>");
+		sb.append("<h1 class=\"sr-only\">");
+		sb.append(headerTitle);
 
 		if (_hasDraftLayout(httpServletRequest) &&
 			_hasEditPermission(httpServletRequest)) {
 
-			sb.append("<sup class=\"flex-shrink-0 small\">*</sup>");
+			sb.append(" ");
+			sb.append(_language.get(httpServletRequest, "draft"));
+			sb.append("</h1> <sup aria-hidden=\"true\"");
+			sb.append("class=\"flex-shrink-0 small\">*</sup>");
+		}
+		else {
+			sb.append("</h1>");
 		}
 
 		sb.append("</span>");
