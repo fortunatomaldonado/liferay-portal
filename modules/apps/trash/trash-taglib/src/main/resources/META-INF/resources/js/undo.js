@@ -18,7 +18,7 @@ export default function ({alertMessage, namespace}) {
 	const componentId = `${namespace}recycleBinAlert`;
 
 	openToast({
-		autoClose: 15000,
+		autoClose: false,
 		message: alertMessage,
 		renderData: {
 			componentId,
