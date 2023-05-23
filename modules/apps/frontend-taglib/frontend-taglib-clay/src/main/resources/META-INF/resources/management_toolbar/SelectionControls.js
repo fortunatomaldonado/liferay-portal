@@ -170,6 +170,23 @@ const SelectionControls = ({
 		itemsType
 	);
 
+	const allSelectedItemsLabel = sub(
+		Liferay.Language.get('x-of-x-x-selected-x-selected-in-total'),
+		searchContainerRef.current?.select?.getCurrentPageSelectedElements()
+			?._nodes?.length,
+		itemsTotal,
+		itemsType,
+		selectedItems
+	);
+
+	const compareSelectedItems =
+		searchContainerRef.current?.select?.getCurrentPageSelectedElements()
+			?._nodes?.length === selectedItems;
+
+	const compareAllItems =
+		searchContainerRef.current?.select?._getAllElements()?._nodes
+			?.length === itemsTotal;
+
 	return (
 		<>
 			<ManagementToolbar.Item>
@@ -229,10 +246,15 @@ const SelectionControls = ({
 					})}
 				>
 					<span aria-live="polite" className="navbar-text">
-						{selectedItems === itemsTotal
+						{selectedItems > itemsTotal
+							? allSelectedItemsLabel
+							: selectedItems === itemsTotal &&
+							  compareSelectedItems
 							? `${Liferay.Language.get(
 									'all-selected'
 							  )} (${selectedItemsLabel})`
+							: !compareAllItems && !compareSelectedItems
+							? allSelectedItemsLabel
 							: selectedItemsLabel}
 					</span>
 				</ManagementToolbar.Item>
