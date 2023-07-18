@@ -533,7 +533,7 @@ const EditFDSFieldModalContent = ({
 								cellRenderer.value
 							) && (
 								<ClayLabel displayType="info">
-									{Liferay.Language.get('cell-renderer')}
+									{Liferay.Language.get('client-extension')}
 								</ClayLabel>
 							)}
 						</ClayDropDown.Item>
@@ -581,7 +581,7 @@ const EditFDSFieldModalContent = ({
 
 				<ClayForm.Group>
 					<label htmlFor={fdsFieldRendererSelectId}>
-						{Liferay.Language.get('cell-renderer')}
+						{Liferay.Language.get('renderer')}
 					</label>
 
 					<CellRendererDropdown
@@ -933,7 +933,7 @@ const Fields = ({
 										rendererName: item.renderer,
 									}),
 							},
-							label: Liferay.Language.get('cell-renderer'),
+							label: Liferay.Language.get('renderer'),
 							name: 'renderer',
 						},
 						{
