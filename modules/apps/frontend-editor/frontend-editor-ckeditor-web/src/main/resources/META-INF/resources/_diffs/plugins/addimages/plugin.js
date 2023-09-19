@@ -73,7 +73,7 @@
 				for (i = 0; i < imageFiles.length; i++) {
 					file = imageFiles[i];
 
-					this._processFile(file, editor);
+					this._processFile(file, editor, true);
 				}
 			}
 
@@ -136,43 +136,6 @@
 		},
 
 		/**
-		 * Handler for when images are uploaded
-		 *
-		 * @instance
-		 * @memberof CKEDITOR.plugins.addimages
-		 * @method _onImageUploaded
-		 * @param {Image} image The image that was uploaded
-		 * @param {CKEDITOR.editor} editor The current editor instance
-		 * @protected
-		 */
-		_onImageUploaded(image, editor) {
-			const instance = this;
-
-			const fragment = CKEDITOR.htmlParser.fragment.fromHtml(
-				editor.getData()
-			);
-
-			const filter = new CKEDITOR.htmlParser.filter({
-				elements: {
-					// eslint-disable-next-line @liferay/no-abbreviations
-					img(element) {
-						if (image.src === instance._tempImage.src) {
-							element.attributes.src = image.src;
-						}
-					},
-				},
-			});
-
-			const writer = new CKEDITOR.htmlParser.basicWriter();
-
-			fragment.writeChildrenHtml(writer, filter);
-
-			editor.setData(writer.getHtml(), () => {
-				editor.updateElement();
-			});
-		},
-
-		/**
 		 * Checks if the pasted data is a dropped image or html.
 		 * In the case of images, it passes it to
 		 * {{#crossLink "CKEDITOR.plugins.addimages/_processFile:method"}}{{/crossLink}} for processing.
@@ -195,7 +158,7 @@
 			if (clipboardItem.type.indexOf('image') === 0) {
 				const imageFile = clipboardItem.getAsFile();
 
-				this._processFile(imageFile, editor);
+				this._processFile(imageFile, editor, false);
 			}
 			else if (clipboardItem.type === 'html') {
 				const fragment = CKEDITOR.htmlParser.fragment.fromHtml(
@@ -274,7 +237,7 @@
 		 * @param {CKEDITOR.editor} editor The current editor instance
 		 * @protected
 		 */
-		_processFile(file, editor) {
+		_processFile(file, editor, dragdrop) {
 			const reader = new FileReader();
 
 			reader.addEventListener('loadend', () => {
@@ -284,7 +247,9 @@
 					'<img src="' + bin + '">'
 				);
 
-				editor.insertElement(element);
+				if (dragdrop) {
+					editor.insertElement(element);
+				}
 
 				const imageData = {
 					element,
@@ -416,26 +381,6 @@
 								fileEntryId: data.file.fileEntryId,
 								uploadImageReturnType: '',
 							});
-
-							const fragment = CKEDITOR.htmlParser.fragment.fromHtml(
-								editor.getData()
-							);
-
-							let imageFound = false;
-
-							fragment.forEach((element) => {
-								if (
-									element.type === CKEDITOR.NODE_ELEMENT &&
-									element.attributes['data-image-id'] ===
-										image.dataset.imageId
-								) {
-									imageFound = true;
-								}
-							});
-
-							if (!imageFound) {
-								this._onImageUploaded(image, editor);
-							}
 						}
 					}
 					else {
