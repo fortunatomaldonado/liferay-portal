@@ -273,7 +273,7 @@ portletDisplay.setURLBack(backURL);
 
 											alertElement.insertAdjacentHTML(
 												'afterbegin',
-												"<span class='alert-indicator'><svg class='lexicon-icon lexicon-icon-exclamation-full' focusable='false' role='presentation'><use xlink:href='/o/admin-theme/images/clay/icons.svg#exclamation-full'/></svg> <strong class='lead'>Error:</strong></span>"
+												"<span class='alert-indicator'><svg class='lexicon-icon lexicon-icon-exclamation-full' focusable='false' role='presentation'><use href='/o/admin-theme/images/clay/icons.svg#exclamation-full'/></svg> <strong class='lead'>Error:</strong></span>"
 											);
 
 											alertElement.insertAdjacentHTML(

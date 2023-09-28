@@ -259,7 +259,7 @@ public class ButtonTag extends BaseContainerTag {
 		jspWriter.write("\"><svg class=\"lexicon-icon lexicon-icon-");
 		jspWriter.write(_icon);
 		jspWriter.write("\" role=\"presentation\" viewBox=\"0 0 512 ");
-		jspWriter.write("512\"><use xlink:href=\"");
+		jspWriter.write("512\"><use href=\"");
 
 		HttpServletRequest httpServletRequest = getRequest();
 

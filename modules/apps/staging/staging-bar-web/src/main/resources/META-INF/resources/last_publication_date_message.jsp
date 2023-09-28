@@ -83,7 +83,7 @@ if (Validator.isNull(publisherName)) {
 			<div class="alert alert-info" role="alert">
 				<span class="alert-indicator">
 					<svg aria-hidden="true" class="lexicon-icon lexicon-icon-info-circle">
-						<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#info-circle" />
+						<use href="<%= themeDisplay.getPathThemeSpritemap() %>#info-circle" />
 					</svg>
 				</span>
 				<span class="last-publication-branch">
@@ -115,7 +115,7 @@ if (Validator.isNull(publisherName)) {
 		<div class="alert alert-info" role="alert">
 			<span class="alert-indicator">
 				<svg aria-hidden="true" class="lexicon-icon lexicon-icon-info-circle">
-					<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#info-circle" />
+					<use href="<%= themeDisplay.getPathThemeSpritemap() %>#info-circle" />
 				</svg>
 			</span>
 

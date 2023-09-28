@@ -71,7 +71,7 @@ public class IconTag extends BaseContainerTag {
 
 		JspWriter jspWriter = pageContext.getOut();
 
-		jspWriter.write("<use xlink:href=\"");
+		jspWriter.write("<use href=\"");
 		jspWriter.write(_spritemap);
 		jspWriter.write("#");
 		jspWriter.write(_symbol);

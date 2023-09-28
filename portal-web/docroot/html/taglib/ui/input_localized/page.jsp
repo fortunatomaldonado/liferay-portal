@@ -253,7 +253,7 @@ Map<String, Map<String, String>> languagesTranslationsAriaLabelsMap = new HashMa
 								<button class="dropdown-item" id="manage-translations" type="button">
 									<span class="inline-item inline-item-before">
 										<svg class="lexicon-icon lexicon-icon-automatic-translate" role="presentation">
-											<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#automatic-translate" />
+											<use href="<%= themeDisplay.getPathThemeSpritemap() %>#automatic-translate" />
 										</svg>
 									</span>
 									<span><liferay-ui:message key="manage-translations" /></span>

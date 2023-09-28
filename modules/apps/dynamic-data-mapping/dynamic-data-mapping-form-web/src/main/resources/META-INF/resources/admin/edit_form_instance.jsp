@@ -63,7 +63,7 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 				<li class="nav-item pr-3">
 					<button class="btn btn-monospaced btn-outline-borderless btn-outline-secondary btn-sm lfr-ddm-button lfr-ddm-settings-button" title="<%= LanguageUtil.get(request, "settings") %>">
 						<svg class="lexicon-icon">
-							<use xlink:href="<%= ddmFormAdminDisplayContext.getLexiconIconsPath() %>cog" />
+							<use href="<%= ddmFormAdminDisplayContext.getLexiconIconsPath() %>cog" />
 						</svg>
 					</button>
 				</li>
@@ -99,7 +99,7 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 				<li class="nav-item">
 					<button class="btn btn-primary btn-sm lfr-ddm-add-field lfr-ddm-plus-button nav-btn nav-btn-monospaced" id="addFieldButton" title="<%= LanguageUtil.get(request, "add-elements") %>">
 						<svg class="lexicon-icon">
-							<use xlink:href="<%= ddmFormAdminDisplayContext.getLexiconIconsPath() %>plus" />
+							<use href="<%= ddmFormAdminDisplayContext.getLexiconIconsPath() %>plus" />
 						</svg>
 					</button>
 				</li>

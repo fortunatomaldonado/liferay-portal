@@ -18,7 +18,7 @@ String iconURL = ParamUtil.getString(request, "iconURL");
 	<c:choose>
 		<c:when test='<%= iconURL.contains(".svg#") %>'>
 			<svg class="lexicon-icon">
-				<use xlink:href="<%= iconURL %>" />
+				<use href="<%= iconURL %>" />
 			</svg>
 		</c:when>
 		<c:when test="<%= Validator.isUrl(iconURL) %>">

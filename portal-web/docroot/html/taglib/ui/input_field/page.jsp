@@ -46,7 +46,7 @@ if (hints != null) {
 	var="infoHTML"
 >
 	<svg class="lexicon-icon lexicon-icon-exclamation-full">
-		<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#exclamation-full"></use>
+		<use href="<%= themeDisplay.getPathThemeSpritemap() %>#exclamation-full"></use>
 	</svg>
 </liferay-util:buffer>
 
@@ -54,7 +54,7 @@ if (hints != null) {
 	var="successHTML"
 >
 	<svg class="lexicon-icon lexicon-icon-check">
-		<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#check"></use>
+		<use href="<%= themeDisplay.getPathThemeSpritemap() %>#check"></use>
 	</svg>
 </liferay-util:buffer>
 

@@ -213,7 +213,7 @@ if (liveLayout != null) {
 								<div class="container-fluid container-fluid-max-xl staging-alert-container">
 									<span class="alert-indicator">
 										<svg aria-hidden="true" class="lexicon-icon lexicon-icon-info-circle">
-											<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#info-circle" />
+											<use href="<%= themeDisplay.getPathThemeSpritemap() %>#info-circle" />
 										</svg>
 									</span>
 

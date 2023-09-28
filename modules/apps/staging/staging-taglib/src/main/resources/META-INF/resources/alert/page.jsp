@@ -13,14 +13,14 @@
 	<c:choose>
 		<c:when test="<%= type == AlertType.ERROR.getAlertCode() %>">
 			<svg aria-hidden="true" class="lexicon-icon lexicon-icon-exclamation-full">
-				<use xlink:href="<%= spritemap %>#exclamation-full" />
+				<use href="<%= spritemap %>#exclamation-full" />
 			</svg>
 
 			<strong class="lead"><liferay-ui:message key="alert-helper-error" />: </strong>
 		</c:when>
 		<c:when test="<%= type == AlertType.INFO.getAlertCode() %>">
 			<svg aria-hidden="true" class="lexicon-icon lexicon-icon-info-circle">
-				<use xlink:href="<%= spritemap %>#info-circle" />
+				<use href="<%= spritemap %>#info-circle" />
 			</svg>
 
 			<strong class="lead"><liferay-ui:message key="alert-helper-info" />: </strong>
@@ -44,7 +44,7 @@
 	<c:if test="<%= dismissible %>">
 		<button aria-label="<%= LanguageUtil.get(request, "close") %>" class="close" data-dismiss="liferay-alert" type="button">
 			<svg aria-hidden="true" class="icon-monospaced lexicon-icon lexicon-icon-times">
-				<use xlink:href="<%= spritemap %>#times" />
+				<use href="<%= spritemap %>#times" />
 			</svg>
 
 			<span class="sr-only"><liferay-ui:message key="close" /></span>

@@ -52,7 +52,7 @@ renderResponse.setTitle((ddmDataProviderInstance == null) ? LanguageUtil.get(req
 						<span class="hide-accessible sr-only"><liferay-ui:message key="required" />&nbsp;</span>
 
 						<svg aria-hidden="true" class="lexicon-icon lexicon-icon-asterisk reference-mark">
-							<use xlink:href="<%= themeDisplay.getPathThemeSpritemap() %>#asterisk" />
+							<use href="<%= themeDisplay.getPathThemeSpritemap() %>#asterisk" />
 						</svg>
 					</liferay-util:buffer>
 
