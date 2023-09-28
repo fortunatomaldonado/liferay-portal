@@ -7,7 +7,7 @@
 						${navPrimaryItem.getName()}
 					</span>
 					<span class="adt-nav-caret-bottom-icon align-self-center">
-						<svg class="lexicon-icon lexicon-icon-caret-bottom" role="presentation" viewBox="0 0 512 512"><use xlink:href="/o/admin-theme/images/clay/icons.svg#caret-bottom"></use></svg>
+						<svg class="lexicon-icon lexicon-icon-caret-bottom" role="presentation" viewBox="0 0 512 512"><use href="/o/admin-theme/images/clay/icons.svg#caret-bottom"></use></svg>
 					</span>
 				</div>
 				<@render_navigation_dropdown navPrimaryItem />

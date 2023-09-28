@@ -13,9 +13,9 @@
 		<g id="FARO-Nav-Icons" transform="translate(-46.000000, -311.000000)">
 			<g id="Icon24/Settings" transform="translate(42.000000, 307.000000)">
 				<mask fill="white" id="mask-2">
-					<use xlink:href="#path-1"></use>
+					<use href="#path-1"></use>
 				</mask>
-				<use fill="#000000" fill-rule="evenodd" id="Combined-Shape" xlink:href="#path-1"></use>
+				<use fill="#000000" fill-rule="evenodd" id="Combined-Shape" href="#path-1"></use>
 				<g fill="#A7A9BC" fill-rule="evenodd" id="Color/Main-Disabled-Light52%" mask="url(#mask-2)">
 					<rect height="24" id="Mask" width="24" x="0" y="0"></rect>
 				</g>

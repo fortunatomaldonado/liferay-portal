@@ -105,7 +105,7 @@ function createOverlayElement(columnElement) {
 						</span>
 					</label>
 					<svg class="d-inline-block lexicon-icon lexicon-icon-question-circle-full small text-white" role="presentation">
-						<use xlink:href="${getSpritemap()}#question-circle-full" />
+						<use href="${getSpritemap()}#question-circle-full" />
 					</svg>
 				</div>
 			</div>

@@ -7,7 +7,7 @@
 		<p class="mt-1 text-secondary [#if !configuration.showCharactersCount]sr-only[/#if]" id="${fragmentEntryLinkNamespace}-length-info">
 			<span class="sr-only" id="${fragmentEntryLinkNamespace}-length-warning">
 				<svg class="lexicon-icon lexicon-icon-info-circle" focusable="false" role="presentation">
-					<use xlink:href="${siteSpritemap}#info-circle" />
+					<use href="${siteSpritemap}#info-circle" />
 				</svg>
 
 				<span aria-live="assertive" data-error-message="${languageUtil.get(locale, "maximum-number-of-characters-exceeded")}" data-valid-message="${languageUtil.get(locale, "current-text-length-is-valid")}" id="${fragmentEntryLinkNamespace}-length-warning-text"></span>:
@@ -18,7 +18,7 @@
 		[#if input.errorMessage?has_content]
 			<p class="font-weight-semi-bold mt-1 text-danger" id="${fragmentEntryLinkNamespace}-text-input-error-message">
 				<svg class="lexicon-icon lexicon-icon-info-circle" focusable="false" role="presentation">
-					<use xlink:href="${siteSpritemap}#info-circle" />
+					<use href="${siteSpritemap}#info-circle" />
 				</svg>
 
 				<span>
