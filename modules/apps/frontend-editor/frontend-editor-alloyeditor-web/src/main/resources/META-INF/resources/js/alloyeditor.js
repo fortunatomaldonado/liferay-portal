@@ -452,12 +452,6 @@ AUI.add(
 				destructor() {
 					const instance = this;
 
-					const editor = instance._alloyEditor;
-
-					if (editor) {
-						editor.destroy();
-					}
-
 					new A.EventHandle(instance._eventHandles).detach();
 
 					// LPS-84186
