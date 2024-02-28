@@ -134,6 +134,10 @@
 					.filter((path) => path.startsWith('module:'))
 					.map((path) => path.substring(7));
 
+				javascriptPaths = javascriptPaths
+					.filter((path) => path.startsWith('nocombo:'))
+					.map((path) => path.substring(8));
+
 				javascriptPaths = javascriptPaths.filter(
 					(path) => !path.startsWith('module:')
 				);
