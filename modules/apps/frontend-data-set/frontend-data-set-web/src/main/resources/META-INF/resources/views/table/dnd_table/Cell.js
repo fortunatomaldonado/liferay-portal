@@ -38,6 +38,10 @@ function Cell({
 		if (columnName && heading && !isFixed) {
 			const boundingClientRect = cellRef.current.getBoundingClientRect();
 
+			if (columnName === 'item-actions') {
+				boundingClientRect.width = 100;
+			}
+
 			viewsDispatch({
 				type: VIEWS_ACTION_TYPES.UPDATE_FIELD,
 				value: {
@@ -131,7 +135,7 @@ function Cell({
 
 Cell.defaultProps = {
 	heading: false,
-	resizable: false,
+	resizable: true,
 };
 
 Cell.propTypes = {

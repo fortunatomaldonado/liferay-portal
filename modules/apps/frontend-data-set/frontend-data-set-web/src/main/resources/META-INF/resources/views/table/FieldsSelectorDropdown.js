@@ -42,7 +42,7 @@ const FieldsSelectorDropdown = ({fields}) => {
 	return (
 		<ClayDropDown
 			active={active}
-			className="ml-auto"
+			className="m-auto"
 			hasLeftSymbols
 			onActiveChange={setActive}
 			trigger={

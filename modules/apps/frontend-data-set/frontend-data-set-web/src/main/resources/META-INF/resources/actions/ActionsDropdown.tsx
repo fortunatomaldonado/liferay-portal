@@ -157,7 +157,7 @@ function ActionsDropdown({
 		return (
 			<LinkOrButton
 				aria-label={action.label}
-				className="btn btn-secondary btn-sm"
+				className="btn btn-secondary btn-sm m-auto"
 				href={
 					isLink(
 						action.target,
@@ -210,7 +210,7 @@ function ActionsDropdown({
 
 	return (
 		<div
-			className={classnames('d-flex', {
+			className={classnames('d-flex m-auto', {
 				'justify-content-end': !Liferay.FeatureFlags['LPS-193005'],
 			})}
 		>
