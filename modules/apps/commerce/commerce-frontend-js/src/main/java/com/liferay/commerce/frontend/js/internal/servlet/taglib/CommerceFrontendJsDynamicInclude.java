@@ -81,6 +81,11 @@ public class CommerceFrontendJsDynamicInclude extends BaseDynamicInclude {
 			HttpServletRequest httpServletRequest)
 		throws PortalException {
 
+		String commerceURL = _portal.getStaticResourceURL(
+			httpServletRequest,
+			_portal.getPathProxy() + httpServletRequest.getContextPath() +
+				"/o/commerce-frontend-js/styles/main.css");
+
 		return StringBundler.concat(
 			"<script",
 			ContentSecurityPolicyNonceProviderUtil.getNonceAttribute(
@@ -181,9 +186,7 @@ public class CommerceFrontendJsDynamicInclude extends BaseDynamicInclude {
 						showUnselectableOptions();
 				}
 			),
-			";</script><link href=\"",
-			_portal.getPathProxy() + httpServletRequest.getContextPath(),
-			"/o/commerce-frontend-js/styles/main.css\" rel=\"stylesheet\" ",
+			";</script><link href=\"", commerceURL, "\" rel=\"stylesheet\" ",
 			"type=\"text/css\" />");
 	}
 
