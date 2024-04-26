@@ -226,8 +226,6 @@ function AddFDSFilterModalContent({
 
 		const responseJSON = await response.json();
 
-		openDefaultSuccessToast();
-
 		onSave({...responseJSON, displayType, filterType});
 
 		closeModal();
@@ -635,7 +633,18 @@ function Filters({fdsFilterClientExtensions, fdsView, namespace}: IProps) {
 							if (newfilter.label === undefined) {
 								newfilter.label = '';
 							}
-							setFilters([...filters, newfilter]);
+
+							setFilters([newfilter, ...filters]);
+
+							let filterOrderString = newfilter.id.toString();
+
+							filters.map((filter) => {
+								filterOrderString += ',' + filter.id;
+							});
+
+							updateFDSFiltersOrder({
+								fdsFiltersOrder: filterOrderString,
+							});
 						}}
 					/>
 				),
