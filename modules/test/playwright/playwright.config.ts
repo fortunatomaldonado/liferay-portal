@@ -42,6 +42,7 @@ import {config as productNavigationUserPersonalBarWebConfig} from './tests/produ
 import {config as stableConfig} from './tests/stable/config';
 import {config as stylebookConfig} from './tests/style-book-web/config';
 import {config as usersAdminWebConfig} from './tests/users-admin-web/config';
+import {config as wikiWebConfig} from './tests/wiki-web/config';
 
 const setupProjects = [wemSiteSetup, wemSiteTeardown];
 
@@ -87,6 +88,7 @@ export default defineConfig({
 		stableConfig,
 		stylebookConfig,
 		usersAdminWebConfig,
+		wikiWebConfig,
 		...setupProjects,
 	],
 	reporter: [
