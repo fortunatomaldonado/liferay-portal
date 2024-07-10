@@ -53,6 +53,15 @@ const Cell = ({
 		if (columnName && heading && !isFixed && cellRef.current) {
 			const boundingClientRect = cellRef.current.getBoundingClientRect();
 
+			if (cellRef?.current && boundingClientRect.width < 70) {
+
+				const fontSize = getComputedStyle(cellRef?.current).fontSize;
+
+				const remSize = parseFloat(fontSize);
+
+				boundingClientRect.width += (remSize * 4);
+			}
+
 			viewsDispatch({
 				type: VIEWS_ACTION_TYPES.UPDATE_FIELD,
 				value: {
