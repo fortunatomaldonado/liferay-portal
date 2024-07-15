@@ -24,9 +24,14 @@ test('@LPD-26354 Custom Exclude Path', async ({
 	await test.step('Check SPA is enabled', async () => {
 		await page.goto(layout.friendlyURL);
 
-		// @ts-ignore
 
-		const liferaySPAOutput = await page.evaluate(() => Liferay.SPA);
+
+		const liferaySPAOutput = await page.evaluate(() => {
+
+			// @ts-ignore
+
+			return Liferay.SPA;
+		});
 
 		expect(liferaySPAOutput).not.toEqual(undefined);
 	});
@@ -63,9 +68,12 @@ test('@LPD-26354 Custom Exclude Path', async ({
 
 		await page.reload();
 
-		// @ts-ignore
+		const liferaySPAOutput = await page.evaluate(() => {
 
-		const liferaySPAOutput = await page.evaluate(() => Liferay.SPA);
+			// @ts-ignore
+
+			return Liferay.SPA;
+		});
 
 		expect(liferaySPAOutput).toEqual(undefined);
 	});
