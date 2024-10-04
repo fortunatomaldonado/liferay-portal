@@ -20,14 +20,16 @@ enum Statuses {
 	SUCCESS,
 }
 
+const MARKETPLACE_ADMIN_EMAIL = 'marketplace-admin@liferay.com';
+
 const statuses = {
 	[Statuses.FAILED]: {
 		bodyMessage: (
 			<span>
 				Sorry, was not possible to install your app, you can try again.
 				If the problem persist, contact a{' '}
-				<a href="mailto:marketplace@liferay.com">
-					marketplace@liferay.com
+				<a href={`mailto:${MARKETPLACE_ADMIN_EMAIL}`}>
+					{MARKETPLACE_ADMIN_EMAIL}
 				</a>
 			</span>
 		),
@@ -38,7 +40,7 @@ const statuses = {
 	},
 	[Statuses.LOADING]: {
 		bodyMessage: i18n.translate(
-			'the-installation-process-is-underway-and-should-be-completed-shortly'
+			'the-installation-process-is-ongoing-and-may-take-some-time-navigating-to-other-sections-will-not-cancel-the-process'
 		),
 		icon: <Loading displayType="primary" shape="squares" size="lg" />,
 		title: i18n.translate('installation-in-progress'),
@@ -68,6 +70,7 @@ const CloudProvisioningInstallation = () => {
 			watch,
 		},
 		navigate,
+		orderId,
 	} = useOutletContext<CloudProvisioningOutletContext>();
 
 	const environment = watch('environment');
@@ -92,27 +95,27 @@ const CloudProvisioningInstallation = () => {
 		}
 	}, [navigate, environment]);
 
-	const props = {
-		...(isLoading && {className: 'd-none'}),
-	};
-
 	return (
 		<ProductPurchase.Shell
 			className="align-items-center d-flex flex-column mt-5"
 			footerProps={{
 				backButtonProps: {
-					...props,
 					children: i18n.translate(
-						isSubmitSuccessful ? 'go-to-my-apps' : 'exit'
+						isLoading
+							? 'go-to-my-apps'
+							: isSubmitSuccessful
+								? 'go-to-app-provisioning'
+								: 'exit'
 					),
-					onClick: () => navigate('..'),
+					onClick: () =>
+						isLoading || !isSubmitSuccessful
+							? navigate('..')
+							: navigate(`/order/${orderId}/cloud-provisioning`),
 				},
 				cancelButtonProps: {
-					...props,
 					children: <></>,
 				},
 				continueButtonProps: {
-					...props,
 					children: 'View App In Cloud',
 					onClick: () =>
 						window.open(
@@ -121,7 +124,9 @@ const CloudProvisioningInstallation = () => {
 								environment.projectId
 							)
 						),
-					...(!isSubmitSuccessful && {className: 'd-none'}),
+					...((isLoading || !isSubmitSuccessful) && {
+						className: 'd-none',
+					}),
 				},
 			}}
 			title={status.title}

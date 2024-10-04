@@ -59,6 +59,7 @@ public class SearchSearchRequestAssemblerImpl
 			searchSourceBuilder, searchSearchRequest, searchRequest);
 
 		_setCollapse(searchSourceBuilder, searchSearchRequest);
+		_setFetchFields(searchSourceBuilder, searchSearchRequest);
 		_setFetchSource(searchSourceBuilder, searchSearchRequest);
 		_setGroupBy(searchSourceBuilder, searchSearchRequest);
 		_setGroupByRequests(searchSourceBuilder, searchSearchRequest);
@@ -133,6 +134,23 @@ public class SearchSearchRequestAssemblerImpl
 		searchSourceBuilder.collapse(collapseBuilder);
 	}
 
+	private void _setFetchFields(
+		SearchSourceBuilder searchSourceBuilder,
+		SearchSearchRequest searchSearchRequest) {
+
+		String[] selectedFieldNames =
+			searchSearchRequest.getSelectedFieldNames();
+
+		if (!ArrayUtil.isEmpty(selectedFieldNames)) {
+			for (String selectedFieldName : selectedFieldNames) {
+				searchSourceBuilder.fetchField(selectedFieldName);
+			}
+		}
+		else {
+			searchSourceBuilder.fetchField(StringPool.STAR);
+		}
+	}
+
 	private void _setFetchSource(
 		SearchSourceBuilder searchSourceBuilder,
 		SearchSearchRequest searchSearchRequest) {
@@ -152,6 +170,9 @@ public class SearchSearchRequestAssemblerImpl
 			searchSourceBuilder.fetchSource(
 				searchSearchRequest.getFetchSourceIncludes(),
 				searchSearchRequest.getFetchSourceExcludes());
+		}
+		else {
+			searchSourceBuilder.fetchSource(false);
 		}
 	}
 
@@ -288,16 +309,13 @@ public class SearchSearchRequestAssemblerImpl
 		SearchSourceBuilder searchSourceBuilder,
 		SearchSearchRequest searchSearchRequest) {
 
-		String[] selectedFieldNames =
-			searchSearchRequest.getSelectedFieldNames();
+		String[] storedFields = searchSearchRequest.getStoredFields();
 
-		if (!ArrayUtil.isEmpty(selectedFieldNames)) {
-			searchSourceBuilder.storedFields(
-				ListUtil.fromArray(selectedFieldNames));
+		if (ArrayUtil.isEmpty(storedFields)) {
+			return;
 		}
-		else {
-			searchSourceBuilder.storedField(StringPool.STAR);
-		}
+
+		searchSourceBuilder.storedFields(ListUtil.fromArray(storedFields));
 	}
 
 	private void _setTrackScores(
