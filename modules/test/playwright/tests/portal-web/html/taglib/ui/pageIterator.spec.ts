@@ -5,9 +5,28 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
+import {apiHelpersTest} from "../../../../../fixtures/apiHelpersTest";
+import {featureFlagsTest} from "../../../../../fixtures/featureFlagsTest";
+import {isolatedSiteTest} from "../../../../../fixtures/isolatedSiteTest";
 import {loginTest} from '../../../../../fixtures/loginTest';
+import {pageEditorPagesTest} from "../../../../../fixtures/pageEditorPagesTest";
+import {liferayConfig} from "../../../../../liferay.config";
+import getRandomString from "../../../../../utils/getRandomString";
+import {waitForAlert} from "../../../../../utils/waitForAlert";
+import getPageDefinition
+	from "../../../../layout-content-page-editor-web/utils/getPageDefinition";
+import getWidgetDefinition
+	from "../../../../layout-content-page-editor-web/utils/getWidgetDefinition";
 
-const test = mergeTests(loginTest());
+const test = mergeTests(
+	apiHelpersTest,
+	featureFlagsTest({
+		'LPS-178052': true,
+	}),
+	isolatedSiteTest,
+	loginTest(),
+	pageEditorPagesTest
+);
 
 test(
 	'Check various accessibility in pagination',
@@ -65,6 +84,100 @@ test(
 			const paginationTranslated = page.getByLabel('Paginación');
 
 			await expect(paginationTranslated).toBeVisible();
+		});
+	}
+);
+
+
+
+test(
+	'Check intermediant button work with arrow keys',
+	{tag: '@LPD-42610'},
+	async ({apiHelpers, page, pageEditorPage, site}) => {
+		let layout: Layout;
+
+		const widgetId = getRandomString();
+
+		await test.step('Create a content site and the ckeditor sample widget', async () => {
+			const widgetDefinition = getWidgetDefinition({
+				id: widgetId,
+				widgetName:
+					'com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet',
+			});
+
+			layout = await apiHelpers.headlessDelivery.createSitePage({
+				pageDefinition: getPageDefinition([widgetDefinition]),
+				siteId: site.id,
+				title: getRandomString(),
+			});
+		});
+
+		await test.step('add DM', async () =>{
+			await page.goto('/');
+
+			const openProductButton = page.getByLabel('Open Product Menu');
+
+			if (await openProductButton.isVisible()) {
+				await openProductButton.click();
+			}
+
+			const contentAndDataTab = page.getByRole('menuitem', {
+				name: 'Content & Data',
+			});
+
+			await contentAndDataTab.waitFor({state: 'visible'});
+
+			await contentAndDataTab.click();
+
+			const documentsAndMediaButton = page.getByRole('menuitem', {
+				name: 'Documents and Media',
+			});
+
+			await documentsAndMediaButton.waitFor({state: 'visible'});
+
+			await documentsAndMediaButton.click();
+
+			const number = 20;
+
+			for (let i = 0; i < number; i++) {
+
+				const newPageButton = page.getByRole('button', {name: 'New'});
+
+				await newPageButton.waitFor({state: 'visible'});
+
+				await newPageButton.click();
+
+				const fileUploadButton = page.getByRole(
+					'menuitem', {name: 'File Upload'})
+
+				await fileUploadButton.waitFor({state: 'visible'});
+
+				await fileUploadButton.click();
+
+				const title = page.getByLabel('Title Required');
+
+				await title.fill('a' + getRandomString());
+
+				const publishButton = page.getByRole(
+					'button', {name: 'Publish'});
+
+				await publishButton.waitFor({state: 'visible'});
+
+				await publishButton.click();
+
+				await waitForAlert(page);
+			}
+		});
+
+		await test.step('Change Asset Publisher settings', async () => {
+			// await page.goto(
+			// 	`${liferayConfig.environment.baseUrl}/web${site.friendlyUrlPath}${layout.friendlyUrlPath}`
+			// );
+
+			await pageEditorPage.goto(layout, site.friendlyUrlPath);
+
+			await pageEditorPage.goToWidgetConfiguration(widgetId);
+
 		});
 	}
 );
