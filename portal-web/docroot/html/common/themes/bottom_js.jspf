@@ -219,30 +219,19 @@ if (layout != null) {
 	UnicodeProperties layoutSetSettingsUnicodeProperties = layoutSet.getSettingsProperties();
 
 	UnicodeProperties layoutTypeSettingsUnicodeProperties = layout.getTypeSettingsProperties();
-
-	List<String> snippets = new ArrayList<String>();
-
-	snippets.add(GetterUtil.getString(layoutSetSettingsUnicodeProperties.getProperty("javascript")));
-
-	snippets.add(GetterUtil.getString(masterLayoutTypeSettingsUnicodeProperties.getProperty("javascript")));
-
-	snippets.add(GetterUtil.getString(layoutTypeSettingsUnicodeProperties.getProperty("javascript")));
-
-	for (String snippet : snippets) {
 	%>
 
-		<c:if test="<%= Validator.isNotNull(snippet) %>">
-			<aui:script type="text/javascript">
-				// <![CDATA[
-					(function() {
-						<%= snippet %>
-					})();
-				// ]]>
-			</aui:script>
-		</c:if>
+	<liferay-util:include page="/html/common/themes/bottom_js_script.jsp">
+		<liferay-util:param name="snippet" value="<%=GetterUtil.getString(layoutSetSettingsUnicodeProperties.getProperty(\"javascript\"))%>" />
+	</liferay-util:include>
 
-	<%
-	}
-	%>
+	<liferay-util:include page="/html/common/themes/bottom_js_script.jsp">
+		<liferay-util:param name="snippet" value="<%=GetterUtil.getString(masterLayoutTypeSettingsUnicodeProperties.getProperty(\"javascript\"))%>" />
+	</liferay-util:include>
+
+	<liferay-util:include page="/html/common/themes/bottom_js_script.jsp">
+		<liferay-util:param name="snippet" value="<%=GetterUtil.getString(layoutTypeSettingsUnicodeProperties.getProperty(\"javascript\"))%>" />
+	</liferay-util:include>
+
 
 </c:if>
