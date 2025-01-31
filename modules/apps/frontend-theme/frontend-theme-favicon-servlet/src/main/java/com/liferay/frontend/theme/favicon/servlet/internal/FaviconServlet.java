@@ -64,6 +64,8 @@ public class FaviconServlet extends HttpServlet {
 			return;
 		}
 
+		String faviconURL = _getFaviconURL(layoutSet);
+
 		String referer = GetterUtil.getString(
 			httpServletRequest.getHeader(HttpHeaders.REFERER));
 
@@ -71,7 +73,13 @@ public class FaviconServlet extends HttpServlet {
 			layoutSet = _getLayoutSet(layoutSet, referer);
 		}
 
-		String faviconURL = _getFaviconURL(layoutSet);
+		String layoutSetFaviconURL = _getFaviconURL(layoutSet);
+
+		if (Validator.isNotNull(layoutSetFaviconURL)) {
+			httpServletResponse.sendRedirect(layoutSetFaviconURL);
+
+			return;
+		}
 
 		if (Validator.isNotNull(faviconURL)) {
 			httpServletResponse.sendRedirect(faviconURL);
