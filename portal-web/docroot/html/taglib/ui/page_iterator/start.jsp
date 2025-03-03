@@ -481,6 +481,33 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 			</ul>
 		</nav>
 	</div>
+
+	<aui:script type="text/javascript">
+		const pageIterator<%= ariaPaginationResults %> = document.getElementById('<%= namespace + id %>');
+
+		const dropdownButton<%= ariaPaginationResults %> = pageIterator<%= ariaPaginationResults %> ?.querySelector('.dropdown.page-item');
+
+		const dropdownMenu<%= ariaPaginationResults %> = pageIterator<%= ariaPaginationResults %> ?.querySelector('.dropdown-menu.dropdown-menu-top-center');
+
+		if (dropdownMenu<%= ariaPaginationResults %>) {
+
+			dropdownButton<%= ariaPaginationResults %>.addEventListener('click', function() {
+				requestAnimationFrame(function() {
+					const rect = dropdownMenu<%= ariaPaginationResults %>.getBoundingClientRect();
+					const windowWidth = window.innerWidth;
+
+					if (rect.left < 0) {
+						dropdownMenu<%= ariaPaginationResults %>.classList.remove('dropdown-menu-top-center');
+						dropdownMenu<%= ariaPaginationResults %>.classList.add('dropdown-menu-top');
+					}
+					else if (dropdownMenu<%= ariaPaginationResults %>.classList.contains('dropdown-menu-top')) {
+						dropdownMenu<%= ariaPaginationResults %>.classList.add('dropdown-menu-top-center');
+						dropdownMenu<%= ariaPaginationResults %>.classList.remove('dropdown-menu-top');
+					}
+				});
+			});
+		}
+	</aui:script>
 </c:if>
 
 <c:if test="<%= pages > initialPages %>">
