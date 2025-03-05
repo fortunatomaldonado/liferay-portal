@@ -5,17 +5,31 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
+import {dataApiHelpersTest} from '../../../../../fixtures/dataApiHelpersTest';
 import {featureFlagsTest} from '../../../../../fixtures/featureFlagsTest';
 import {isolatedSiteTest} from '../../../../../fixtures/isolatedSiteTest';
 import {loginTest} from '../../../../../fixtures/loginTest';
+import {pageEditorPagesTest} from '../../../../../fixtures/pageEditorPagesTest';
+
 import {samplePageTest} from '../../../../frontend-taglib/fixtures/samplePageTest';
+import getWidgetDefinition
+	from "../../../../layout-content-page-editor-web/utils/getWidgetDefinition";
+import getRandomString from "../../../../../utils/getRandomString";
+import {apiHelpersTest} from "../../../../../fixtures/apiHelpersTest";
+import getPageDefinition
+	from "../../../../layout-content-page-editor-web/utils/getPageDefinition";
+import getBasicWebContentStructureId
+	from "../../../../../utils/structured-content/getBasicWebContentStructureId";
 
 const test = mergeTests(
+	apiHelpersTest,
+	dataApiHelpersTest,
 	featureFlagsTest({
 		'LPS-178052': {enabled: true},
 	}),
 	isolatedSiteTest,
 	loginTest(),
+	pageEditorPagesTest,
 	samplePageTest
 );
 
@@ -112,5 +126,38 @@ test(
 
 			await expect(pageLink).toHaveRole('menuitem');
 		});
+	}
+);
+
+test(
+	'Dropdown menu adjusts to screen size',
+	{tag: '@LPD-50471'},
+	async ({apiHelpers, page, pageEditorPage, samplePage, site}) => {
+		// Create a page with an Asset Publisher Widget
+
+		const widgetId = getRandomString();
+
+		const widgetDefinition = getWidgetDefinition({
+			id: widgetId,
+			widgetName:
+				'com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet',
+		});
+
+		const layout = await apiHelpers.headlessDelivery.createSitePage({
+			pageDefinition: getPageDefinition([widgetDefinition]),
+			siteId: site.id,
+			title: getRandomString(),
+		});
+
+		// Access to the configuration of the widget from the page editor
+
+		await pageEditorPage.goto(layout, site.friendlyUrlPath);
+
+		await pageEditorPage.goToWidgetConfiguration(widgetId);
+
+		await pageEditorPage.chooseCollectionDisplayOption(
+			'Collection Providers',
+			'Recent Content'
+		);
 	}
 );

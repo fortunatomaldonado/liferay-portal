@@ -419,12 +419,13 @@ export class PageEditorPage {
 		collectionType: string,
 		collectionTitle?: string
 	) {
-		await this.page.getByLabel('Select Collection', {exact: true}).click();
-
-		await this.page
-			.frameLocator('iframe[title="Select"]')
-			.getByRole('link', {name: collectionType})
-			.click();
+		await clickAndExpectToBeVisible({
+			autoClick: true,
+			target: this.page
+				.frameLocator('iframe[title="Select"]')
+				.getByRole('link', {name: collectionType}),
+			trigger: this.page.getByLabel('Select Collection', {exact: true}),
+		});
 
 		await clickAndExpectToBeHidden({
 			target: this.page.locator('.modal-dialog'),
