@@ -5,21 +5,16 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
+import {apiHelpersTest} from '../../../../../fixtures/apiHelpersTest';
 import {dataApiHelpersTest} from '../../../../../fixtures/dataApiHelpersTest';
 import {featureFlagsTest} from '../../../../../fixtures/featureFlagsTest';
 import {isolatedSiteTest} from '../../../../../fixtures/isolatedSiteTest';
 import {loginTest} from '../../../../../fixtures/loginTest';
 import {pageEditorPagesTest} from '../../../../../fixtures/pageEditorPagesTest';
-
+import getRandomString from '../../../../../utils/getRandomString';
 import {samplePageTest} from '../../../../frontend-taglib/fixtures/samplePageTest';
-import getWidgetDefinition
-	from "../../../../layout-content-page-editor-web/utils/getWidgetDefinition";
-import getRandomString from "../../../../../utils/getRandomString";
-import {apiHelpersTest} from "../../../../../fixtures/apiHelpersTest";
-import getPageDefinition
-	from "../../../../layout-content-page-editor-web/utils/getPageDefinition";
-import getBasicWebContentStructureId
-	from "../../../../../utils/structured-content/getBasicWebContentStructureId";
+import getPageDefinition from '../../../../layout-content-page-editor-web/utils/getPageDefinition';
+import getWidgetDefinition from '../../../../layout-content-page-editor-web/utils/getWidgetDefinition';
 
 const test = mergeTests(
 	apiHelpersTest,
@@ -132,7 +127,8 @@ test(
 test(
 	'Dropdown menu adjusts to screen size',
 	{tag: '@LPD-50471'},
-	async ({apiHelpers, page, pageEditorPage, samplePage, site}) => {
+	async ({apiHelpers, pageEditorPage, site}) => {
+
 		// Create a page with an Asset Publisher Widget
 
 		const widgetId = getRandomString();
