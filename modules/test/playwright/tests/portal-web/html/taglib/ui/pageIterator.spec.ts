@@ -6,6 +6,7 @@
 import {expect, mergeTests} from '@playwright/test';
 
 import {apiHelpersTest} from '../../../../../fixtures/apiHelpersTest';
+import {assetPublisherPagesTest} from '../../../../../fixtures/assetPublisherPagesTest';
 import {dataApiHelpersTest} from '../../../../../fixtures/dataApiHelpersTest';
 import {featureFlagsTest} from '../../../../../fixtures/featureFlagsTest';
 import {isolatedSiteTest} from '../../../../../fixtures/isolatedSiteTest';
@@ -18,6 +19,7 @@ import getWidgetDefinition from '../../../../layout-content-page-editor-web/util
 
 const test = mergeTests(
 	apiHelpersTest,
+	assetPublisherPagesTest,
 	dataApiHelpersTest,
 	featureFlagsTest({
 		'LPS-178052': {enabled: true},
@@ -127,7 +129,7 @@ test(
 test(
 	'Dropdown menu adjusts to screen size',
 	{tag: '@LPD-50471'},
-	async ({apiHelpers, pageEditorPage, site}) => {
+	async ({apiHelpers, assetPublisherPage, pageEditorPage, site}) => {
 
 		// Create a page with an Asset Publisher Widget
 
@@ -151,7 +153,7 @@ test(
 
 		await pageEditorPage.goToWidgetConfiguration(widgetId);
 
-		await pageEditorPage.chooseCollectionDisplayOption(
+		await assetPublisherPage.selectAssetCollectionDisplay(
 			'Collection Providers',
 			'Recent Content'
 		);

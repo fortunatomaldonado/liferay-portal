@@ -5,6 +5,8 @@
 
 import {FrameLocator, Page} from '@playwright/test';
 
+import {clickAndExpectToBeHidden} from '../../utils/clickAndExpectToBeHidden';
+import {clickAndExpectToBeVisible} from '../../utils/clickAndExpectToBeVisible';
 import {waitForAlert} from '../../utils/waitForAlert';
 
 export class AssetPublisherPage {
@@ -63,6 +65,35 @@ export class AssetPublisherPage {
 			})
 			.first()
 			.waitFor();
+	}
+
+	async selectAssetCollectionDisplay(
+		collectionType: string,
+		collectionTitle?: string
+	) {
+		await clickAndExpectToBeVisible({
+			autoClick: true,
+
+			target: this.page
+				.frameLocator('iframe[title="Configuration"]')
+				.frameLocator('iframe[title="Select Collection"]')
+				.getByRole('link', {name: collectionType}),
+			timeout: 2000,
+			trigger: this.page
+				.frameLocator('iframe[title="Configuration"]')
+				.getByRole('button', {exact: true, name: 'Select Collection'}),
+		});
+
+		await clickAndExpectToBeHidden({
+			target: this.page
+				.frameLocator('iframe[title="Configuration"]')
+				.locator('.modal-dialog'),
+			timeout: 2000,
+			trigger: this.page
+				.frameLocator('iframe[title="Configuration"]')
+				.frameLocator('iframe[title="Select Collection"]')
+				.getByRole('button', {name: 'Select ' + collectionTitle}),
+		});
 	}
 
 	async saveConfiguration() {
