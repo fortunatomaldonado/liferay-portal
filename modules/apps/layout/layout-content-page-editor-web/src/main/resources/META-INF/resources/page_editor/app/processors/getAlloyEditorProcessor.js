@@ -119,6 +119,18 @@ export default function getAlloyEditorProcessor(
 
 			const nativeEditor = _editor.get('nativeEditor');
 
+			var editorTransformerURLs = editorConfig.editorTransformerURLs;
+
+			if (editorTransformerURLs) {
+
+				Liferay.Util.loadEditorClientExtensions({
+					config: editorConfig,
+					onLoad: ({transformedConfig}) => {
+						// initInstance(transformedConfig);
+					},
+				});
+			}
+
 			// For the cases where we open the selector we need to make sure that
 			// the editor is destroyed. Since we cannot rely on the blur event for these cases
 			// (it is ignored) we have to setup an additional listener.
