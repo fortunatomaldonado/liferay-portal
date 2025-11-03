@@ -7,19 +7,27 @@ package com.liferay.frontend.js.importmaps.extender.internal.servlet.taglib.test
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.frontend.js.importmaps.extender.JSImportMapsContributor;
+import com.liferay.layout.test.util.ContentLayoutTestUtil;
+import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.GroupTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 
 import com.liferay.portal.url.builder.AbsolutePortalURLBuilder;
 import com.liferay.portal.url.builder.AbsolutePortalURLBuilderFactory;
@@ -32,13 +40,13 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.mockito.Mockito;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -79,10 +87,31 @@ public class JSImportMapsExtenderTopHeadDynamicIncludeTest {
 
 	@Test
 	public void newTest() throws Exception {
-		MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
+		MockHttpServletRequest mockHttpServletRequest =
+			new MockHttpServletRequest();
+
+		_company = _companyLocalService.getCompany(
+			TestPropsValues.getCompanyId());
+
+		_group = GroupTestUtil.addGroup();
+
+		_layout = LayoutTestUtil.addTypePortletLayout(_group);
+
+		mockHttpServletRequest.setAttribute(WebKeys.LAYOUT, _layout);
+
+		ThemeDisplay themeDisplay = ContentLayoutTestUtil.getThemeDisplay(
+			_company, _group, _layout);
+
+		themeDisplay.setCDNBaseURL("http://portal.example.com");
+		themeDisplay.setCDNHost("http://portal.example.com");
+		themeDisplay.setCDNDynamicResourcesHost("http://portal.example.com");
 
 		mockHttpServletRequest.setAttribute(
-			WebKeys.THEME_DISPLAY, _mockThemeDisplay());
+			WebKeys.THEME_DISPLAY, themeDisplay);
+
+
+		themeDisplay.setRequest(mockHttpServletRequest);
+
 
 		AbsolutePortalURLBuilder absolutePortalURLBuilder =
 			_absolutePortalURLBuilderFactory.getAbsolutePortalURLBuilder(
@@ -93,30 +122,6 @@ public class JSImportMapsExtenderTopHeadDynamicIncludeTest {
 				"frontend-js-importmaps-extender-test", "/@liferay$js-api.js");
 
 		System.out.println("\n\n" + esModuleAbsolutePortalURLBuilder.build());
-	}
-
-	private ThemeDisplay _mockThemeDisplay() {
-		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
-
-		Mockito.when(
-			themeDisplay.getCDNBaseURL()
-		).thenReturn(
-			"http://portal.example.com"
-		);
-
-		Mockito.when(
-			themeDisplay.getCDNDynamicResourcesHost()
-		).thenReturn(
-			"http://portal.example.com"
-		);
-
-		Mockito.when(
-			themeDisplay.getCDNHost()
-		).thenReturn(
-			"http://portal.example.com"
-		);
-
-		return themeDisplay;
 	}
 
 	@Test
@@ -224,6 +229,20 @@ public class JSImportMapsExtenderTopHeadDynamicIncludeTest {
 	}
 
 	private static BundleContext _bundleContext;
+
+
+	private Company _company;
+
+	@Inject
+	private CompanyLocalService _companyLocalService;
+
+	@DeleteAfterTestRun
+	private Group _group;
+
+	@Inject
+	private GroupLocalService _groupLocalService;
+
+	private Layout _layout;
 
 	@DeleteAfterTestRun
 	private Company _company1;
