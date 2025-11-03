@@ -10,7 +10,7 @@ import {useId} from 'frontend-js-components-web';
 import React from 'react';
 
 import {useSelector, useStateDispatch} from '../../contexts/StateContext';
-import selectPublishedFields from '../../selectors/selectPublishedFields';
+import selectPublishedChildren from '../../selectors/selectPublishedChildren';
 import {DateTimeField, Field} from '../../utils/field';
 
 const TIME_STORAGE_OPTIONS = [
@@ -43,9 +43,9 @@ function FirstSectionComponent({
 	const dateTimeField = field as DateTimeField;
 
 	const dispatch = useStateDispatch();
-	const publishedFields = useSelector(selectPublishedFields);
+	const publishedChildren = useSelector(selectPublishedChildren);
 
-	const isPublished = publishedFields.has(field.uuid);
+	const isPublished = publishedChildren.has(field.uuid);
 
 	const id = useId();
 
@@ -76,6 +76,15 @@ function FirstSectionComponent({
 				disabled={disabled || isPublished}
 				id={id}
 				items={TIME_STORAGE_OPTIONS}
+				messages={{
+					itemDescribedby: Liferay.Language.get(
+						'you-are-currently-on-a-text-element,-inside-of-a-list-box'
+					),
+					itemSelected: Liferay.Language.get('x-selected'),
+					scrollToBottomAriaLabel:
+						Liferay.Language.get('scroll-to-bottom'),
+					scrollToTopAriaLabel: Liferay.Language.get('scroll-to-top'),
+				}}
 				onSelectionChange={(timeStorage: React.Key) => {
 					dispatch({
 						settings: {

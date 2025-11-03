@@ -8,7 +8,7 @@ import mockFetch from 'jest-fetch-mock';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 import CommerceChannelAddPaymentMethod from '../../../src/main/resources/META-INF/resources/js/commerce_marketplace_payment_method';
 import marketplacePermissionsMock from '../__mock__/marketplacePermissions';
@@ -110,7 +110,7 @@ describe('CommerceMarketplacePaymentMethod', () => {
 		).toBeTruthy();
 	});
 
-	it('renders modal connection with markeplace needed', async () => {
+	it('renders modal connection with marketplace needed', async () => {
 		const {fetch} = require('frontend-js-web');
 
 		fetch.mockResponseOnce(JSON.stringify({authorized: false, data: null}));

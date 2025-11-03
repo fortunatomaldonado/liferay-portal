@@ -51,7 +51,6 @@ import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.service.persistence.UserPersistence;
-import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -357,7 +356,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 		return TempFileEntryUtil.addTempFileEntry(
 			groupId, getUserId(),
-			DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName,
+			DigesterUtil.digestHex(DigesterUtil.SHA_256, folderName), fileName,
 			inputStream, mimeType);
 	}
 
@@ -455,7 +454,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 		TempFileEntryUtil.deleteTempFileEntry(
 			groupId, getUserId(),
-			DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName);
+			DigesterUtil.digestHex(DigesterUtil.SHA_256, folderName), fileName);
 	}
 
 	@Override
@@ -1038,6 +1037,26 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	}
 
 	@Override
+	public Layout getOrAddEmptyLayout(
+			String externalReferenceCode, long groupId,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		Layout layout = fetchLayoutByExternalReferenceCode(
+			externalReferenceCode, groupId);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		GroupPermissionUtil.check(
+			getPermissionChecker(), groupId, ActionKeys.ADD_LAYOUT);
+
+		return layoutLocalService.getOrAddEmptyLayout(
+			externalReferenceCode, getUserId(), groupId, serviceContext);
+	}
+
+	@Override
 	public String[] getTempFileNames(long groupId, String folderName)
 		throws PortalException {
 
@@ -1052,7 +1071,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 			return TempFileEntryUtil.getTempFileNames(
 				groupId, getUserId(),
-				DigesterUtil.digestHex(Digester.SHA_256, folderName));
+				DigesterUtil.digestHex(DigesterUtil.SHA_256, folderName));
 		}
 	}
 
@@ -1360,7 +1379,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	 *         String)}.
 	 * @param  hasIconImage if the layout has a custom icon image
 	 * @param  iconBytes the byte array of the layout's new icon image
-	 * @param  styleBookEntryId the primary key of the style book entry
+	 * @param  styleBookEntryERC the external reference code of the style book entry
 	 * @param  faviconFileEntryId the file entry ID of the layout's new favicon
 	 * @param  masterLayoutPlid the primary key of the master layout
 	 * @param  serviceContext the service context to be applied. Can set the
@@ -1376,7 +1395,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 			Map<Locale, String> descriptionMap, Map<Locale, String> keywordsMap,
 			Map<Locale, String> robotsMap, String type, boolean hidden,
 			Map<Locale, String> friendlyURLMap, boolean hasIconImage,
-			byte[] iconBytes, long styleBookEntryId, long faviconFileEntryId,
+			byte[] iconBytes, String styleBookEntryERC, long faviconFileEntryId,
 			long masterLayoutPlid, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -1389,7 +1408,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		Layout updatedLayout = layoutLocalService.updateLayout(
 			groupId, privateLayout, layoutId, parentLayoutId, localeNamesMap,
 			localeTitlesMap, descriptionMap, keywordsMap, robotsMap, type,
-			hidden, friendlyURLMap, hasIconImage, iconBytes, styleBookEntryId,
+			hidden, friendlyURLMap, hasIconImage, iconBytes, styleBookEntryERC,
 			faviconFileEntryId, masterLayoutPlid, serviceContext);
 
 		if (!(layout.getLayoutType() instanceof LayoutTypePortlet)) {
@@ -1398,36 +1417,6 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		}
 
 		return updatedLayout;
-	}
-
-	/**
-	 * Updates the layout replacing its type settings.
-	 *
-	 * @param  groupId the primary key of the group
-	 * @param  privateLayout whether the layout is private to the group
-	 * @param  layoutId the layout ID of the layout
-	 * @param  typeSettings the settings to load the unicode properties object.
-	 *         See {@link com.liferay.portal.kernel.util.UnicodeProperties
-	 *         #fastLoad(String)}.
-	 * @return the updated layout
-	 * @throws PortalException if a portal exception occurred
-	 */
-	@Override
-	public Layout updateLayout(
-			long groupId, boolean privateLayout, long layoutId,
-			String typeSettings)
-		throws PortalException {
-
-		Layout layout = layoutLocalService.getLayout(
-			groupId, privateLayout, layoutId);
-
-		LayoutPermissionUtil.checkLayoutUpdatePermission(
-			getPermissionChecker(), layout);
-
-		checkLayoutTypeSettings(layout, layout.getTypeSettings(), typeSettings);
-
-		return layoutLocalService.updateLayout(
-			groupId, privateLayout, layoutId, typeSettings);
 	}
 
 	/**
@@ -1650,6 +1639,36 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 			getPermissionChecker(), plid);
 
 		return layoutLocalService.updateType(plid, type);
+	}
+
+	/**
+	 * Updates the layout replacing its type settings.
+	 *
+	 * @param  groupId the primary key of the group
+	 * @param  privateLayout whether the layout is private to the group
+	 * @param  layoutId the layout ID of the layout
+	 * @param  typeSettings the settings to load the unicode properties object.
+	 *         See {@link com.liferay.portal.kernel.util.UnicodeProperties
+	 *         #fastLoad(String)}.
+	 * @return the updated layout
+	 * @throws PortalException if a portal exception occurred
+	 */
+	@Override
+	public Layout updateTypeSettings(
+			long groupId, boolean privateLayout, long layoutId,
+			String typeSettings)
+		throws PortalException {
+
+		Layout layout = layoutLocalService.getLayout(
+			groupId, privateLayout, layoutId);
+
+		LayoutPermissionUtil.checkLayoutUpdatePermission(
+			getPermissionChecker(), layout);
+
+		checkLayoutTypeSettings(layout, layout.getTypeSettings(), typeSettings);
+
+		return layoutLocalService.updateTypeSettings(
+			groupId, privateLayout, layoutId, typeSettings);
 	}
 
 	protected void checkLayoutTypeSettings(

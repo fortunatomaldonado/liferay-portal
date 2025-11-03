@@ -23,7 +23,11 @@ import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.fragment.test.util.FragmentTestUtil;
+import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
+import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
+import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
 import com.liferay.layout.test.util.LayoutTestUtil;
+import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -84,7 +88,7 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 	}
 
 	@Test
-	@TestInfo("LPD-40868")
+	@TestInfo({"LPD-40868", "LPS-149718"})
 	public void testFragmentEntryLinkWithFragmentEntryInCompanyGroup()
 		throws Exception {
 
@@ -108,8 +112,9 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 
 		StagedModel stagedModel =
 			_fragmentEntryLinkLocalService.addFragmentEntryLink(
-				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(), 0,
-				fragmentEntry.getFragmentEntryId(),
+				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(),
+				null, fragmentEntry.getExternalReferenceCode(),
+				fragmentEntry.getScopeERC(),
 				_segmentsExperienceLocalService.
 					fetchDefaultSegmentsExperienceId(_layout.getPlid()),
 				stagingGroup.getDefaultPublicPlid(), StringPool.BLANK, "html",
@@ -119,22 +124,18 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 				ServiceContextTestUtil.getServiceContext(
 					stagingGroup.getGroupId(), TestPropsValues.getUserId()));
 
-		try {
-			exportImportStagedModel(stagedModel);
-		}
-		finally {
-			ExportImportThreadLocal.setPortletImportInProcess(false);
-		}
-
-		StagedModel importedStagedModel = getStagedModel(
-			stagedModel.getUuid(), liveGroup);
-
 		FragmentEntryLink importedFragmentEntryLink =
-			(FragmentEntryLink)importedStagedModel;
+			(FragmentEntryLink)_getExportImportStagedModel(stagedModel);
 
 		Assert.assertEquals(
-			fragmentEntry.getFragmentEntryId(),
-			importedFragmentEntryLink.getFragmentEntryId());
+			fragmentEntry.getGroupId(),
+			importedFragmentEntryLink.getFragmentEntryGroupId());
+		Assert.assertEquals(
+			fragmentEntry.getExternalReferenceCode(),
+			importedFragmentEntryLink.getFragmentEntryERC());
+
+		_testImportRestoresDeletedFragmentEntryInCompanyGroup(
+			fragmentEntry, stagedModel);
 	}
 
 	@Test
@@ -157,27 +158,18 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 		stagedModel = _fragmentEntryLinkLocalService.updateFragmentEntryLink(
 			TestPropsValues.getUserId(),
 			fragmentEntryLink.getFragmentEntryLinkId(),
-			fragmentEntryLink.getFragmentEntryLinkId(),
-			fragmentEntryLink.getFragmentEntryId(), fragmentEntryLink.getPlid(),
-			"css", "html", "js", fragmentEntryLink.getConfiguration(),
+			fragmentEntryLink.getOriginalFragmentEntryLinkERC(),
+			fragmentEntryLink.getFragmentEntryERC(),
+			fragmentEntryLink.getFragmentEntryScopeERC(),
+			fragmentEntryLink.getPlid(), "css", "html", "js",
+			fragmentEntryLink.getConfiguration(),
 			fragmentEntryLink.getEditableValues(),
 			fragmentEntryLink.getNamespace(),
 			fragmentEntryLink.getPosition() + 1, fragmentEntryLink.getType(),
 			serviceContext);
 
-		try {
-			exportImportStagedModel(stagedModel);
-		}
-		finally {
-			ExportImportThreadLocal.setPortletImportInProcess(false);
-		}
-
-		StagedModel importedStagedModel = getStagedModel(
-			stagedModel.getUuid(), liveGroup);
-
-		Assert.assertNotNull(importedStagedModel);
-
-		validateImportedStagedModel(stagedModel, importedStagedModel);
+		validateImportedStagedModel(
+			stagedModel, _getExportImportStagedModel(stagedModel));
 	}
 
 	@Test
@@ -205,65 +197,98 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 				stagingGroup.getGroupId(), ddmTemplate.getTemplateId(),
 				StringPool.BLANK, StringPool.BLANK, serviceContext);
 
-		String configuration = _read("configuration-valid-all-types.json");
-
-		String editableValues = StringUtil.replace(
-			_read("collection-item-template-editable-values.json"),
-			"${TEMPLATE_ENTRY_ID}",
-			String.valueOf(templateEntry.getTemplateEntryId()));
-
 		StagedModel stagedModel =
 			_fragmentEntryLinkLocalService.addFragmentEntryLink(
-				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(), 0,
-				0,
+				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(),
+				null, null, null,
 				_segmentsExperienceLocalService.
 					fetchDefaultSegmentsExperienceId(_layout.getPlid()),
 				stagingGroup.getDefaultPublicPlid(), StringPool.BLANK, "html",
-				StringPool.BLANK, configuration, editableValues,
+				StringPool.BLANK, _read("configuration-valid-all-types.json"),
+				StringUtil.replace(
+					_read("collection-item-template-editable-values.json"),
+					"${TEMPLATE_ENTRY_ID}",
+					String.valueOf(templateEntry.getTemplateEntryId())),
 				StringPool.BLANK, 0, StringPool.BLANK,
 				FragmentConstants.TYPE_COMPONENT, serviceContext);
 
-		ExportImportThreadLocal.setPortletImportInProcess(true);
-
-		try {
-			exportImportStagedModel(stagedModel);
-		}
-		finally {
-			ExportImportThreadLocal.setPortletImportInProcess(false);
-		}
-
-		StagedModel importedStagedModel = getStagedModel(
-			stagedModel.getUuid(), liveGroup);
-
-		Assert.assertNotNull(importedStagedModel);
-
-		TemplateEntry importedTemplateEntry =
-			_templateEntryLocalService.
-				fetchTemplateEntryByExternalReferenceCode(
-					externalReferenceCode, liveGroup.getGroupId());
-
-		Assert.assertNotNull(importedTemplateEntry);
-
 		FragmentEntryLink fragmentEntryLink =
-			(FragmentEntryLink)importedStagedModel;
+			(FragmentEntryLink)_getExportImportStagedModel(stagedModel);
 
-		JSONObject jsonObject = _jsonFactory.createJSONObject(
-			fragmentEntryLink.getEditableValues());
+		_assertCollectionFieldId(
+			fragmentEntryLink.getEditableValues(),
+			() -> {
+				TemplateEntry importedTemplateEntry =
+					_templateEntryLocalService.
+						fetchTemplateEntryByExternalReferenceCode(
+							externalReferenceCode, liveGroup.getGroupId());
 
-		JSONObject editableValuesJSONObject = jsonObject.getJSONObject(
-			FragmentEntryProcessorConstants.
-				KEY_EDITABLE_FRAGMENT_ENTRY_PROCESSOR);
+				Assert.assertNotNull(importedTemplateEntry);
 
-		JSONObject collectionJSONObject =
-			editableValuesJSONObject.getJSONObject("element-text");
-
-		Assert.assertEquals(
+				return importedTemplateEntry.getTemplateEntryId();
+			},
 			StringBundler.concat(
 				PortletDisplayTemplate.DISPLAY_STYLE_PREFIX,
 				StringPool.UNDERLINE,
-				PortletDisplayTemplate.DISPLAY_STYLE_PREFIX,
-				importedTemplateEntry.getTemplateEntryId()),
-			collectionJSONObject.getString("collectionFieldId"));
+				PortletDisplayTemplate.DISPLAY_STYLE_PREFIX));
+	}
+
+	@Test
+	@TestInfo("LPD-58654")
+	public void testStageFragmentEntryLinkWithCollectionEditableValuesPageTemplateEntry()
+		throws Exception {
+
+		String externalReferenceCode = RandomTestUtil.randomString();
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				stagingGroup.getGroupId(), TestPropsValues.getUserId());
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			_layoutPageTemplateEntryLocalService.addLayoutPageTemplateEntry(
+				externalReferenceCode, TestPropsValues.getUserId(),
+				stagingGroup.getGroupId(), 0, null, 0, 0,
+				RandomTestUtil.randomString(),
+				LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE, 0, true, 0,
+				0, 0, WorkflowConstants.STATUS_APPROVED, serviceContext);
+
+		StagedModel stagedModel =
+			_fragmentEntryLinkLocalService.addFragmentEntryLink(
+				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(),
+				null, null, null,
+				_segmentsExperienceLocalService.
+					fetchDefaultSegmentsExperienceId(_layout.getPlid()),
+				stagingGroup.getDefaultPublicPlid(), StringPool.BLANK, "html",
+				StringPool.BLANK, "{fieldSets: []}",
+				StringUtil.replace(
+					_read(
+						"collection-item-layout-page-template-editable-" +
+							"values.json"),
+					"${LAYOUT_PAGE_TEMPLATE_ENTRY_ID}",
+					String.valueOf(
+						layoutPageTemplateEntry.
+							getLayoutPageTemplateEntryId())),
+				StringPool.BLANK, 0, StringPool.BLANK,
+				FragmentConstants.TYPE_COMPONENT, serviceContext);
+
+		FragmentEntryLink fragmentEntryLink =
+			(FragmentEntryLink)_getExportImportStagedModel(stagedModel);
+
+		_assertCollectionFieldId(
+			fragmentEntryLink.getEditableValues(),
+			() -> {
+				LayoutPageTemplateEntry importedLayoutPageTemplateEntry =
+					_layoutPageTemplateEntryLocalService.
+						fetchLayoutPageTemplateEntryByExternalReferenceCode(
+							externalReferenceCode, liveGroup.getGroupId());
+
+				Assert.assertNotNull(importedLayoutPageTemplateEntry);
+
+				return importedLayoutPageTemplateEntry.
+					getLayoutPageTemplateEntryId();
+			},
+			LayoutPageTemplateEntry.class.getSimpleName() +
+				StringPool.UNDERLINE);
 	}
 
 	@Test
@@ -296,8 +321,8 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 
 		StagedModel stagedModel =
 			_fragmentEntryLinkLocalService.addFragmentEntryLink(
-				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(), 0,
-				0,
+				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(),
+				null, null, null,
 				_segmentsExperienceLocalService.
 					fetchDefaultSegmentsExperienceId(_layout.getPlid()),
 				stagingGroup.getDefaultPublicPlid(), StringPool.BLANK, "html",
@@ -305,32 +330,10 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 				StringPool.BLANK, 0, StringPool.BLANK,
 				FragmentConstants.TYPE_COMPONENT, serviceContext);
 
-		ExportImportThreadLocal.setPortletImportInProcess(true);
-
-		try {
-			exportImportStagedModel(stagedModel);
-		}
-		finally {
-			ExportImportThreadLocal.setPortletImportInProcess(false);
-		}
-
-		StagedModel importedStagedModel = getStagedModel(
-			stagedModel.getUuid(), liveGroup);
-
-		Assert.assertNotNull(importedStagedModel);
-
-		AssetListEntry importedAssetListEntry =
-			_assetListEntryLocalService.
-				fetchAssetListEntryByExternalReferenceCode(
-					externalReferenceCode, liveGroup.getGroupId());
-
-		Assert.assertNotNull(importedAssetListEntry);
-
 		FragmentEntryLink fragmentEntryLink =
-			(FragmentEntryLink)importedStagedModel;
+			(FragmentEntryLink)_getExportImportStagedModel(stagedModel);
 
-		JSONObject jsonObject = _jsonFactory.createJSONObject(
-			fragmentEntryLink.getEditableValues());
+		JSONObject jsonObject = fragmentEntryLink.getEditableValuesJSONObject();
 
 		JSONObject freeMarkerJSONObject = jsonObject.getJSONObject(
 			FragmentEntryProcessorConstants.
@@ -340,7 +343,7 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 			"collection");
 
 		Assert.assertEquals(
-			importedAssetListEntry.getAssetListEntryId(),
+			_getAssetListEntryId(externalReferenceCode),
 			collectionJSONObject.getLong("classPK"));
 	}
 
@@ -350,8 +353,8 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 
 		StagedModel stagedModel =
 			_fragmentEntryLinkLocalService.addFragmentEntryLink(
-				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(), 0,
-				0,
+				null, TestPropsValues.getUserId(), stagingGroup.getGroupId(),
+				null, null, null,
 				_segmentsExperienceLocalService.
 					fetchDefaultSegmentsExperienceId(_layout.getPlid()),
 				stagingGroup.getDefaultPublicPlid(), StringPool.BLANK, "html",
@@ -361,19 +364,8 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 				ServiceContextTestUtil.getServiceContext(
 					stagingGroup.getGroupId(), TestPropsValues.getUserId()));
 
-		try {
-			exportImportStagedModel(stagedModel);
-		}
-		finally {
-			ExportImportThreadLocal.setPortletImportInProcess(false);
-		}
-
-		StagedModel importedStagedModel = getStagedModel(
-			stagedModel.getUuid(), liveGroup);
-
-		Assert.assertNotNull(importedStagedModel);
-
-		validateImportedStagedModel(stagedModel, importedStagedModel);
+		validateImportedStagedModel(
+			stagedModel, _getExportImportStagedModel(stagedModel));
 	}
 
 	@Test
@@ -387,8 +379,9 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 		FragmentEntryLink fragmentEntryLink = (FragmentEntryLink)stagedModel;
 
 		Assert.assertNotNull(
-			_fragmentEntryLocalService.getFragmentEntry(
-				fragmentEntryLink.getFragmentEntryId()));
+			_fragmentEntryLocalService.getFragmentEntryByExternalReferenceCode(
+				fragmentEntryLink.getFragmentEntryERC(),
+				fragmentEntryLink.getFragmentEntryGroupId()));
 
 		try {
 			_exportImportStagedModel(stagedModel, true);
@@ -404,8 +397,9 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 			(FragmentEntryLink)importedStagedModel;
 
 		Assert.assertNotNull(
-			_fragmentEntryLocalService.getFragmentEntry(
-				importedFragmentEntryLink.getFragmentEntryId()));
+			_fragmentEntryLocalService.getFragmentEntryByExternalReferenceCode(
+				importedFragmentEntryLink.getFragmentEntryERC(),
+				importedFragmentEntryLink.getFragmentEntryGroupId()));
 	}
 
 	@Override
@@ -435,7 +429,8 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 
 		return _fragmentEntryLinkLocalService.addFragmentEntryLink(
 			null, TestPropsValues.getUserId(), serviceContext.getScopeGroupId(),
-			0, fragmentEntry.getFragmentEntryId(),
+			null, fragmentEntry.getExternalReferenceCode(),
+			fragmentEntry.getScopeERC(),
 			_segmentsExperienceLocalService.fetchDefaultSegmentsExperienceId(
 				_layout.getPlid()),
 			group.getDefaultPublicPlid(), fragmentEntry.getCss(),
@@ -486,6 +481,26 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 			fragmentEntryLink.getPosition());
 	}
 
+	private void _assertCollectionFieldId(
+			String editableValues,
+			UnsafeSupplier<Long, Exception> fieldIdUnsafeSupplier,
+			String prefix)
+		throws Exception {
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(editableValues);
+
+		JSONObject editableValuesJSONObject = jsonObject.getJSONObject(
+			FragmentEntryProcessorConstants.
+				KEY_EDITABLE_FRAGMENT_ENTRY_PROCESSOR);
+
+		JSONObject collectionJSONObject =
+			editableValuesJSONObject.getJSONObject("element-text");
+
+		Assert.assertEquals(
+			prefix + fieldIdUnsafeSupplier.get(),
+			collectionJSONObject.getString("collectionFieldId"));
+	}
+
 	private void _exportImportStagedModel(
 			StagedModel stagedModel,
 			boolean deleteFragmentEntryAndFragmentEntryLinkBeforeImport)
@@ -508,7 +523,8 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 			fragmentEntryLink);
 
 		_fragmentEntryLocalService.deleteFragmentEntry(
-			fragmentEntryLink.getFragmentEntryId());
+			fragmentEntryLink.getFragmentEntryERC(),
+			fragmentEntryLink.getFragmentEntryGroupId());
 
 		initImport();
 
@@ -520,9 +536,77 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 			portletDataContext, exportedStagedModel);
 	}
 
+	private long _getAssetListEntryId(String externalReferenceCode) {
+		AssetListEntry assetListEntry =
+			_assetListEntryLocalService.
+				fetchAssetListEntryByExternalReferenceCode(
+					externalReferenceCode, liveGroup.getGroupId());
+
+		Assert.assertNotNull(assetListEntry);
+
+		return assetListEntry.getAssetListEntryId();
+	}
+
+	private StagedModel _getExportImportStagedModel(StagedModel stagedModel)
+		throws Exception {
+
+		ExportImportThreadLocal.setPortletImportInProcess(true);
+
+		try {
+			exportImportStagedModel(stagedModel);
+		}
+		finally {
+			ExportImportThreadLocal.setPortletImportInProcess(false);
+		}
+
+		StagedModel importedStagedModel = getStagedModel(
+			stagedModel.getUuid(), liveGroup);
+
+		Assert.assertNotNull(importedStagedModel);
+
+		return importedStagedModel;
+	}
+
 	private String _read(String fileName) throws Exception {
 		return new String(
 			FileUtil.getBytes(getClass(), "dependencies/" + fileName));
+	}
+
+	private void _testImportRestoresDeletedFragmentEntryInCompanyGroup(
+			FragmentEntry fragmentEntry, StagedModel stagedModel)
+		throws Exception {
+
+		ExportImportThreadLocal.setPortletImportInProcess(true);
+
+		try {
+			exportStagedModel(stagedModel);
+
+			fragmentEntry.setExternalReferenceCode(
+				RandomTestUtil.randomString());
+
+			fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
+				fragmentEntry);
+
+			importStagedModel(stagedModel);
+		}
+		finally {
+			ExportImportThreadLocal.setPortletImportInProcess(false);
+		}
+
+		StagedModel importedStagedModel = getStagedModel(
+			stagedModel.getUuid(), liveGroup);
+
+		Assert.assertNotNull(importedStagedModel);
+
+		FragmentEntryLink importedFragmentEntryLink =
+			(FragmentEntryLink)importedStagedModel;
+
+		Assert.assertEquals(
+			fragmentEntry.getGroupId(),
+			importedFragmentEntryLink.getFragmentEntryGroupId());
+		Assert.assertEquals(
+			fragmentEntry.getExternalReferenceCode(),
+			importedFragmentEntryLink.getFragmentEntryERC());
 	}
 
 	@Inject
@@ -544,6 +628,10 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 	private JSONFactory _jsonFactory;
 
 	private Layout _layout;
+
+	@Inject
+	private LayoutPageTemplateEntryLocalService
+		_layoutPageTemplateEntryLocalService;
 
 	@Inject
 	private Portal _portal;

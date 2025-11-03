@@ -6,6 +6,7 @@
 package com.liferay.jenkins.results.parser.test.clazz.group;
 
 import com.liferay.jenkins.results.parser.BatchHistory;
+import com.liferay.jenkins.results.parser.DownstreamBuildReport;
 import com.liferay.jenkins.results.parser.JenkinsResultsParserUtil;
 import com.liferay.jenkins.results.parser.Job;
 import com.liferay.jenkins.results.parser.test.clazz.TestClass;
@@ -14,6 +15,7 @@ import com.liferay.jenkins.results.parser.test.clazz.TestClassFactory;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -120,6 +122,17 @@ public class AxisTestClassGroup extends BaseTestClassGroup {
 		return _batchTestClassGroup;
 	}
 
+	public List<DownstreamBuildReport> getCachedDownstreamBuildReports() {
+		if (!isBuildCachingEnabled() || !isResultsCached()) {
+			return null;
+		}
+
+		BatchTestClassGroup batchTestClassGroup = getBatchTestClassGroup();
+
+		return new ArrayList<>(
+			batchTestClassGroup.getCachedDownstreamBuildReports(getAxisName()));
+	}
+
 	public String getDownstreamJobName() {
 		return _batchTestClassGroup.getDownstreamJobName();
 	}
@@ -201,6 +214,29 @@ public class AxisTestClassGroup extends BaseTestClassGroup {
 		return null;
 	}
 
+	public boolean isBuildCachingEnabled() {
+		return _batchTestClassGroup.isBuildCachingEnabled();
+	}
+
+	public boolean isResultsCached() {
+		if (!isBuildCachingEnabled()) {
+			return false;
+		}
+
+		BatchTestClassGroup batchTestClassGroup = getBatchTestClassGroup();
+
+		List<DownstreamBuildReport> cachedDownstreamBuildReports =
+			batchTestClassGroup.getCachedDownstreamBuildReports(getAxisName());
+
+		if ((cachedDownstreamBuildReports != null) &&
+			!cachedDownstreamBuildReports.isEmpty()) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	protected AxisTestClassGroup(BatchTestClassGroup batchTestClassGroup) {
 		setBatchTestClassGroup(batchTestClassGroup);
 	}
@@ -230,10 +266,17 @@ public class AxisTestClassGroup extends BaseTestClassGroup {
 				continue;
 			}
 
-			testClasses.add(
+			addTestClass(
 				TestClassFactory.newTestClass(
 					batchTestClassGroup, testClassJSONObject));
 		}
+	}
+
+	@Override
+	protected void addTestClass(TestClass testClass) {
+		super.addTestClass(testClass);
+
+		testClass.setAxisTestClassGroup(this);
 	}
 
 	protected void setBatchTestClassGroup(

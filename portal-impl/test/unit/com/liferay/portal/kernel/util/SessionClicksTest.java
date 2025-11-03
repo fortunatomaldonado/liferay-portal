@@ -11,7 +11,6 @@ import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.util.PropsImpl;
 import com.liferay.portlet.PortalPreferencesImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,17 +37,12 @@ public class SessionClicksTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
-	@Before
-	public void setUp() {
-		PropsUtil.setProps(new PropsImpl());
-	}
-
 	@Test
 	public void testPutMaxAllowedValues() {
-		com.liferay.portal.util.PropsUtil.set(
+		PropsUtil.set(
 			PropsKeys.SESSION_CLICKS_MAX_ALLOWED_VALUES,
 			String.valueOf(_MAX_ALLOWED_VALUES));
-		com.liferay.portal.util.PropsUtil.set(
+		PropsUtil.set(
 			PropsKeys.SESSION_CLICKS_MAX_SIZE_TERMS,
 			String.valueOf(Integer.MAX_VALUE));
 
@@ -111,10 +104,10 @@ public class SessionClicksTest {
 
 	@Test
 	public void testPutMaxSizeTerms() {
-		com.liferay.portal.util.PropsUtil.set(
+		PropsUtil.set(
 			PropsKeys.SESSION_CLICKS_MAX_ALLOWED_VALUES,
 			String.valueOf(Integer.MAX_VALUE));
-		com.liferay.portal.util.PropsUtil.set(
+		PropsUtil.set(
 			PropsKeys.SESSION_CLICKS_MAX_SIZE_TERMS,
 			String.valueOf(_MAX_SIZE_TERMS));
 

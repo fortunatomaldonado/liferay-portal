@@ -57,7 +57,9 @@ public interface TestEntityResource {
 			Boolean permanent, String callbackURL, Object object)
 		throws Exception;
 
-	public Page<TestEntity> getTestEntitiesPage() throws Exception;
+	public Page<TestEntity> getTestEntitiesPage(
+			com.liferay.portal.kernel.search.filter.Filter filter)
+		throws Exception;
 
 	public TestEntity getTestEntity(Long testEntityId) throws Exception;
 
@@ -70,6 +72,7 @@ public interface TestEntityResource {
 	public Response postReservedWord(Boolean booleanValue) throws Exception;
 
 	public Response postTestEntitiesPageExportBatch(
+			com.liferay.portal.kernel.search.filter.Filter filter,
 			String callbackURL, String contentType, String fieldNames)
 		throws Exception;
 
@@ -81,12 +84,19 @@ public interface TestEntityResource {
 	public Response postTestEntityMultipartBulk(MultipartBody multipartBody)
 		throws Exception;
 
+	public Response postTestEntityMultipartImage(MultipartBody multipartBody)
+		throws Exception;
+
 	public TestEntity putTestEntity(
 			Long testEntityId, Long optionalParameter, TestEntity testEntity)
 		throws Exception;
 
 	public Response putTestEntityBatch(
 			Long optionalParameter, String callbackURL, Object object)
+		throws Exception;
+
+	public TestEntity putTestEntityStatus(
+			Long testEntityId, TestEntity testEntity)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

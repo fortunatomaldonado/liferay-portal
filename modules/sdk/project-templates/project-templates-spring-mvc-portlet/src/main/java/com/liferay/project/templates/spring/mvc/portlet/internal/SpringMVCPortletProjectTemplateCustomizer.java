@@ -14,6 +14,7 @@ import java.io.File;
 
 import java.nio.file.Path;
 
+import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -122,6 +123,22 @@ public class SpringMVCPortletProjectTemplateCustomizer
 		setProperty(
 			properties, "viewType",
 			springMVCPortletProjectTemplatesArgsExt.getViewType());
+
+		boolean jakartaCompatible = VersionUtil.isJakartaCompatibleVersion(
+			projectTemplatesArgs.getLiferayVersion());
+
+		setProperty(
+			properties, "jakartaCompatible", String.valueOf(jakartaCompatible));
+
+		if (jakartaCompatible &&
+			Objects.equals(
+				springMVCPortletProjectTemplatesArgsExt.getFramework(),
+				"springportletmvc")) {
+
+			throw new IllegalArgumentException(
+				"Framework springportletmvc is not compatible with Jakarta, " +
+					"use portletmvc4spring instead");
+		}
 	}
 
 	private static final Pattern _jspPattern = Pattern.compile(".*.html");

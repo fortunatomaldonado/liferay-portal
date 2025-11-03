@@ -103,7 +103,7 @@ public class UpdateLayoutStrutsAction implements StrutsAction {
 				throw new IllegalArgumentException("Portlet ID is null");
 			}
 
-			_checkPortletPermission(portletId, themeDisplay);
+			_checkPortletPermission(layout.getPlid(), portletId, themeDisplay);
 
 			String columnId = ParamUtil.getString(
 				httpServletRequest, "p_p_col_id", null);
@@ -243,7 +243,7 @@ public class UpdateLayoutStrutsAction implements StrutsAction {
 			layoutTypePortlet.resetModes();
 			layoutTypePortlet.resetStates();
 
-			layout = _layoutService.updateLayout(
+			layout = _layoutService.updateTypeSettings(
 				layout.getGroupId(), layout.isPrivateLayout(),
 				layout.getLayoutId(), layout.getTypeSettings());
 		}
@@ -397,11 +397,11 @@ public class UpdateLayoutStrutsAction implements StrutsAction {
 	}
 
 	private void _checkPortletPermission(
-			String portletId, ThemeDisplay themeDisplay)
+			long plid, String portletId, ThemeDisplay themeDisplay)
 		throws Exception {
 
 		PortletPermissionUtil.check(
-			themeDisplay.getPermissionChecker(), portletId,
+			themeDisplay.getPermissionChecker(), plid, portletId,
 			ActionKeys.ADD_TO_PAGE);
 
 		LayoutTypePortlet layoutTypePortlet =

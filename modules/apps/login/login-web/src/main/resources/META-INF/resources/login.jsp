@@ -180,11 +180,15 @@
 			<%@ include file="/navigation.jspf" %>
 		</div>
 
-		<aui:script sandbox="<%= true %>">
+		<aui:script position="inline" sandbox="<%= true %>">
 			var form = document.getElementById('<portlet:namespace /><%= formName %>');
+
+			form.action = '';
 
 			if (form) {
 				form.addEventListener('submit', (event) => {
+					event.preventDefault();
+
 					<c:if test="<%= PropsValues.SESSION_ENABLE_PERSISTENT_COOKIES && PropsValues.SESSION_TEST_COOKIE_SUPPORT %>">
 						if (!navigator.cookieEnabled) {
 							document
@@ -205,6 +209,8 @@
 						}
 					</c:if>
 
+					form.action = '<%= loginURL %>';
+
 					submitForm(form);
 				});
 
@@ -219,16 +225,21 @@
 					});
 				}
 			}
-			AUI().ready(function (A) {
-				const signInButton = document.getElementsByClassName(
-					'btn disabled btn-primary'
-				)[0];
 
-				if (signInButton) {
-					signInButton.classList.remove('disabled');
-					signInButton.disabled = false;
+			document.onreadystatechange = () => {
+				if (document.readyState === 'complete') {
+					const signInButton = document.getElementsByClassName(
+						'btn disabled btn-primary'
+					)[0];
+
+					if (signInButton) {
+						signInButton.classList.remove('disabled');
+						signInButton.disabled = false;
+					}
 				}
-			});
+			};
+
+			document.onreadystatechange();
 		</aui:script>
 	</c:otherwise>
 </c:choose>

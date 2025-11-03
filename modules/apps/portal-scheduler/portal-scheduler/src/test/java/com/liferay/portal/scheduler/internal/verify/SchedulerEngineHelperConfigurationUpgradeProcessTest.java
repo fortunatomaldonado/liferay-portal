@@ -45,7 +45,7 @@ public class SchedulerEngineHelperConfigurationUpgradeProcessTest {
 		SchedulerEngineHelperConfigurationUpgradeProcess
 			schedulerEngineHelperConfigurationUpgradeProcess =
 				new SchedulerEngineHelperConfigurationUpgradeProcess(
-					configurationAdmin, PropsUtil.getProps());
+					configurationAdmin);
 
 		Mockito.when(
 			configurationAdmin.getConfiguration(
@@ -73,13 +73,12 @@ public class SchedulerEngineHelperConfigurationUpgradeProcessTest {
 		ConfigurationAdmin configurationAdmin = Mockito.mock(
 			ConfigurationAdmin.class);
 
-		com.liferay.portal.util.PropsUtil.set(
-			_LEGACY_AUDIT_MESSAGE_SCHEDULER_JOB, "true");
+		PropsUtil.set(_LEGACY_AUDIT_MESSAGE_SCHEDULER_JOB, "true");
 
 		SchedulerEngineHelperConfigurationUpgradeProcess
 			schedulerEngineHelperConfigurationUpgradeProcess =
 				new SchedulerEngineHelperConfigurationUpgradeProcess(
-					configurationAdmin, PropsUtil.getProps());
+					configurationAdmin);
 
 		Configuration configuration = Mockito.mock(Configuration.class);
 

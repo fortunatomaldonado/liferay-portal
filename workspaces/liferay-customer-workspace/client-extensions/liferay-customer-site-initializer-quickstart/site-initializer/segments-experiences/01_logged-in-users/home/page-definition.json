@@ -53,8 +53,7 @@
 								"widgetConfig": {
 									"destination": "",
 									"displayStyle": "ddmTemplate_SEARCH-BAR-LEFT-ALIGNED-ICON-FTL",
-									"displayStyleGroupId": "20121",
-									"displayStyleGroupKey": "19497231034269",
+									"displayStyleGroupId": "[$GROUP_ID$]",
 									"federatedSearchKey": "",
 									"invisible": "false",
 									"keywordsParameterName": "q",
@@ -303,7 +302,10 @@
 											"fragmentLink": {
 												"href": {
 													"value_i18n": {
-														"en_US": "https://learn.liferay.com"
+														"en_US": "https://learn.liferay.com",
+														"es_ES": "https://learn.liferay.com",
+														"ja_JP": "https://learn.liferay.com",
+														"pt_BR": "https://learn.liferay.com"
 													}
 												}
 											},
@@ -432,6 +434,29 @@
 												"card",
 												"card-flat"
 											],
+											"fragmentLink": {
+												"href": {
+													"mapping": {
+														"itemReference": {
+															"className": "com.liferay.portal.kernel.model.Layout",
+															"fields": [
+																{
+																	"fieldName": "friendlyURL",
+																	"fieldValue": "/release-notes"
+																},
+																{
+																	"fieldName": "privatePage",
+																	"fieldValue": "false"
+																},
+																{
+																	"fieldName": "siteKey",
+																	"fieldValue": "Customer Portal"
+																}
+															]
+														}
+													}
+												}
+											},
 											"fragmentStyle": {
 												"backgroundColor": "colorBrandPrimaryLighten5",
 												"borderRadius": "borderRadiusLg",
@@ -592,7 +617,10 @@
 												},
 												"text": {
 													"value_i18n": {
-														"en_US": "Announcements"
+														"en_US": "Announcements",
+														"es_ES": "Anuncios",
+														"ja_JP": "アナウンスメント",
+														"pt_BR": "Avisos"
 													}
 												}
 											}
@@ -619,8 +647,7 @@
 										"url": {
 											"en_US": {
 												"layout": {
-													"groupId": "33877",
-													"layoutId": "41",
+													"groupId": "[$GROUP_ID$]",
 													"layoutUuid": "4ff091a3-fb4d-ee7e-36cb-e9c537587a6c",
 													"privateLayout": false,
 													"title": "Announcements"
@@ -636,7 +663,10 @@
 												},
 												"text": {
 													"value_i18n": {
-														"en_US": "View all"
+														"en_US": "View all",
+														"es_ES": "Ver todos",
+														"ja_JP": "全てを見る",
+														"pt_BR": "Ver tudo"
 													}
 												}
 											}
@@ -663,10 +693,9 @@
 						"definition": {
 							"collectionConfig": {
 								"collectionReference": {
-									"className": "com.liferay.asset.list.model.AssetListEntry",
-									"classPK": 37920
+									"className": "com.liferay.asset.internal.info.collection.provider.RecentContentInfoCollectionProvider"
 								},
-								"collectionType": "Collection"
+								"collectionType": "CollectionProvider"
 							},
 							"collectionViewports": [
 								{
@@ -694,7 +723,7 @@
 								"displayMessage": true
 							},
 							"listItemStyle": "",
-							"listStyle": "flex-column",
+							"listStyle": "",
 							"numberOfColumns": 1,
 							"numberOfItems": 4,
 							"numberOfItemsPerPage": 4,
@@ -715,6 +744,16 @@
 									{
 										"definition": {
 											"customCSS": ".[$FRAGMENT_CLASS$]:hover {\n\toutline: 2px solid var(--color-action-primary-hover);\n\toutline-offset: 2px;\n}",
+											"fragmentLink": {
+												"href": {
+													"mapping": {
+														"fieldKey": "AssetEntry_displayPageURL",
+														"itemReference": {
+															"contextSource": "CollectionItem"
+														}
+													}
+												}
+											},
 											"fragmentStyle": {
 												"backgroundColor": "#F1F5FB",
 												"borderRadius": "borderRadiusLg",
@@ -768,7 +807,7 @@
 																		},
 																		"text": {
 																			"mapping": {
-																				"fieldKey": "DDMStructure_Text94368469",
+																				"fieldKey": "AssetEntry_title",
 																				"itemReference": {
 																					"contextSource": "CollectionItem"
 																				}
@@ -800,7 +839,7 @@
 																		},
 																		"text": {
 																			"mapping": {
-																				"fieldKey": "DDMStructure_RichText69265670",
+																				"fieldKey": "AssetEntry_description",
 																				"itemReference": {
 																					"contextSource": "CollectionItem"
 																				}
@@ -829,7 +868,7 @@
 																		},
 																		"text": {
 																			"mapping": {
-																				"fieldKey": "DDMStructure_Date95276355",
+																				"fieldKey": "AssetEntry_createDate",
 																				"itemReference": {
 																					"contextSource": "CollectionItem"
 																				}
@@ -877,7 +916,10 @@
 																},
 																"text": {
 																	"value_i18n": {
-																		"en_US": "Read more&nbsp;→"
+																		"en_US": "Read more&nbsp;→",
+																		"es_ES": "Lee más&nbsp;→",
+																		"ja_JP": "さらに読む&nbsp;→",
+																		"pt_BR": "Ler mais&nbsp;→"
 																	}
 																}
 															}

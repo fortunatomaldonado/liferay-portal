@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Locator, Page, expect} from '@playwright/test';
+import {FrameLocator, Locator, Page, expect} from '@playwright/test';
 
 import {clickAndExpectToBeHidden} from '../../../../utils/clickAndExpectToBeHidden';
 import {clickAndExpectToBeVisible} from '../../../../utils/clickAndExpectToBeVisible';
@@ -20,11 +20,13 @@ export class JournalEditArticlePage {
 	readonly changesSavedIndicator: Locator;
 	readonly clearButton: Locator;
 	readonly content: Locator;
+	readonly contentFrame: FrameLocator;
 	readonly defaultTemplateButton: Locator;
 	readonly duplicateButton: Locator;
 	readonly friendlyURLInput: Locator;
 	readonly friendlyUrlToggle: Locator;
 	readonly historyButton: Locator;
+	readonly inputPermissionsViewRole: Locator;
 	readonly journalPage: JournalPage;
 	readonly propertiesTab: Locator;
 	readonly publishDropdown: Locator;
@@ -44,8 +46,12 @@ export class JournalEditArticlePage {
 		this.changesSavedIndicator = page.locator(
 			'#_com_liferay_journal_web_portlet_JournalPortlet_changesSavedIndicator'
 		);
+
 		this.clearButton = page.getByRole('button', {name: 'Clear'});
 		this.content = page.getByText('Content', {exact: true});
+		this.contentFrame = page.frameLocator(
+			'internal:role=application[name="Content,"i] >> iframe[title="editor"]'
+		);
 		this.defaultTemplateButton = page.getByRole('button', {
 			name: 'Default Template',
 		});
@@ -55,6 +61,9 @@ export class JournalEditArticlePage {
 		);
 		this.friendlyUrlToggle = page.locator('a[href="#friendlyUrlContent"]');
 		this.historyButton = page.getByLabel('History');
+		this.inputPermissionsViewRole = page.locator(
+			'#_com_liferay_journal_web_portlet_JournalPortlet_inputPermissionsViewRole'
+		);
 		this.journalPage = new JournalPage(page);
 		this.propertiesTab = page.getByRole('tab', {
 			name: /properties|propriétés/i,
@@ -133,6 +142,12 @@ export class JournalEditArticlePage {
 		}
 	}
 
+	async changeDefaultLanguage(languageId: string) {
+		await this.page.getByRole('button', {name: 'Change'}).click();
+
+		await this.page.getByRole('menuitem', {name: languageId}).click();
+	}
+
 	async changeLanguage(languageId: string) {
 		await this.page
 			.getByRole('combobox', {
@@ -156,6 +171,24 @@ export class JournalEditArticlePage {
 			.frameLocator(`iframe[title="Select ${assetType}"]`)
 			.getByRole('menuitem', {name: viewType})
 			.click();
+	}
+
+	async clearAllCategories(vocabulary: string) {
+		await this.openFieldSet('Categories', 'categorization');
+
+		await this.page
+			.getByRole('button', {name: `Select ${vocabulary}`})
+			.click();
+
+		const selectVocabularyIframe = this.page.frameLocator(
+			`iframe[title="Select ${vocabulary}"]`
+		);
+
+		await selectVocabularyIframe
+			.getByRole('button', {name: 'Clear All'})
+			.click();
+
+		await this.page.getByRole('button', {name: 'Done'}).click();
 	}
 
 	async createAndPublishBasicArticle(title?: string) {
@@ -269,6 +302,12 @@ export class JournalEditArticlePage {
 		await this.page.locator('body').click();
 	}
 
+	async editURL(title: string, url: string) {
+		await this.contentFrame.getByRole('link', {name: title}).dblclick();
+		await this.page.getByLabel('URL*').fill(url);
+		await this.page.getByLabel('OK').click();
+	}
+
 	async fillContent(content: string) {
 		await this.journalPage.articleContentTextBox.fill(content);
 		await this.journalPage.articleContentTextBox.press('Enter');
@@ -375,19 +414,19 @@ export class JournalEditArticlePage {
 	async saveAsDraftWithPermissions(title: string) {
 		await this.fillTitle(title);
 
-		await this.page
-			.getByRole('button', {exact: true, name: 'Save as Draft'})
-			.click();
+		const draftButton = this.page
+			.getByLabel('Save as Draft With Permissions')
+			.getByRole('button', {name: 'Save as Draft'});
 
 		await expect(async () => {
-			const draftButton = await this.page
-				.getByLabel('Save as Draft With Permissions')
-				.getByRole('button', {name: 'Save as Draft'});
+			await this.page
+				.getByRole('button', {exact: true, name: 'Save as Draft'})
+				.click();
 
-			await draftButton.waitFor();
-
-			await draftButton.click();
+			await expect(draftButton).toBeVisible();
 		}).toPass();
+
+		await draftButton.click();
 
 		await expect(this.page.getByText('Version: 1.0 Draft')).toBeVisible();
 	}
@@ -449,7 +488,13 @@ export class JournalEditArticlePage {
 				: `Success:${title} will be published on`
 		);
 
-		const row = await this.page
+		await clickAndExpectToBeVisible({
+			autoClick: true,
+			target: this.page.getByRole('menuitem', {name: 'list'}),
+			trigger: this.page.getByLabel('Select View, Currently Selected: '),
+		});
+
+		const row = this.page
 			.locator('.list-group-item')
 			.filter({hasText: title});
 
@@ -457,6 +502,53 @@ export class JournalEditArticlePage {
 			.locator('span.label')
 			.filter({hasText: workflow ? 'Pending' : 'Scheduled'})
 			.waitFor();
+	}
+
+	async selectFileFromDocumentsAndMedia(fileName: string) {
+		await this.page.getByLabel('File', {exact: true}).click();
+
+		const selectDocumentIframe = this.page.frameLocator(
+			'iframe[title="Select Document"]'
+		);
+
+		await selectDocumentIframe
+			.getByRole('link', {name: 'Sites and Libraries'})
+			.click();
+
+		await selectDocumentIframe
+			.getByRole('link', {name: 'Liferay DXP'})
+			.click();
+
+		await selectDocumentIframe
+			.getByRole('link', {name: 'Provided by Liferay'})
+			.click();
+
+		await expect(
+			selectDocumentIframe.getByLabel('Search for', {exact: true})
+		).toBeEnabled();
+
+		await selectDocumentIframe.getByText(fileName).dblclick();
+	}
+
+	async selectCategories(vocabulary: string, categories: string[]) {
+		await this.openFieldSet('Categories', 'categorization');
+
+		await this.page
+			.getByRole('button', {name: `Select ${vocabulary}`})
+			.click();
+
+		const selectVocabularyIframe = this.page.frameLocator(
+			`iframe[title="Select ${vocabulary}"]`
+		);
+
+		categories.forEach((category) => {
+			selectVocabularyIframe
+				.locator('li')
+				.filter({hasText: category})
+				.click();
+		});
+
+		await this.page.getByRole('button', {name: 'Done'}).click();
 	}
 
 	async selectSpecificDisplayPage(displayPageName: string) {
@@ -517,7 +609,7 @@ export class JournalEditArticlePage {
 			.filter({hasText: title})
 			.waitFor();
 
-		const row = await this.page
+		const row = this.page
 			.locator('.list-group-item')
 			.filter({hasText: title});
 

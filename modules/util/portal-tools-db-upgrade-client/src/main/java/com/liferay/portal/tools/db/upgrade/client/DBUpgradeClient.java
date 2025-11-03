@@ -17,9 +17,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 
+import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -78,7 +80,7 @@ public class DBUpgradeClient {
 				jvmOpts.add("-Duser.country=US");
 				jvmOpts.add("-Duser.language=en");
 				jvmOpts.add("-Duser.timezone=GMT");
-				jvmOpts.add("-Xmx2048m");
+				jvmOpts.add("-Xmx4096m");
 			}
 
 			if (commandLine.hasOption("debug")) {
@@ -418,6 +420,43 @@ public class DBUpgradeClient {
 		return sb.toString();
 	}
 
+	private String[] _getDBTypes() {
+		if (_appServer == null) {
+			return _DATABASE_TYPES_PORTAL;
+		}
+
+		File portalShieldedContainerLibDir =
+			_appServer.getPortalShieldedContainerLibDir();
+
+		if (portalShieldedContainerLibDir != null) {
+			Path path = portalShieldedContainerLibDir.toPath();
+
+			if (Files.exists(path.resolve("com.liferay.portal.dao.db.jar"))) {
+				return _DATABASE_TYPES_DXP;
+			}
+		}
+
+		return _DATABASE_TYPES_PORTAL;
+	}
+
+	private File _getResolvedDir(
+		boolean allowAbsolutePaths, File baseDir, String dirName) {
+
+		File dir = new File(dirName);
+
+		if (dir.isAbsolute()) {
+			if (allowAbsolutePaths) {
+				return dir;
+			}
+
+			System.err.println(dirName + " is not a relative path.");
+
+			return null;
+		}
+
+		return new File(baseDir, dirName);
+	}
+
 	private GogoShellClient _initGogoShellClient() throws IOException {
 		String value = _portalUpgradeExtProperties.getProperty(
 			"module.framework.properties.osgi.console");
@@ -463,6 +502,17 @@ public class DBUpgradeClient {
 		}
 
 		return true;
+	}
+
+	private boolean _isValidDir(File dir) {
+		if (dir.exists() && dir.isDirectory()) {
+			return true;
+		}
+
+		System.err.println(
+			dir.getAbsolutePath() + " does not exist or is not a directory.");
+
+		return false;
 	}
 
 	private void _printHelp() {
@@ -522,6 +572,139 @@ public class DBUpgradeClient {
 		return properties;
 	}
 
+	private String _requestDirName(
+			boolean allowAbsolutePaths, File baseDir, String defaultDirName,
+			String prompt)
+		throws IOException {
+
+		while (true) {
+			System.out.println(prompt + " (" + defaultDirName + "): ");
+
+			String response = _consoleReader.readLine();
+
+			if (response.isEmpty()) {
+				return null;
+			}
+
+			String dirName = response.trim();
+
+			File testDir = _getResolvedDir(
+				allowAbsolutePaths, baseDir, dirName);
+
+			if ((testDir != null) && _isValidDir(testDir)) {
+				if (allowAbsolutePaths) {
+					return testDir.getCanonicalPath();
+				}
+
+				return dirName;
+			}
+		}
+	}
+
+	private String _requestDirNames(
+			boolean allowAbsolutePaths, File baseDir, String defaultDirNames,
+			String prompt)
+		throws IOException {
+
+		while (true) {
+			System.out.println(prompt + " (" + defaultDirNames + "): ");
+
+			String response = _consoleReader.readLine();
+
+			if (response.isEmpty()) {
+				return null;
+			}
+
+			boolean hasErrors = false;
+
+			String dirNames = response.trim();
+
+			for (String dirName : dirNames.split(",")) {
+				dirName = dirName.trim();
+
+				File testDir = _getResolvedDir(
+					allowAbsolutePaths, baseDir, dirName);
+
+				if ((testDir == null) || !_isValidDir(testDir)) {
+					hasErrors = true;
+				}
+			}
+
+			if (!hasErrors) {
+				return dirNames;
+			}
+		}
+	}
+
+	private String _requestHost(String defaultHost, String prompt)
+		throws IOException {
+
+		while (true) {
+			System.out.println(prompt + " (" + defaultHost + "): ");
+
+			String response = _consoleReader.readLine();
+
+			if (response.isEmpty()) {
+				return null;
+			}
+
+			String name = response.trim();
+
+			try {
+				InetAddress.getByName(name);
+
+				return name;
+			}
+			catch (Exception exception) {
+				System.err.println(
+					"Unable to resolve host " + name + ": " +
+						exception.getMessage());
+			}
+		}
+	}
+
+	private Integer _requestPort(int defaultPort, String prompt)
+		throws IOException {
+
+		String port = null;
+
+		if (defaultPort > 0) {
+			port = String.valueOf(defaultPort);
+		}
+		else {
+			port = "none";
+		}
+
+		while (true) {
+			System.out.println(prompt + " (" + port + "): ");
+
+			String response = _consoleReader.readLine();
+
+			if (response.isEmpty()) {
+				return null;
+			}
+
+			if (response.equals("none")) {
+				return 0;
+			}
+
+			try {
+				int portInt = Integer.parseInt(response);
+
+				if ((portInt < 0) || (portInt > 65535)) {
+					System.err.println("Port must be between 0 and 65535.");
+
+					continue;
+				}
+
+				return portInt;
+			}
+			catch (NumberFormatException numberFormatException) {
+				System.err.println(response + " is not a valid port number.");
+			}
+		}
+	}
+
 	private void _saveProperties() throws IOException {
 		_appServerProperties.store(_appServerPropertiesFile);
 		_portalUpgradeDatabaseProperties.store(
@@ -565,49 +748,46 @@ public class DBUpgradeClient {
 				}
 			}
 
-			System.out.println(
-				"Please enter your application server directory (" +
-					_appServer.getDir() + "): ");
+			String appServerDirName = _requestDirName(
+				true,
+				new File(
+					_portalUpgradeExtProperties.getProperty("liferay.home")),
+				_appServer.getDir(
+				).getPath(),
+				"Please enter your application server directory");
 
-			response = _consoleReader.readLine();
-
-			if (!response.isEmpty()) {
-				_appServer.setDirName(response);
-			}
-
-			System.out.println(
-				"Please enter your extra library directories in application " +
-					"server directory (" + _appServer.getExtraLibDirNames() +
-						"): ");
-
-			response = _consoleReader.readLine();
-
-			if (!response.isEmpty()) {
-				_appServer.setExtraLibDirNames(response);
-			}
-
-			System.out.println(
-				"Please enter your global library directory in application " +
-					"server directory (" + _appServer.getGlobalLibDirName() +
-						"): ");
-
-			response = _consoleReader.readLine();
-
-			if (!response.isEmpty()) {
-				_appServer.setGlobalLibDirName(response);
-			}
-
-			System.out.println(
-				"Please enter your portal directory in application server " +
-					"directory (" + _appServer.getPortalDirName() + "): ");
-
-			response = _consoleReader.readLine();
-
-			if (!response.isEmpty()) {
-				_appServer.setPortalDirName(response);
+			if (appServerDirName != null) {
+				_appServer.setDirName(appServerDirName);
 			}
 
 			File dir = _appServer.getDir();
+
+			String extraLibDirNames = _requestDirNames(
+				false, dir, _appServer.getExtraLibDirNames(),
+				"Please enter your extra library directories in application " +
+					"server directory");
+
+			if (extraLibDirNames != null) {
+				_appServer.setExtraLibDirNames(extraLibDirNames);
+			}
+
+			String globalLibDirName = _requestDirName(
+				false, dir, _appServer.getGlobalLibDirName(),
+				"Please enter your global library directory in application " +
+					"server directory");
+
+			if (globalLibDirName != null) {
+				_appServer.setGlobalLibDirName(globalLibDirName);
+			}
+
+			String portalDirName = _requestDirName(
+				false, dir, _appServer.getPortalDirName(),
+				"Please enter your portal directory in application server " +
+					"directory");
+
+			if (portalDirName != null) {
+				_appServer.setPortalDirName(portalDirName);
+			}
 
 			_appServerProperties.setProperty("dir", dir.getCanonicalPath());
 
@@ -656,7 +836,7 @@ public class DBUpgradeClient {
 		while (dataSource == null) {
 			System.out.print("[ ");
 
-			for (String databaseType : _DATABASE_TYPES) {
+			for (String databaseType : _getDBTypes()) {
 				System.out.print(databaseType + " ");
 			}
 
@@ -697,35 +877,18 @@ public class DBUpgradeClient {
 			dataSource.setProtocol(response);
 		}
 
-		System.out.println(
-			"Please enter your database host (" + dataSource.getHost() + "): ");
+		String host = _requestHost(
+			dataSource.getHost(), "Please enter your database host");
 
-		response = _consoleReader.readLine();
-
-		if (!response.isEmpty()) {
-			dataSource.setHost(response);
+		if (host != null) {
+			dataSource.setHost(host);
 		}
 
-		String port = null;
+		Integer port = _requestPort(
+			dataSource.getPort(), "Please enter your database port");
 
-		if (dataSource.getPort() > 0) {
-			port = String.valueOf(dataSource.getPort());
-		}
-		else {
-			port = "none";
-		}
-
-		System.out.println("Please enter your database port (" + port + "): ");
-
-		response = _consoleReader.readLine();
-
-		if (!response.isEmpty()) {
-			if (response.equals("none")) {
-				dataSource.setPort(0);
-			}
-			else {
-				dataSource.setPort(Integer.parseInt(response));
-			}
+		if (port != null) {
+			dataSource.setPort(port);
 		}
 
 		System.out.println(
@@ -764,13 +927,14 @@ public class DBUpgradeClient {
 		if ((value == null) || value.isEmpty()) {
 			File defaultLiferayHomeDir = new File(_jarDir, "../../");
 
-			System.out.println(
-				"Please enter your Liferay home (" +
-					defaultLiferayHomeDir.getCanonicalPath() + "): ");
+			String liferayHomeDirName = _requestDirName(
+				true, baseDir, defaultLiferayHomeDir.getCanonicalPath(),
+				"Please enter your Liferay home");
 
-			value = _consoleReader.readLine();
-
-			if (value.isEmpty()) {
+			if (liferayHomeDirName != null) {
+				value = liferayHomeDirName;
+			}
+			else {
 				value = defaultLiferayHomeDir.getCanonicalPath();
 			}
 		}
@@ -792,8 +956,12 @@ public class DBUpgradeClient {
 		"jboss", "tomcat", "weblogic", "wildfly"
 	};
 
-	private static final String[] _DATABASE_TYPES = {
+	private static final String[] _DATABASE_TYPES_DXP = {
 		"db2", "mariadb", "mysql", "oracle", "postgresql", "sqlserver"
+	};
+
+	private static final String[] _DATABASE_TYPES_PORTAL = {
+		"mariadb", "mysql", "postgresql"
 	};
 
 	private static final String _GOGO_SHELL_PREFIX = "g! ";

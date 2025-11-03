@@ -7,8 +7,15 @@ package com.liferay.layout.utility.page.forgot.password.internal;
 
 import com.liferay.layout.utility.page.kernel.LayoutUtilityPageEntryViewRenderer;
 import com.liferay.layout.utility.page.kernel.constants.LayoutUtilityPageEntryConstants;
-import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.language.Language;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 import java.util.Locale;
 
@@ -36,11 +43,23 @@ public class ForgotPasswordLayoutUtilityPageEntryViewRenderer
 	}
 
 	@Override
-	public boolean isEnabled() {
-		return FeatureFlagManagerUtil.isEnabled("LPD-6378");
+	public void renderHTML(
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse)
+		throws IOException, ServletException {
+
+		RequestDispatcher requestDispatcher =
+			_servletContext.getRequestDispatcher("/forgot_password.jsp");
+
+		requestDispatcher.include(httpServletRequest, httpServletResponse);
 	}
 
 	@Reference
 	private Language _language;
+
+	@Reference(
+		target = "(osgi.web.symbolicname=com.liferay.layout.utility.page.forgot.password)"
+	)
+	private ServletContext _servletContext;
 
 }

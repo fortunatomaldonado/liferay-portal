@@ -67,6 +67,18 @@ public class FreeMarkerTool {
 		return _freeMarkerTool;
 	}
 
+	public static String getPropertyType(
+		ConfigYAML configYAML, OpenAPIYAML openAPIYAML, Schema propertySchema,
+		String propertySchemaName) {
+
+		Map<String, String> javaDataTypeMap =
+			OpenAPIParserUtil.getJavaDataTypeMap(configYAML, openAPIYAML);
+
+		return DTOOpenAPIParser.getPropertyType(
+			configYAML, javaDataTypeMap, openAPIYAML, propertySchema,
+			propertySchemaName);
+	}
+
 	public boolean containsJavaMethodSignature(
 		List<JavaMethodSignature> javaMethodSignatures, String text) {
 
@@ -379,6 +391,24 @@ public class FreeMarkerTool {
 		fieldName = fieldName.replaceAll("_+", "_");
 
 		return StringUtil.toUpperCase(fieldName);
+	}
+
+	public String getExternalReferenceCodeParameterName(
+		JavaMethodSignature javaMethodSignature, String schemaName) {
+
+		for (JavaMethodParameter javaMethodParameter :
+				javaMethodSignature.getJavaMethodParameters()) {
+
+			String parameterName = javaMethodParameter.getParameterName();
+
+			if (isExternalReferenceCodeParameterName(
+					parameterName, schemaName)) {
+
+				return parameterName;
+			}
+		}
+
+		return null;
 	}
 
 	public String getGraphQLArguments(
@@ -747,6 +777,39 @@ public class FreeMarkerTool {
 		return parentJavaMethodSignatures;
 	}
 
+	public JavaMethodSignature getParentPermissionsPageJavaMethodSignature(
+		String httpMethod, List<JavaMethodSignature> javaMethodSignatures,
+		String parentSchemaName, String schemaName) {
+
+		if ((parentSchemaName == null) ||
+			!(Objects.equals(parentSchemaName, "AssetLibrary") ||
+			  Objects.equals(parentSchemaName, "Site"))) {
+
+			return null;
+		}
+
+		for (JavaMethodSignature javaMethodSignature : javaMethodSignatures) {
+			if (Objects.equals(
+					javaMethodSignature.getMethodName(),
+					StringBundler.concat(
+						httpMethod, parentSchemaName, schemaName,
+						"PermissionsPage")) &&
+				hasPathParameter(
+					javaMethodSignature,
+					TextFormatter.format(parentSchemaName, TextFormatter.I) +
+						"ExternalReferenceCode") &&
+				hasPathParameter(
+					javaMethodSignature,
+					TextFormatter.format(schemaName, TextFormatter.I) +
+						"ExternalReferenceCode")) {
+
+				return javaMethodSignature;
+			}
+		}
+
+		return null;
+	}
+
 	public JavaMethodSignature getPostSchemaJavaMethodSignature(
 		List<JavaMethodSignature> javaMethodSignatures, String parameterName,
 		String schemaName) {
@@ -1004,6 +1067,13 @@ public class FreeMarkerTool {
 		return false;
 	}
 
+	public boolean hasPathParameter(
+		JavaMethodSignature javaMethodSignature, String parameterName) {
+
+		return ResourceOpenAPIParser.hasPathParameter(
+			javaMethodSignature, parameterName);
+	}
+
 	public boolean hasPostSchemaJavaMethodSignature(
 		List<JavaMethodSignature> javaMethodSignatures, String parameterName,
 		String schemaName) {
@@ -1094,14 +1164,26 @@ public class FreeMarkerTool {
 			configYAML, propertyName, schema, schemas);
 	}
 
+	public boolean isExternalReferenceCodeMethod(
+		String httpMethod, JavaMethodSignature javaMethodSignature) {
+
+		return ResourceOpenAPIParser.isExternalReferenceCodeMethod(
+			httpMethod, javaMethodSignature);
+	}
+
 	public boolean isExternalReferenceCodeParameter(
 		JavaMethodParameter javaMethodParameter, String schemaName) {
 
-		if (StringUtil.equals(
-				javaMethodParameter.getParameterName(),
-				"externalReferenceCode") ||
+		return isExternalReferenceCodeParameterName(
+			javaMethodParameter.getParameterName(), schemaName);
+	}
+
+	public boolean isExternalReferenceCodeParameterName(
+		String parameterName, String schemaName) {
+
+		if (StringUtil.equals(parameterName, "externalReferenceCode") ||
 			StringUtil.equals(
-				javaMethodParameter.getParameterName(),
+				parameterName,
 				TextFormatter.format(schemaName, TextFormatter.I) +
 					"ExternalReferenceCode")) {
 
@@ -1123,11 +1205,7 @@ public class FreeMarkerTool {
 		Map<String, Schema> propertySchemas = schema.getPropertySchemas();
 
 		if (MapUtil.isEmpty(propertySchemas) ||
-			!propertySchemas.containsKey("permissions") ||
-			!containsJavaMethodSignature(
-				javaMethodSignatures, "get" + schemaName + "PermissionsPage") ||
-			!containsJavaMethodSignature(
-				javaMethodSignatures, "put" + schemaName + "PermissionsPage")) {
+			!propertySchemas.containsKey("permissions")) {
 
 			return false;
 		}
@@ -1172,9 +1250,14 @@ public class FreeMarkerTool {
 	public boolean isIdParameter(
 		JavaMethodParameter javaMethodParameter, String schemaName) {
 
-		if (StringUtil.equals(javaMethodParameter.getParameterName(), "id") ||
+		return isIdParameterName(
+			javaMethodParameter.getParameterName(), schemaName);
+	}
+
+	public boolean isIdParameterName(String parameterName, String schemaName) {
+		if (StringUtil.equals(parameterName, "id") ||
 			StringUtil.equals(
-				javaMethodParameter.getParameterName(),
+				parameterName,
 				TextFormatter.format(schemaName, TextFormatter.I) + "Id")) {
 
 			return true;
@@ -1207,12 +1290,7 @@ public class FreeMarkerTool {
 			schemaName, TextFormatter.I);
 
 		if (StringUtil.equals(
-				parameterName, "assetLibraryExternalReferenceCode") ||
-			StringUtil.equals(parameterName, "assetLibraryId") ||
-			StringUtil.equals(parameterName, "siteExternalReferenceCode") ||
-			StringUtil.equals(parameterName, "siteId") ||
-			StringUtil.equals(
-				parameterName, schemaVarName + "externalReferenceCode") ||
+				parameterName, schemaVarName + "ExternalReferenceCode") ||
 			StringUtil.equals(parameterName, schemaVarName + "Id")) {
 
 			return true;
@@ -1271,6 +1349,19 @@ public class FreeMarkerTool {
 				formattedParameterSchemaName, formattedSchemaNamePlural) ||
 			StringUtil.equals(
 				formattedParameterSchemaName, formattedSchemaNameSingular)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isParameterNameScopeRelated(String parameterName) {
+		if (StringUtil.equals(
+				parameterName, "assetLibraryExternalReferenceCode") ||
+			StringUtil.equals(parameterName, "assetLibraryId") ||
+			StringUtil.equals(parameterName, "siteExternalReferenceCode") ||
+			StringUtil.equals(parameterName, "siteId")) {
 
 			return true;
 		}

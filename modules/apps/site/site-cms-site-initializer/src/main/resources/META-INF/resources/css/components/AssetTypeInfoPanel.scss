@@ -1,0 +1,81 @@
+@import 'atlas-variables';
+
+.asset-navigation-container {
+	--asset-sidebar-layout-width: 472px;
+
+	@include media-breakpoint-up(sm) {
+		&.c-slideout-push-end {
+			padding-right: var(--asset-sidebar-layout-width);
+		}
+
+		.sidebar {
+			width: var(--asset-sidebar-layout-width);
+		}
+	}
+}
+
+.sidebar-layout {
+	--fds-sidebar-layout-width: 472px;
+
+	@include media-breakpoint-up(sm) {
+		.fds {
+			&-info-panel {
+				--sidebar-layout-width: var(--fds-sidebar-layout-width);
+			}
+
+			&.c-slideout-push-end {
+				padding-right: var(--fds-sidebar-layout-width);
+			}
+		}
+	}
+}
+
+.c-slideout .sidebar {
+	.asset-metadata-section {
+		p {
+			font-size: 0.875rem;
+		}
+	}
+
+	.asset-type-default-view {
+		.c-empty-state-title {
+			display: none;
+		}
+
+		.c-empty-state-text {
+			margin-top: 2rem;
+		}
+	}
+
+	.card-image {
+		height: 250px;
+		object-fit: contain;
+	}
+
+	.nav {
+		flex-wrap: nowrap;
+	}
+
+	.nav-tabs {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	.panel-unstyled .panel-header.panel-header-link {
+		border-radius: 0;
+	}
+
+	.sidebar-header {
+		.asset-icon-files {
+			color: $red-l1;
+		}
+	}
+
+	.tab-content {
+		overflow-y: auto;
+	}
+
+	.vocabulary-name {
+		font-size: 0.875rem;
+	}
+}

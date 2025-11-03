@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClassicEditor as BaseClassicEditor, EventInfo} from 'ckeditor5';
+import {EventInfo} from '@ckeditor/ckeditor5-utils/dist/index.js';
 import React from 'react';
 
+import {BaseCKEditor5ClassicEditor} from '../index';
 import BaseEditor from './BaseEditor';
 import getDefaultEditorConfig from './utils/getDefaultEditorConfig';
 import {
@@ -20,14 +21,18 @@ const ClassicEditor = ({
 	config,
 	data,
 	disabled,
+	onBlur,
 	onChange,
+	onFocus,
 	onReady,
 }: {
 	className?: string;
 	config?: LiferayEditorConfig;
 	data?: string;
 	disabled?: boolean;
+	onBlur?: (event: EventInfo, editor: TEditor) => void;
 	onChange?: (event: EventInfo, editor: TEditor) => void;
+	onFocus?: (event: EventInfo, editor: TEditor) => void;
 	onReady?: (editor: TEditor) => void;
 }) => {
 	return (
@@ -42,13 +47,15 @@ const ClassicEditor = ({
 			}}
 			data={data}
 			disabled={disabled}
-			editor={BaseClassicEditor}
+			editor={BaseCKEditor5ClassicEditor}
+			onBlur={onBlur}
 			onChange={onChange}
+			onFocus={onFocus}
 			onReady={(editor) => {
 				Liferay.fire('ckeditor:ready', {editor});
 
 				if ('toolbar' in editor.ui.view) {
-					editor.ui.view.toolbar.items.map((item: any) => {
+					editor.ui.view.toolbar?.items.map((item: any) => {
 						if (item.buttonView) {
 							item.buttonView.tooltipPosition = 'n';
 						}

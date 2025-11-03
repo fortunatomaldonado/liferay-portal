@@ -13,11 +13,11 @@ import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.util.PropsUtil;
 
 import java.io.Serializable;
 
@@ -113,8 +113,8 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 
 	@Test
 	public void testInitChannels() {
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				ClusterLinkImpl.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				ClusterLinkImpl.class.getName(), LoggerTestUtil.OFF)) {
 
 			// Test 1, create ClusterLinkImpl#MAX_CHANNEL_COUNT channels
 
@@ -265,10 +265,6 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 					StringPool.PERIOD + i,
 				"test-channel-properties-transport-" + i);
 		}
-
-		ReflectionTestUtil.setFieldValue(
-			clusterLinkImpl, "_props",
-			com.liferay.portal.kernel.util.PropsUtil.getProps());
 
 		clusterLinkImpl.activate(Collections.emptyMap());
 

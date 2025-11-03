@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {EventInfo} from 'ckeditor5';
+import {EventInfo} from '@ckeditor/ckeditor5-utils/dist/index.js';
 import {loadEditorClientExtensions} from 'frontend-js-web';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -20,7 +20,9 @@ const BaseEditor = ({
 	data,
 	disabled,
 	editor,
+	onBlur,
 	onChange,
+	onFocus,
 	onReady,
 }: {
 	className?: string;
@@ -28,7 +30,9 @@ const BaseEditor = ({
 	data?: string;
 	disabled?: boolean;
 	editor: any;
+	onBlur?: (event: EventInfo, editor: TEditor) => void;
 	onChange?: (event: EventInfo, editor: TEditor) => void;
+	onFocus?: (event: EventInfo, editor: TEditor) => void;
 	onReady?: (editor: TEditor) => void;
 }) => {
 	const [loading, setLoading] = useState(true);
@@ -55,9 +59,11 @@ const BaseEditor = ({
 		loadEditorClientExtensions({
 			config: editorConfig,
 			onLoad: ({transformedConfig}: any) => {
+				const cxExtraPlugins = transformedConfig.extraPlugins ?? [];
+
 				setEditorConfig(() => ({
 					...transformedConfig,
-					extraPlugins,
+					extraPlugins: [...(extraPlugins ?? []), ...cxExtraPlugins],
 					licenseKey,
 					plugins,
 				}));
@@ -76,7 +82,9 @@ const BaseEditor = ({
 				data={data}
 				disabled={disabled}
 				editor={editor}
+				onBlur={onBlur}
 				onChange={onChange}
+				onFocus={onFocus}
 				onReady={onReady}
 			/>
 		</div>

@@ -12,11 +12,15 @@ import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.headless.admin.site.dto.v1_0.DefaultFragmentReference;
 import com.liferay.headless.admin.site.dto.v1_0.FragmentInstancePageElementDefinition;
-import com.liferay.headless.admin.site.dto.v1_0.ItemExternalReference;
+import com.liferay.headless.admin.site.dto.v1_0.FragmentItemExternalReference;
 import com.liferay.headless.admin.site.dto.v1_0.PageElementDefinition;
+import com.liferay.headless.admin.site.dto.v1_0.Scope;
 import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 
@@ -58,6 +62,8 @@ public class FragmentInstancePageElementDefinitionDTOConverter
 
 		return new FragmentInstancePageElementDefinition() {
 			{
+				setConfiguration(fragmentEntryLink::getConfiguration);
+				setCss(fragmentEntryLink::getCss);
 				setCssClasses(
 					() -> {
 						if (SetUtil.isEmpty(
@@ -71,18 +77,53 @@ public class FragmentInstancePageElementDefinitionDTOConverter
 							fragmentStyledLayoutStructureItem.getCssClasses());
 					});
 				setCustomCSS(fragmentStyledLayoutStructureItem::getCustomCSS);
+				setDatePropagated(fragmentEntryLink::getLastPropagationDate);
+				setDraftFragmentInstanceExternalReferenceCode(
+					() -> _getDraftFragmentInstanceExternalReferenceCode(
+						fragmentEntryLink));
+				setFragmentInstanceExternalReferenceCode(
+					fragmentEntryLink::getExternalReferenceCode);
 				setFragmentReference(
 					() -> {
 						FragmentEntry fragmentEntry =
-							_fragmentEntryLocalService.fetchFragmentEntry(
-								fragmentEntryLink.getFragmentEntryId());
+							_fragmentEntryLocalService.
+								fetchFragmentEntryByExternalReferenceCode(
+									fragmentEntryLink.getFragmentEntryERC(),
+									fragmentEntryLink.
+										getFragmentEntryGroupId());
 
 						if (fragmentEntry != null) {
-							return new ItemExternalReference() {
+							return new FragmentItemExternalReference() {
 								{
 									setExternalReferenceCode(
 										fragmentEntry::
 											getExternalReferenceCode);
+									setFragmentReferenceType(
+										() ->
+											FragmentReferenceType.
+												FRAGMENT_ITEM_EXTERNAL_REFERENCE);
+									setScope(
+										() -> {
+											if (fragmentEntry.getGroupId() ==
+													fragmentEntryLink.
+														getGroupId()) {
+
+												return null;
+											}
+
+											Group group =
+												_groupLocalService.getGroup(
+													fragmentEntry.getGroupId());
+
+											return new Scope() {
+												{
+													setExternalReferenceCode(
+														group::
+															getExternalReferenceCode);
+													setType(() -> Type.SITE);
+												}
+											};
+										});
 								}
 							};
 						}
@@ -101,15 +142,53 @@ public class FragmentInstancePageElementDefinitionDTOConverter
 							{
 								setDefaultFragmentKey(
 									fragmentEntryLink::getRendererKey);
+								setFragmentReferenceType(
+									() ->
+										FragmentReferenceType.
+											DEFAULT_FRAGMENT_REFERENCE);
 							}
 						};
 					});
+				setFragmentType(
+					() -> {
+						if (fragmentEntryLink.isTypeComponent()) {
+							return FragmentType.BASIC;
+						}
+
+						return FragmentType.FORM;
+					});
+				setHtml(fragmentEntryLink::getHtml);
 				setIndexed(fragmentStyledLayoutStructureItem::isIndexed);
+				setJs(fragmentEntryLink::getJs);
 				setName(fragmentStyledLayoutStructureItem::getName);
 				setNamespace(fragmentEntryLink::getNamespace);
 				setType(PageElementDefinition.Type.FRAGMENT);
+				setUuid(fragmentEntryLink::getUuid);
 			}
 		};
+	}
+
+	private String _getDraftFragmentInstanceExternalReferenceCode(
+		FragmentEntryLink fragmentEntryLink) {
+
+		String originalFragmentEntryLinkERC =
+			fragmentEntryLink.getOriginalFragmentEntryLinkERC();
+
+		if (Validator.isNull(originalFragmentEntryLinkERC)) {
+			return null;
+		}
+
+		FragmentEntryLink originalFragmentEntryLink =
+			_fragmentEntryLinkLocalService.
+				fetchFragmentEntryLinkByExternalReferenceCode(
+					originalFragmentEntryLinkERC,
+					fragmentEntryLink.getGroupId());
+
+		if (originalFragmentEntryLink == null) {
+			return null;
+		}
+
+		return originalFragmentEntryLink.getExternalReferenceCode();
 	}
 
 	@Reference
@@ -121,5 +200,8 @@ public class FragmentInstancePageElementDefinitionDTOConverter
 
 	@Reference
 	private FragmentEntryLocalService _fragmentEntryLocalService;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 }

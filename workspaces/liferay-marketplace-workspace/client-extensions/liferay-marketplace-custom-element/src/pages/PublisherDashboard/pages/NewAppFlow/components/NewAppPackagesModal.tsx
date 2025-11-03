@@ -56,7 +56,9 @@ export function NewAppPackageVersionModal({
 			className="package-version-modal-container"
 			observer={observer}
 		>
-			<ClayModal.Header>
+			<ClayModal.Header
+				closeButtonAriaLabel={Liferay.Language.get('close')}
+			>
 				{i18n.translate('select-compatible-versions')}
 			</ClayModal.Header>
 			<ClayModal.Body>
@@ -149,6 +151,7 @@ export function NewAppPackageVersionModal({
 											{
 												file: null,
 												id: getRandomID(),
+												uploaded: false,
 												versions: checkboxVersions,
 											},
 										],

@@ -9,13 +9,17 @@ import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import jakarta.portlet.ActionRequest;
 
@@ -40,14 +44,11 @@ public class ViewStructureUsagesDisplayContext {
 	}
 
 	public String getAPIURL() {
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("/o/search/v1.0/search?emptySearch=true&");
-		sb.append("filter=(objectDefinitionId eq ");
-		sb.append(ParamUtil.getLong(_httpServletRequest, "objectDefinitionId"));
-		sb.append(")&nestedFields=embedded");
-
-		return sb.toString();
+		return StringBundler.concat(
+			"/o/search/v1.0/search?emptySearch=true&",
+			"filter=(objectDefinitionId eq ",
+			ParamUtil.getLong(_httpServletRequest, "objectDefinitionId"),
+			" and status in (", _STATUSES, "))&nestedFields=embedded");
 	}
 
 	public List<DropdownItem> getBulkActionDropdownItems() {
@@ -56,6 +57,14 @@ public class ViewStructureUsagesDisplayContext {
 
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems() {
 		return ListUtil.fromArray(
+			new FDSActionDropdownItem(
+				StringBundler.concat(
+					_themeDisplay.getPortalURL(), _themeDisplay.getPathMain(),
+					GroupConstants.CMS_FRIENDLY_URL,
+					"/edit_content_item?objectEntryId={embedded.id}&",
+					"redirect=", _themeDisplay.getURLCurrent()),
+				"pencil", "edit", LanguageUtil.get(_httpServletRequest, "edit"),
+				"get", "update", null),
 			new FDSActionDropdownItem(
 				PortletURLBuilder.create(
 					PortalUtil.getControlPanelPortletURL(
@@ -72,6 +81,8 @@ public class ViewStructureUsagesDisplayContext {
 				).setParameter(
 					"modelResourceDescription", "{embedded.name}"
 				).setParameter(
+					"resourceGroupId", "{embedded.scopeId}"
+				).setParameter(
 					"resourcePrimKey", "{embedded.id}"
 				).setWindowState(
 					LiferayWindowState.POP_UP
@@ -87,6 +98,13 @@ public class ViewStructureUsagesDisplayContext {
 				_language.get(_httpServletRequest, "delete"), "delete",
 				"delete", "headless"));
 	}
+
+	private static final String _STATUSES = StringUtil.merge(
+		new int[] {
+			WorkflowConstants.STATUS_APPROVED, WorkflowConstants.STATUS_DRAFT,
+			WorkflowConstants.STATUS_EXPIRED, WorkflowConstants.STATUS_PENDING,
+			WorkflowConstants.STATUS_SCHEDULED
+		});
 
 	private final HttpServletRequest _httpServletRequest;
 	private final Language _language;

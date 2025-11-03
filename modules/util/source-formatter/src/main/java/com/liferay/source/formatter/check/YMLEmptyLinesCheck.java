@@ -33,42 +33,49 @@ public class YMLEmptyLinesCheck extends BaseFileCheck {
 			boolean insideBlockStyle = false;
 			String leadingSpaces = null;
 			String line = null;
+			String previousLine = null;
 
 			while ((line = unsyncBufferedReader.readLine()) != null) {
 				if (line.startsWith("{{- define ") && (sb.index() > 0)) {
 					sb.append("\n");
 				}
 
-				if (!insideBlockStyle) {
-					if (YMLSourceUtil.isBlockStyle(line)) {
-						insideBlockStyle = true;
-						blockStyleLeadingSpaces = SourceUtil.getLeadingSpaces(
-							line);
-					}
-
-					if (Validator.isBlank(line)) {
-						continue;
-					}
-
+				if (insideBlockStyle) {
 					sb.append(line);
-
 					sb.append("\n");
+
+					leadingSpaces = SourceUtil.getLeadingSpaces(line);
+
+					if (!Validator.isBlank(line) &&
+						(leadingSpaces.length() <=
+							blockStyleLeadingSpaces.length()) &&
+						!YMLSourceUtil.isBlockStyle(line)) {
+
+						insideBlockStyle = false;
+					}
+
+					continue;
+				}
+
+				if (Validator.isBlank(line) && (previousLine != null) &&
+					!previousLine.startsWith("#")) {
+
+					previousLine = line;
 
 					continue;
 				}
 
 				sb.append(line);
-
 				sb.append("\n");
 
-				leadingSpaces = SourceUtil.getLeadingSpaces(line);
+				if (!YMLSourceUtil.isBlockStyle(line)) {
+					previousLine = line;
 
-				if (!Validator.isBlank(line) &&
-					(leadingSpaces.length() <=
-						blockStyleLeadingSpaces.length())) {
-
-					insideBlockStyle = false;
+					continue;
 				}
+
+				blockStyleLeadingSpaces = SourceUtil.getLeadingSpaces(line);
+				insideBlockStyle = true;
 			}
 		}
 

@@ -6,11 +6,11 @@
 package com.liferay.portal.kernel.upgrade;
 
 import com.liferay.portal.kernel.dao.db.DBInspector;
-import com.liferay.portal.kernel.db.partition.DBPartition;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.upgrade.util.JakartaUpgradeProcessUtil;
+import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringBundler;
 
 import java.sql.PreparedStatement;
@@ -55,10 +55,15 @@ public abstract class BaseJakartaUpgradeProcess extends UpgradeProcess {
 				continue;
 			}
 
-			Queue<String> modifiedKeys = new ConcurrentLinkedQueue<>();
-
 			String[] primaryKeyColumnNames = getPrimaryKeyColumnNames(
 				connection, tableName);
+
+			if (primaryKeyColumnNames.length == 0) {
+				throw new Exception(
+					"Table " + tableName + " has no primary key");
+			}
+
+			Queue<String> modifiedKeys = new ConcurrentLinkedQueue<>();
 
 			processConcurrently(
 				_getSelectSQL(columnName, primaryKeyColumnNames, tableName),
@@ -86,14 +91,14 @@ public abstract class BaseJakartaUpgradeProcess extends UpgradeProcess {
 				(modifiedKeys.size() * 2) + (primaryKeyColumnNames.length * 2);
 
 			StringBundler sb = new StringBundler(
-				DBPartition.isPartitionEnabled() ? size + 8 : size + 6);
+				PropsValues.DATABASE_PARTITION_ENABLED ? size + 8 : size + 6);
 
 			sb.append("Table ");
 			sb.append(tableName);
 			sb.append(" column ");
 			sb.append(columnName);
 
-			if (DBPartition.isPartitionEnabled()) {
+			if (PropsValues.DATABASE_PARTITION_ENABLED) {
 				sb.append(" for company ");
 				sb.append(CompanyThreadLocal.getCompanyId());
 			}
@@ -133,14 +138,14 @@ public abstract class BaseJakartaUpgradeProcess extends UpgradeProcess {
 
 	private String _getExceptionMessage(String columnName, String tableName) {
 		StringBundler sb = new StringBundler(
-			DBPartition.isPartitionEnabled() ? 6 : 4);
+			PropsValues.DATABASE_PARTITION_ENABLED ? 6 : 4);
 
 		sb.append("Unable to update Javax references in table ");
 		sb.append(tableName);
 		sb.append(" column ");
 		sb.append(columnName);
 
-		if (DBPartition.isPartitionEnabled()) {
+		if (PropsValues.DATABASE_PARTITION_ENABLED) {
 			sb.append(" for company ");
 			sb.append(CompanyThreadLocal.getCompanyId());
 		}

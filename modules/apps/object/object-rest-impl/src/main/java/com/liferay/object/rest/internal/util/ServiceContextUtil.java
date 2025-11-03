@@ -7,8 +7,8 @@ package com.liferay.object.rest.internal.util;
 
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
+import com.liferay.headless.object.dto.v1_0.Scope;
 import com.liferay.object.rest.dto.v1_0.ObjectEntry;
-import com.liferay.object.rest.dto.v1_0.Scope;
 import com.liferay.object.rest.dto.v1_0.Status;
 import com.liferay.object.rest.dto.v1_0.TaxonomyCategoryBrief;
 import com.liferay.object.service.ObjectEntryLocalServiceUtil;
@@ -67,15 +67,12 @@ public class ServiceContextUtil {
 		ServiceContext serviceContext = createServiceContext(
 			companyId, groupId, objectEntry, userId);
 
-		if (FeatureFlagManagerUtil.isEnabled("LPD-21926")) {
-			serviceContext.setAttribute(
-				"friendlyUrlMap",
-				(Serializable)LocalizedMapUtil.populateI18nMap(
-					LocaleUtil.toLanguageId(locale),
-					objectEntry.getFriendlyUrlPath_i18n(),
-					objectEntry.getFriendlyUrlPath()));
-		}
-
+		serviceContext.setAttribute(
+			"friendlyUrlMap",
+			(Serializable)LocalizedMapUtil.populateI18nMap(
+				LocaleUtil.toLanguageId(locale),
+				objectEntry.getFriendlyUrlPath_i18n(),
+				objectEntry.getFriendlyUrlPath()));
 		serviceContext.setCompanyId(companyId);
 		serviceContext.setLanguageId(LocaleUtil.toLanguageId(locale));
 		serviceContext.setModelPermissions(modelPermissions);
@@ -91,10 +88,12 @@ public class ServiceContextUtil {
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		_setObjectEntryTaxonomyCategoryIds(
-			companyId, groupId, userId, objectEntry);
+		if (objectEntry.getTaxonomyCategoryIds() == null) {
+			_setObjectEntryTaxonomyCategoryIds(
+				companyId, groupId, userId, objectEntry);
+		}
 
-		if (Validator.isNotNull(objectEntry.getTaxonomyCategoryIds())) {
+		if (objectEntry.getTaxonomyCategoryIds() != null) {
 			serviceContext.setAssetCategoryIds(
 				ArrayUtil.toArray(objectEntry.getTaxonomyCategoryIds()));
 		}
@@ -116,10 +115,6 @@ public class ServiceContextUtil {
 	private static long _getGroupId(
 		long companyId, long groupId, String externalReferenceCode,
 		TaxonomyCategoryBrief taxonomyCategoryBrief) {
-
-		if (groupId != 0) {
-			return groupId;
-		}
 
 		Scope scope = taxonomyCategoryBrief.getScope();
 
@@ -166,7 +161,7 @@ public class ServiceContextUtil {
 			objectEntry.getTaxonomyCategoryBriefs();
 
 		if ((taxonomyCategoryBriefs == null) ||
-			!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+			!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
 
 			return;
 		}
@@ -190,7 +185,7 @@ public class ServiceContextUtil {
 
 			try {
 				AssetCategory assetCategory =
-					AssetCategoryLocalServiceUtil.getOrAddIncompleteCategory(
+					AssetCategoryLocalServiceUtil.getOrAddEmptyCategory(
 						externalReferenceCode, userId, groupId);
 
 				assetCategoryIds.add(assetCategory.getCategoryId());

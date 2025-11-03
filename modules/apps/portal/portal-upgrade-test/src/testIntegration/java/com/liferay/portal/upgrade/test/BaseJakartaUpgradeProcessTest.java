@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBInspector;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
-import com.liferay.portal.kernel.db.partition.DBPartition;
 import com.liferay.portal.kernel.instance.PortalInstancePool;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -20,6 +19,7 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upgrade.BaseJakartaUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
@@ -73,6 +73,29 @@ public class BaseJakartaUpgradeProcessTest extends BaseJakartaUpgradeProcess {
 	public void tearDown() throws Exception {
 		_companyLocalService.forEachCompany(
 			company -> _db.runSQL("drop table " + _TABLE_NAME));
+	}
+
+	@Test
+	public void testUpgradeMissingPrimaryKey() throws Exception {
+		String tableName = "";
+
+		try (Connection connection = DataAccess.getConnection()) {
+			DBInspector dbInspector = new DBInspector(connection);
+
+			tableName = dbInspector.normalizeName(_TABLE_NAME);
+
+			_db.removePrimaryKey(connection, _TABLE_NAME);
+
+			upgrade();
+
+			Assert.fail();
+		}
+		catch (Exception exception) {
+			String message = exception.getMessage();
+
+			Assert.assertTrue(
+				message.contains("Table " + tableName + " has no primary key"));
+		}
 	}
 
 	@Test
@@ -134,7 +157,7 @@ public class BaseJakartaUpgradeProcessTest extends BaseJakartaUpgradeProcess {
 		try (Connection connection = DataAccess.getConnection()) {
 			DBInspector dbInspector = new DBInspector(connection);
 
-			if (DBPartition.isPartitionEnabled()) {
+			if (PropsValues.DATABASE_PARTITION_ENABLED) {
 				message = " for company " + companyId;
 			}
 
@@ -218,7 +241,7 @@ public class BaseJakartaUpgradeProcessTest extends BaseJakartaUpgradeProcess {
 
 			int logEntriesSize = 4;
 
-			if (DBPartition.isPartitionEnabled()) {
+			if (PropsValues.DATABASE_PARTITION_ENABLED) {
 				long[] companyIds = PortalInstancePool.getCompanyIds();
 
 				logEntriesSize *= companyIds.length;

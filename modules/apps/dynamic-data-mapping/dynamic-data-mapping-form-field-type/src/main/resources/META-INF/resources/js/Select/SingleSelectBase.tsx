@@ -20,6 +20,7 @@ interface SingleSelectBaseProps
 
 export default function SingleSelectBase({
 	className,
+	displayErrors,
 	errorMessage,
 	id,
 	label,
@@ -33,6 +34,7 @@ export default function SingleSelectBase({
 	selectedKey,
 	showEmptyOption,
 	tip,
+	valid,
 	viewMode,
 }: SingleSelectBaseProps) {
 	const {activeTabTitle} = useFormState();
@@ -73,11 +75,12 @@ export default function SingleSelectBase({
 
 	const accessibleProps = {
 		...(label && {
-			'aria-labelledby': `${id ?? name}`,
+			'aria-labelledby': `${id ?? name}_fieldLabel`,
 		}),
 		...((errorMessage || tip) && {
 			'aria-describedby': `${id ?? name}_fieldFeedback`,
 		}),
+		...(displayErrors && !valid && {'aria-invalid': true}),
 		'aria-required': required,
 	};
 
@@ -121,6 +124,16 @@ export default function SingleSelectBase({
 					data-testid={id}
 					disabled={readOnly}
 					items={[{items: options, label}]}
+					messages={{
+						itemDescribedby: Liferay.Language.get(
+							'you-are-currently-on-a-text-element,-inside-of-a-list-box'
+						),
+						itemSelected: Liferay.Language.get('x-selected'),
+						scrollToBottomAriaLabel:
+							Liferay.Language.get('scroll-to-bottom'),
+						scrollToTopAriaLabel:
+							Liferay.Language.get('scroll-to-top'),
+					}}
 					onSelectionChange={onSelectionChange}
 					placeholder={placeholder}
 					selectedKey={selectedItem ?? 'chooseAnOption'}

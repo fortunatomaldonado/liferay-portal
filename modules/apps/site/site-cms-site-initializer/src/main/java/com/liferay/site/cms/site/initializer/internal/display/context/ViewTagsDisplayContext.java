@@ -5,6 +5,7 @@
 
 package com.liferay.site.cms.site.initializer.internal.display.context;
 
+import com.liferay.asset.util.AssetHelper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -25,27 +26,32 @@ public class ViewTagsDisplayContext {
 
 	public Map<String, Object> getReactData() throws PortalException {
 		return HashMapBuilder.<String, Object>put(
+			"cmsGroupId", _themeDisplay.getScopeGroupId()
+		).put(
 			"dataSetId", CMSSiteInitializerFDSNames.CATEGORIZATION_TAGS
+		).put(
+			"invalidTagCharacters",
+			String.valueOf(AssetHelper.INVALID_CHARACTERS)
 		).put(
 			"tagsURL",
 			PortalUtil.getLayoutFullURL(
 				LayoutLocalServiceUtil.getLayoutByFriendlyURL(
 					_themeDisplay.getScopeGroupId(), false,
-					"/categorization/view_tags"),
+					"/categorization/view-tags"),
 				_themeDisplay)
 		).put(
 			"tagUsagesURL",
 			PortalUtil.getLayoutFullURL(
 				LayoutLocalServiceUtil.getLayoutByFriendlyURL(
 					_themeDisplay.getScopeGroupId(), false,
-					"/categorization/view_tag_usages"),
+					"/categorization/view-tag-usages"),
 				_themeDisplay)
 		).put(
 			"vocabulariesURL",
 			PortalUtil.getLayoutFullURL(
 				LayoutLocalServiceUtil.getLayoutByFriendlyURL(
 					_themeDisplay.getScopeGroupId(), false,
-					"/categorization/view_vocabularies"),
+					"/categorization/view-vocabularies"),
 				_themeDisplay)
 		).build();
 	}

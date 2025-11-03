@@ -7,7 +7,7 @@ import ClayForm, {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {FieldFeedback, useId} from 'frontend-js-components-web';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 export default function Input({
 	className,
@@ -17,6 +17,7 @@ export default function Input({
 	inputProps,
 	label,
 	onValueChange,
+	placeholder,
 	required = false,
 	value: initialValue,
 }: {
@@ -27,6 +28,7 @@ export default function Input({
 	inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 	label: string;
 	onValueChange: (value: string) => void;
+	placeholder?: string;
 	required?: boolean;
 	value: string;
 }) {
@@ -34,12 +36,12 @@ export default function Input({
 	const helpMessageId = useId();
 	const [value, setValue] = useState(initialValue);
 
-	const hasError = error || (required && !value);
+	useEffect(() => {
+		setValue(initialValue);
+	}, [initialValue]);
 
 	return (
-		<ClayForm.Group
-			className={classNames(className, {'has-error': hasError})}
-		>
+		<ClayForm.Group className={classNames(className, {'has-error': error})}>
 			<label htmlFor={id}>
 				{label}
 
@@ -59,19 +61,14 @@ export default function Input({
 				id={id}
 				onBlur={() => onValueChange(value)}
 				onChange={(event) => setValue(event.target.value)}
+				placeholder={placeholder}
 				required={required}
 				type="text"
 				value={value}
 				{...inputProps}
 			/>
 
-			{hasError ? (
-				<FieldFeedback
-					errorMessage={
-						error || Liferay.Language.get('this-field-is-required')
-					}
-				/>
-			) : null}
+			{error ? <FieldFeedback errorMessage={error} /> : null}
 
 			{helpMessage ? (
 				<FieldFeedback helpMessage={helpMessage} id={helpMessageId} />

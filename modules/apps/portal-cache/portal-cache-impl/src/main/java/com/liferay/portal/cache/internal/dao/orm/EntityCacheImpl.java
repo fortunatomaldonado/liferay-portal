@@ -34,8 +34,9 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LRUMap;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
-import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.servlet.filters.threadlocal.ThreadLocalFilterThreadLocal;
 
 import java.io.Serializable;
@@ -288,15 +289,17 @@ public class EntityCacheImpl
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_valueObjectEntityCacheEnabled = GetterUtil.getBoolean(
-			_props.get(PropsKeys.VALUE_OBJECT_ENTITY_CACHE_ENABLED));
+			PropsUtil.get(PropsKeys.VALUE_OBJECT_ENTITY_CACHE_ENABLED));
 		_valueObjectMVCCEntityCacheEnabled = GetterUtil.getBoolean(
-			_props.get(PropsKeys.VALUE_OBJECT_MVCC_ENTITY_CACHE_ENABLED));
+			PropsUtil.get(PropsKeys.VALUE_OBJECT_MVCC_ENTITY_CACHE_ENABLED));
 
 		int localCacheMaxSize = GetterUtil.getInteger(
-			_props.get(
+			PropsUtil.get(
 				PropsKeys.VALUE_OBJECT_ENTITY_THREAD_LOCAL_CACHE_MAX_SIZE));
 
-		if (!DBPartition.isPartitionEnabled() && (localCacheMaxSize > 0)) {
+		if (!PropsValues.DATABASE_PARTITION_ENABLED &&
+			(localCacheMaxSize > 0)) {
+
 			_localCache = new CentralizedThreadLocal<>(
 				EntityCacheImpl.class + "._localCache",
 				() -> new LRUMap<>(localCacheMaxSize));
@@ -506,10 +509,6 @@ public class EntityCacheImpl
 
 	private final ConcurrentMap<String, PortalCache<Serializable, Serializable>>
 		_portalCaches = new ConcurrentHashMap<>();
-
-	@Reference
-	private Props _props;
-
 	private ServiceRegistration<CacheRegistryItem> _serviceRegistration;
 	private boolean _valueObjectEntityCacheEnabled;
 	private boolean _valueObjectMVCCEntityCacheEnabled;

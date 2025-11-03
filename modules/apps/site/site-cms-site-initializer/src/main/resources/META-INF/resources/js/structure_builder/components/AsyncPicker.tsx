@@ -8,6 +8,7 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 
+import {Picklist} from '../../common/types/Picklist';
 import {CacheStatus} from '../contexts/CacheContext';
 
 type Item = {id: number; name: string};
@@ -16,7 +17,7 @@ type Props = {
 	disabled?: boolean;
 	id?: string;
 	items: Item[];
-	loader: () => Promise<void>;
+	loader: () => Promise<Picklist[]>;
 	onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
 	onSelectionChange?: (selectedKey: React.Key) => void;
 	placeholder?: string;
@@ -88,6 +89,15 @@ export default function AsyncPicker({
 			disabled={status === 'saving' || (disabled && status !== 'stale')}
 			id={id}
 			items={items}
+			messages={{
+				itemDescribedby: Liferay.Language.get(
+					'you-are-currently-on-a-text-element,-inside-of-a-list-box'
+				),
+				itemSelected: Liferay.Language.get('x-selected'),
+				scrollToBottomAriaLabel:
+					Liferay.Language.get('scroll-to-bottom'),
+				scrollToTopAriaLabel: Liferay.Language.get('scroll-to-top'),
+			}}
 			onActiveChange={async (active: boolean) => {
 				if (active && status === 'stale') {
 					await loader();

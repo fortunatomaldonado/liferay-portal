@@ -36,6 +36,11 @@ public abstract class BaseDownstreamBuildReport
 	}
 
 	@Override
+	public JSONObject getBuildReportJSONObject() {
+		return _buildReportJSONObject;
+	}
+
+	@Override
 	public int getFailCount() {
 		JSONObject buildReportJSONObject = getBuildReportJSONObject();
 
@@ -122,12 +127,17 @@ public abstract class BaseDownstreamBuildReport
 		return _topLevelBuildReport;
 	}
 
+	@Override
+	public boolean isBuildCached() {
+		return _buildCached;
+	}
+
 	protected BaseDownstreamBuildReport(DownstreamBuild downstreamBuild) {
 		super(downstreamBuild.getBuildURL());
 
-		buildReportJSONObject = downstreamBuild.getBuildReportJSONObject();
-
 		_batchName = downstreamBuild.getBatchName();
+		_buildCached = false;
+		_buildReportJSONObject = downstreamBuild.getBuildReportJSONObject();
 		_topLevelBuildReport = null;
 	}
 
@@ -135,13 +145,18 @@ public abstract class BaseDownstreamBuildReport
 		String batchName, JSONObject buildReportJSONObject,
 		TopLevelBuildReport topLevelBuildReport) {
 
-		super(buildReportJSONObject);
+		super(buildReportJSONObject.getString("buildURL"));
 
 		_batchName = batchName;
+		_buildReportJSONObject = buildReportJSONObject;
 		_topLevelBuildReport = topLevelBuildReport;
+
+		_buildCached = buildReportJSONObject.optBoolean("buildCached", false);
 	}
 
 	private final String _batchName;
+	private final boolean _buildCached;
+	private final JSONObject _buildReportJSONObject;
 	private Map<String, TestClassReport> _testClassReportsMap;
 	private final TopLevelBuildReport _topLevelBuildReport;
 

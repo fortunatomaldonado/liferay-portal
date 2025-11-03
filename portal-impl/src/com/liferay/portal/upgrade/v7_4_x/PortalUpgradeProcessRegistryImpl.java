@@ -8,6 +8,7 @@ package com.liferay.portal.upgrade.v7_4_x;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.upgrade.BaseExternalReferenceCodeUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.BaseUuidUpgradeProcess;
@@ -19,6 +20,7 @@ import com.liferay.portal.kernel.upgrade.GuestUnsupportedResourcePermissionsUpgr
 import com.liferay.portal.kernel.upgrade.UpgradeProcessFactory;
 import com.liferay.portal.kernel.upgrade.util.UpgradeModulesFactory;
 import com.liferay.portal.kernel.upgrade.util.UpgradeVersionTreeMap;
+import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.upgrade.util.PortalUpgradeProcessRegistry;
 import com.liferay.portal.upgrade.util.UpgradePartitionedControlTable;
@@ -187,8 +189,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {{"DLFolder", "folderId"}};
+				protected String[] getTableNames() {
+					return new String[] {"DLFolder"};
 				}
 
 			});
@@ -340,8 +342,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {{"Group_", "groupId"}};
+				protected String[] getTableNames() {
+					return new String[] {"Group_"};
 				}
 
 			});
@@ -456,10 +458,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"DLFileEntryType", "fileEntryTypeId"}
-					};
+				protected String[] getTableNames() {
+					return new String[] {"DLFileEntryType"};
 				}
 
 			});
@@ -473,10 +473,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"DLFileEntryMetadata", "fileEntryMetadataId"}
-					};
+				protected String[] getTableNames() {
+					return new String[] {"DLFileEntryMetadata"};
 				}
 
 			});
@@ -490,8 +488,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {{"Website", "websiteId"}};
+				protected String[] getTableNames() {
+					return new String[] {"Website"};
 				}
 
 			});
@@ -501,8 +499,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {{"Repository", "repositoryId"}};
+				protected String[] getTableNames() {
+					return new String[] {"Repository"};
 				}
 
 			});
@@ -512,8 +510,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {{"Phone", "phoneId"}};
+				protected String[] getTableNames() {
+					return new String[] {"Phone"};
 				}
 
 			});
@@ -523,8 +521,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {{"AssetTag", "tagId"}};
+				protected String[] getTableNames() {
+					return new String[] {"AssetTag"};
 				}
 
 			});
@@ -539,10 +537,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseUuidUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"WorkflowDefinitionLink", "workflowDefinitionLinkId"}
-					};
+				protected String[] getTableNames() {
+					return new String[] {"WorkflowDefinitionLink"};
 				}
 
 			});
@@ -552,10 +548,8 @@ public class PortalUpgradeProcessRegistryImpl
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"WorkflowDefinitionLink", "workflowDefinitionLinkId"}
-					};
+				protected String[] getTableNames() {
+					return new String[] {"WorkflowDefinitionLink"};
 				}
 
 			});
@@ -652,6 +646,41 @@ public class PortalUpgradeProcessRegistryImpl
 		upgradeVersionTreeMap.put(
 			new Version(33, 1, 0),
 			new CTModelUpgradeProcess("LayoutSetPrototype"));
+
+		upgradeVersionTreeMap.put(
+			new Version(33, 2, 0),
+			UpgradeProcessFactory.addColumns(
+				"Release_", "versionDisplayName VARCHAR(75) null"),
+			UpgradeProcessFactory.runSQL(
+				StringBundler.concat(
+					"update Release_ set versionDisplayName = '",
+					ReleaseInfo.getVersionDisplayName(),
+					"' where servletContextName = '",
+					ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME, "'")));
+
+		upgradeVersionTreeMap.put(
+			new Version(34, 0, 0),
+			new LayoutLayoutSetPrototypeLayoutERCUpgradeProcess());
+
+		upgradeVersionTreeMap.put(new Version(34, 1, 0), new UpgradeDB2());
+
+		upgradeVersionTreeMap.put(
+			new Version(34, 1, 1),
+			UpgradeProcessFactory.runSQL(
+				StringBundler.concat(
+					"update Release_ set verified = [$FALSE$] where ",
+					"servletContextName = '",
+					ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME, "'")));
+
+		upgradeVersionTreeMap.put(
+			new Version(35, 0, 0),
+			UpgradeModulesFactory.create(
+				new String[] {"com.liferay.mail.settings.impl"}, null));
+
+		upgradeVersionTreeMap.put(
+			new Version(35, 1, 0),
+			UpgradeProcessFactory.addColumns(
+				"Layout", "styleBookEntryERC VARCHAR(75) null"));
 	}
 
 }

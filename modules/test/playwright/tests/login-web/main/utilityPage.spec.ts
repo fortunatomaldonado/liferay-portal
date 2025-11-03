@@ -5,18 +5,12 @@
 
 import {expect, mergeTests} from '@playwright/test';
 
-import {featureFlagsTest} from '../../../fixtures/featureFlagsTest';
 import {liferayConfig} from '../../../liferay.config';
 import {getRandomInt} from '../../../utils/getRandomInt';
 import performLogin, {performLogout} from '../../../utils/performLogin';
 import {utilityPagesPage} from './fixtures/utilityPageTest';
 
-export const test = mergeTests(
-	featureFlagsTest({
-		'LPD-6378': {enabled: true},
-	}),
-	utilityPagesPage
-);
+export const test = mergeTests(utilityPagesPage);
 
 const getRandomTitle = () => {
 	return 'test-up-' + getRandomInt();
@@ -136,7 +130,7 @@ test('LPD-6871 Render the default "Forgot Password" utility page if exists', asy
 
 	await expect(page.getByPlaceholder('Search')).toBeVisible();
 	await page.getByRole('button', {name: 'Sign In'}).click();
-	await page.getByRole('link', {name: 'Forgot Password'}).click();
+	await page.getByRole('menuitem', {name: 'Forgot Password'}).click();
 	await expect(page).toHaveTitle(title + ' - Liferay DXP');
 
 	await performLogin(page, 'test');

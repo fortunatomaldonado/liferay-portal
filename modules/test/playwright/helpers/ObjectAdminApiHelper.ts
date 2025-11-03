@@ -13,19 +13,6 @@ import {
 
 import {getRandomInt} from '../utils/getRandomInt';
 import {ApiHelpers} from './ApiHelpers';
-
-export interface CreateObjectField {
-	attachmentSource?: string;
-	formulaFieldOutput?: 'Decimal' | 'Integer';
-	listTypeDefinitionName?: string;
-	mandatory?: boolean;
-	objectDefinitionLabel?: string;
-
-	objectDefinitionNodes: unknown;
-	objectFieldBusinessType: string;
-	objectFieldLabel: string;
-}
-
 export class ObjectAdminApiHelper {
 	readonly apiHelpers: ApiHelpers;
 	readonly basePath: string;
@@ -59,6 +46,7 @@ export class ObjectAdminApiHelper {
 
 	async postRandomObjectDefinition({
 		className,
+		enableFriendlyURLCustomization,
 		objectFields,
 		objectFolderExternalReferenceCode,
 		panelCategoryKey,
@@ -67,6 +55,7 @@ export class ObjectAdminApiHelper {
 		titleObjectFieldName,
 	}: {
 		className?: string;
+		enableFriendlyURLCustomization?: boolean;
 		objectFields?: Partial<ObjectField>[];
 		objectFolderExternalReferenceCode?: string;
 		panelCategoryKey?: string;
@@ -80,6 +69,7 @@ export class ObjectAdminApiHelper {
 		const requestBody: ObjectDefinition = {
 			active: true,
 			className,
+			enableFriendlyURLCustomization,
 			externalReferenceCode: objectDefinitionExternalReferenceCode,
 			label: {
 				en_US: objectDefinitionExternalReferenceCode,

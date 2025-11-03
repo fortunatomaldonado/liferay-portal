@@ -117,6 +117,7 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.Base64;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
@@ -153,12 +154,16 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.zip.ZipInputStream;
 
 import javax.crypto.KeyGenerator;
@@ -348,7 +353,8 @@ public class BatchEngineBrokerTest {
 		}
 
 		ObjectEntry objectEntry = _objectEntryLocalService.getObjectEntry(
-			_OBJECT_ENTRY_ERC_1, _objectDefinition1.getObjectDefinitionId());
+			_OBJECT_ENTRY_ERC_1, ObjectDefinitionConstants.GROUP_ID_DEFAULT,
+			_objectDefinition1.getObjectDefinitionId());
 
 		Assert.assertNotNull(objectEntry);
 
@@ -375,6 +381,7 @@ public class BatchEngineBrokerTest {
 		File file = _createJSONImportFile(
 			_addDLFileEntry(
 				TestPropsValues.getGroupId(), TestPropsValues.getUserId()),
+			ObjectDefinitionConstants.GROUP_ID_DEFAULT,
 			_objectDefinition1.getExternalReferenceCode(), _OBJECT_ENTRY_ERC_1,
 			"object_entry_import_template.txt");
 
@@ -386,7 +393,7 @@ public class BatchEngineBrokerTest {
 				_getURIString("json", fileInputStream));
 
 			ObjectEntry objectEntry = _objectEntryLocalService.getObjectEntry(
-				_OBJECT_ENTRY_ERC_1,
+				_OBJECT_ENTRY_ERC_1, ObjectDefinitionConstants.GROUP_ID_DEFAULT,
 				_objectDefinition1.getObjectDefinitionId());
 
 			_addObjectEntryInDifferentCompany("TestObject");
@@ -610,10 +617,8 @@ public class BatchEngineBrokerTest {
 				new BigDecimal(0.1234567891234567, MathContext.DECIMAL64)
 			).put(
 				"testRichTextField",
-				StringBundler.concat(
-					"<p>Test text</p>\n<p>\n",
-					"  <img alt=\"\" height=\"202\" src=\"",
-					"http://localhost:8080/image/company_logo\">\n</p>")
+				"<p>Test text</p>\n<p>\n  <img alt=\"\" height=\"202\" " +
+					"src=\"http://localhost:8080/image/company_logo\">\n</p>"
 			).put(
 				"testTextField", "Lorem Ipsum"
 			).build(),
@@ -696,51 +701,23 @@ public class BatchEngineBrokerTest {
 			String externalReferenceCode)
 		throws Exception {
 
-		CSVFormat csvFormat = CSVFormat.Builder.create(
-		).setDelimiter(
-			_DELIMITER_VALUE
-		).setIgnoreEmptyLines(
-			true
-		).setQuote(
-			_ENCLOSING_CHARACTER_VALUE.charAt(0)
-		).build();
+		List<CSVRecord> csvRecords = _getCSVRecords(actualCSVString);
 
-		CSVParser actualCSVParser = CSVParser.parse(actualCSVString, csvFormat);
-
-		List<CSVRecord> actualCSVRecords = actualCSVParser.getRecords();
-
-		CSVParser expectedCSVParser = CSVParser.parse(
-			expectedCSVString, csvFormat);
-
-		List<CSVRecord> expectedCSVRecords = expectedCSVParser.getRecords();
+		List<List<String>> csvRecordStringsList = _normalize(
+			_getCSVRecords(expectedCSVString));
 
 		Assert.assertEquals(
-			_toList(expectedCSVRecords.get(0)),
-			_toList(actualCSVRecords.get(0)));
+			csvRecordStringsList.get(0), _toList(csvRecords.get(0)));
 
-		List<String> expectedCSVRecordStrings = _toList(
-			expectedCSVRecords.get(1));
+		List<String> csvRecordStrings = csvRecordStringsList.get(0);
 
-		boolean found = false;
+		Map<String, List<String>> csvRecordStringsMap = _getCSVRecordStringsMap(
+			csvRecords.subList(1, csvRecords.size()),
+			csvRecordStrings.indexOf("externalReferenceCode"));
 
-		for (int i = 1; i < actualCSVRecords.size(); i++) {
-			List<String> actualCSVRecordStrings = _toList(
-				actualCSVRecords.get(i));
-
-			if (!actualCSVRecordStrings.contains(externalReferenceCode)) {
-				continue;
-			}
-
-			Assert.assertEquals(
-				expectedCSVRecordStrings, actualCSVRecordStrings);
-
-			found = true;
-		}
-
-		Assert.assertTrue(
-			"There is no CSV line for externalReferenceCode: " +
-				externalReferenceCode,
-			found);
+		Assert.assertEquals(
+			csvRecordStringsList.get(1),
+			csvRecordStringsMap.get(externalReferenceCode));
 	}
 
 	private void _assertJSONTConfiguration(
@@ -785,7 +762,7 @@ public class BatchEngineBrokerTest {
 	}
 
 	private File _createJSONImportFile(
-			DLFileEntry dlFileEntry, String objectDefinitionERC,
+			DLFileEntry dlFileEntry, long groupId, String objectDefinitionERC,
 			String objectEntryERC, String templateName)
 		throws Exception {
 
@@ -794,8 +771,8 @@ public class BatchEngineBrokerTest {
 		String template = StreamUtil.toString(_getInputStream(templateName));
 
 		Link link = LinkUtil.toLink(
-			_dlAppService, dlFileEntry, _dlURLHelper, objectDefinitionERC,
-			objectEntryERC, _portal);
+			_dlAppService, dlFileEntry, _dlURLHelper, groupId,
+			objectDefinitionERC, objectEntryERC, _portal);
 
 		template = StringUtil.replace(
 			template,
@@ -916,6 +893,32 @@ public class BatchEngineBrokerTest {
 			batchPlannerPlan.getBatchPlannerPlanId());
 	}
 
+	private List<CSVRecord> _getCSVRecords(String csvString) throws Exception {
+		CSVParser csvParser = CSVParser.parse(csvString, _csvFormat);
+
+		return csvParser.getRecords();
+	}
+
+	private Map<String, List<String>> _getCSVRecordStringsMap(
+		List<CSVRecord> csvRecords, int index) {
+
+		Map<String, List<String>> csvRecordStringsMap = new HashMap<>();
+
+		for (CSVRecord csvRecord : csvRecords) {
+			List<String> csvRecordStrings = _toList(csvRecord);
+
+			if (index >= csvRecordStrings.size()) {
+				continue;
+			}
+
+			String key = csvRecordStrings.get(index);
+
+			csvRecordStringsMap.put(key, csvRecordStrings);
+		}
+
+		return csvRecordStringsMap;
+	}
+
 	private String _getCSVString(
 			Date createDate, DLFileEntry dlFileEntry,
 			String objectDefinitionERC, String objectEntryERC, String fileName,
@@ -923,8 +926,9 @@ public class BatchEngineBrokerTest {
 		throws Exception {
 
 		Link link = LinkUtil.toLink(
-			_dlAppService, dlFileEntry, _dlURLHelper, objectDefinitionERC,
-			objectEntryERC, _portal);
+			_dlAppService, dlFileEntry, _dlURLHelper,
+			GetterUtil.getLong(groupId), objectDefinitionERC, objectEntryERC,
+			_portal);
 
 		String scopeKey = null;
 
@@ -1152,6 +1156,37 @@ public class BatchEngineBrokerTest {
 		return zipInputStream;
 	}
 
+	private List<List<String>> _normalize(List<CSVRecord> csvRecords) {
+		List<List<String>> csvRecordStringsList = new ArrayList<>(
+			csvRecords.size());
+
+		for (CSVRecord csvRecord : csvRecords) {
+			List<String> csvRecordStrings = new ArrayList<>();
+
+			for (String csvRecordString : csvRecord.toList()) {
+				if (!Validator.isBlank(csvRecordString) &&
+					_htmlTagPattern.matcher(
+						csvRecordString
+					).find()) {
+
+					csvRecordString = _htmlBreakPattern.matcher(
+						csvRecordString
+					).replaceAll(
+						StringBundler.concat(
+							"$1", System.lineSeparator(),
+							System.lineSeparator(), "$3")
+					);
+				}
+
+				csvRecordStrings.add(csvRecordString);
+			}
+
+			csvRecordStringsList.add(csvRecordStrings);
+		}
+
+		return csvRecordStringsList;
+	}
+
 	private ObjectDefinition _publishObjectDefinition(
 			String name, String scope, User user)
 		throws Exception {
@@ -1173,8 +1208,8 @@ public class BatchEngineBrokerTest {
 
 		ObjectDefinition objectDefinition =
 			_objectDefinitionLocalService.addCustomObjectDefinition(
-				user.getUserId(), 0, null, false, false, true, false, false,
-				false, null,
+				null, user.getUserId(), 0, null, false, true, false, true,
+				false, false, false, false, false, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				name, null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
@@ -1317,7 +1352,8 @@ public class BatchEngineBrokerTest {
 							RandomTestUtil.randomString())
 					).name(
 						"testTextField"
-					).build()));
+					).build()),
+				Collections.emptyList());
 
 		ObjectRelationship objectRelationship =
 			_objectRelationshipLocalService.addObjectRelationship(
@@ -1490,7 +1526,8 @@ public class BatchEngineBrokerTest {
 		}
 
 		ObjectEntry objectEntry = _objectEntryLocalService.getObjectEntry(
-			objectEntryERC, _objectDefinition1.getObjectDefinitionId());
+			objectEntryERC, groupId,
+			_objectDefinition1.getObjectDefinitionId());
 
 		Assert.assertEquals(objectEntry.getGroupId(), groupId);
 
@@ -1514,8 +1551,8 @@ public class BatchEngineBrokerTest {
 		File file = _createJSONImportFile(
 			_addDLFileEntry(
 				TestPropsValues.getGroupId(), TestPropsValues.getUserId()),
-			_objectDefinition1.getExternalReferenceCode(), objectEntryERC,
-			"object_entry_import_template.txt");
+			groupId, _objectDefinition1.getExternalReferenceCode(),
+			objectEntryERC, "object_entry_import_template.txt");
 
 		try (FileInputStream fileInputStream = new FileInputStream(file)) {
 			_executeImportTask(
@@ -1525,7 +1562,8 @@ public class BatchEngineBrokerTest {
 				_getURIString("json", fileInputStream));
 
 			ObjectEntry objectEntry = _objectEntryLocalService.getObjectEntry(
-				objectEntryERC, _objectDefinition1.getObjectDefinitionId());
+				objectEntryERC, groupId,
+				_objectDefinition1.getObjectDefinitionId());
 
 			Assert.assertEquals(objectEntry.getGroupId(), groupId);
 
@@ -1580,6 +1618,18 @@ public class BatchEngineBrokerTest {
 
 	private static final String _OBJECT_ENTRY_ERC_3 = "TEST-OBJECT-ENTRY-3";
 
+	private static final CSVFormat _csvFormat = CSVFormat.Builder.create(
+	).setDelimiter(
+		_DELIMITER_VALUE
+	).setIgnoreEmptyLines(
+		true
+	).setQuote(
+		_ENCLOSING_CHARACTER_VALUE.charAt(0)
+	).build();
+	private static final Pattern _htmlBreakPattern = Pattern.compile(
+		"(?m)(</([A-Za-z][A-Za-z0-9]*)>)\\r?\\n(<\\2>)");
+	private static final Pattern _htmlTagPattern = Pattern.compile(
+		"<([A-Za-z][A-Za-z0-9]*)\\b[^>]*>(.*?)</\\1>", Pattern.DOTALL);
 	private static final List<String> _objectDefinitionExportCSVFieldNames =
 		Arrays.asList(
 			"accountEntryRestrictedObjectFieldName", "dateCreated",

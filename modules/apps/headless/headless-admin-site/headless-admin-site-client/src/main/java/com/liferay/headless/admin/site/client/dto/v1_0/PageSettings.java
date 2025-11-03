@@ -68,29 +68,29 @@ public abstract class PageSettings implements Cloneable, Serializable {
 
 	protected Boolean hiddenFromNavigation;
 
-	public NavigationMenuSettings getNavigationMenuSettings() {
-		return navigationMenuSettings;
+	public SitePageNavigationSettings getNavigationSettings() {
+		return navigationSettings;
 	}
 
-	public void setNavigationMenuSettings(
-		NavigationMenuSettings navigationMenuSettings) {
+	public void setNavigationSettings(
+		SitePageNavigationSettings navigationSettings) {
 
-		this.navigationMenuSettings = navigationMenuSettings;
+		this.navigationSettings = navigationSettings;
 	}
 
-	public void setNavigationMenuSettings(
-		UnsafeSupplier<NavigationMenuSettings, Exception>
-			navigationMenuSettingsUnsafeSupplier) {
+	public void setNavigationSettings(
+		UnsafeSupplier<SitePageNavigationSettings, Exception>
+			navigationSettingsUnsafeSupplier) {
 
 		try {
-			navigationMenuSettings = navigationMenuSettingsUnsafeSupplier.get();
+			navigationSettings = navigationSettingsUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected NavigationMenuSettings navigationMenuSettings;
+	protected SitePageNavigationSettings navigationSettings;
 
 	public OpenGraphSettings getOpenGraphSettings() {
 		return openGraphSettings;
@@ -113,6 +113,27 @@ public abstract class PageSettings implements Cloneable, Serializable {
 	}
 
 	protected OpenGraphSettings openGraphSettings;
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+
+	public void setPriority(
+		UnsafeSupplier<Integer, Exception> priorityUnsafeSupplier) {
+
+		try {
+			priority = priorityUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Integer priority;
 
 	public SEOSettings getSeoSettings() {
 		return seoSettings;

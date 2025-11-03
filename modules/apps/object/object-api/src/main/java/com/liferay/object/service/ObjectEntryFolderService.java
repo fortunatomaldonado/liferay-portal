@@ -52,11 +52,20 @@ public interface ObjectEntryFolderService extends BaseService {
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	public ObjectEntryFolder copyObjectEntryFolder(
+			long objectEntryFolderId, long parentObjectEntryFolderId,
+			boolean replace, ServiceContext serviceContext)
+		throws PortalException;
+
 	public ObjectEntryFolder deleteObjectEntryFolder(long objectEntryFolderId)
 		throws PortalException;
 
 	public ObjectEntryFolder deleteObjectEntryFolderByExternalReferenceCode(
 			String externalReferenceCode, long groupId, long companyId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ObjectEntryFolder fetchObjectEntryFolder(long objectEntryFolderId)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -84,12 +93,39 @@ public interface ObjectEntryFolderService extends BaseService {
 			long groupId, long companyId, long parentObjectEntryFolderId)
 		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ObjectEntryFolder getOrAddEmptyObjectEntryFolder(
+			String externalReferenceCode, long groupId, long companyId,
+			ServiceContext serviceContext)
+		throws PortalException;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
 	 */
 	public String getOSGiServiceIdentifier();
+
+	public ObjectEntryFolder moveObjectEntryFolder(
+			long objectEntryFolderId, long parentObjectEntryFolderId,
+			boolean replace, ServiceContext serviceContext)
+		throws PortalException;
+
+	public ObjectEntryFolder moveObjectEntryFolderToTrash(
+			ObjectEntryFolder objectEntryFolder, ServiceContext serviceContext)
+		throws PortalException;
+
+	public ObjectEntryFolder restoreObjectEntryFolderFromTrash(
+			ObjectEntryFolder objectEntryFolder, ServiceContext serviceContext)
+		throws PortalException;
+
+	public void subscribeObjectEntryFolder(
+			long groupId, long objectEntryFolderId)
+		throws PortalException;
+
+	public void unsubscribeObjectEntryFolder(
+			long groupId, long objectEntryFolderId)
+		throws PortalException;
 
 	public ObjectEntryFolder updateObjectEntryFolder(
 			long objectEntryFolderId, long parentObjectEntryFolderId,

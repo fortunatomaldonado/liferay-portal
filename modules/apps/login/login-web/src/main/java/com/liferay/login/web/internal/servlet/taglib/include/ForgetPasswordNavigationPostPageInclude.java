@@ -8,12 +8,12 @@ package com.liferay.login.web.internal.servlet.taglib.include;
 import com.liferay.layout.utility.page.kernel.constants.LayoutUtilityPageEntryConstants;
 import com.liferay.layout.utility.page.kernel.provider.LayoutUtilityPageEntryLayoutProvider;
 import com.liferay.login.web.constants.LoginPortletKeys;
-import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
+import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.taglib.include.PageInclude;
@@ -21,6 +21,9 @@ import com.liferay.taglib.portlet.RenderURLTag;
 import com.liferay.taglib.ui.IconTag;
 
 import jakarta.portlet.PortletConfig;
+import jakarta.portlet.PortletMode;
+import jakarta.portlet.PortletRequest;
+import jakarta.portlet.PortletURL;
 import jakarta.portlet.WindowState;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,21 +54,16 @@ public class ForgetPasswordNavigationPostPageInclude implements PageInclude {
 		String mvcRenderCommandName = httpServletRequest.getParameter(
 			"mvcRenderCommandName");
 
-		if (FeatureFlagManagerUtil.isEnabled("LPD-6378")) {
-			PortletConfig portletConfig =
-				(PortletConfig)httpServletRequest.getAttribute(
-					JavaConstants.JAKARTA_PORTLET_CONFIG);
+		PortletConfig portletConfig =
+			(PortletConfig)httpServletRequest.getAttribute(
+				JavaConstants.JAKARTA_PORTLET_CONFIG);
 
-			String portletName = portletConfig.getPortletName();
+		String portletName = portletConfig.getPortletName();
 
-			if (portletName.equals(LoginPortletKeys.FORGOT_PASSWORD) &&
-				Validator.isNull(mvcRenderCommandName)) {
+		if ((portletName.equals(LoginPortletKeys.FORGOT_PASSWORD) &&
+			 Validator.isNull(mvcRenderCommandName)) ||
+			Objects.equals(mvcRenderCommandName, "/login/forgot_password")) {
 
-				return;
-			}
-		}
-
-		if (Objects.equals(mvcRenderCommandName, "/login/forgot_password")) {
 			return;
 		}
 
@@ -89,7 +87,23 @@ public class ForgetPasswordNavigationPostPageInclude implements PageInclude {
 			String forgetPasswordURL = null;
 
 			if (layout != null) {
-				forgetPasswordURL = _portal.getLayoutURL(layout, themeDisplay);
+				PortletURL portletURL = PortletURLBuilder.create(
+					PortletURLFactoryUtil.create(
+						httpServletRequest, LoginPortletKeys.FORGOT_PASSWORD,
+						layout, PortletRequest.RENDER_PHASE)
+				).setParameter(
+					"saveLastPath", false
+				).setPortletMode(
+					PortletMode.VIEW
+				).setWindowState(
+					WindowState.MAXIMIZED
+				).buildPortletURL();
+
+				if (layout.isTypeUtility()) {
+					portletURL.setWindowState(WindowState.NORMAL);
+				}
+
+				forgetPasswordURL = portletURL.toString();
 			}
 			else {
 				RenderURLTag renderURLTag = new RenderURLTag();
@@ -124,8 +138,5 @@ public class ForgetPasswordNavigationPostPageInclude implements PageInclude {
 	@Reference
 	private LayoutUtilityPageEntryLayoutProvider
 		_layoutUtilityPageEntryLayoutProvider;
-
-	@Reference
-	private Portal _portal;
 
 }

@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class ElasticsearchDistribution implements Distribution {
 
-	public static final String VERSION = "7.17.28";
+	public static final String VERSION = "8.18.8";
 
 	@Override
 	public Distributable getElasticsearchDistributable() {
 		return new DistributableImpl(
 			StringBundler.concat(
 				"https://artifacts.elastic.co/downloads/elasticsearch",
-				"/elasticsearch-", VERSION, "-no-jdk-linux-x86_64.tar.gz"),
+				"/elasticsearch-", VERSION, "-linux-x86_64.tar.gz"),
 			_ELASTICSEARCH_CHECKSUM);
 	}
 
@@ -46,23 +46,23 @@ public class ElasticsearchDistribution implements Distribution {
 	}
 
 	private static final String _ELASTICSEARCH_CHECKSUM =
-		"228241d7b4b02d6f97da51b3069767d65e4d94116aba31d215229942350ae6b8cfab" +
-			"88d662ff344e7bc3ed7f351fd4ea5e5e1e1068e052a44d4e166e211ffe8a";
+		"6878adbf03ab0cc390758c6633eaba19562d500d173b536d9dd249397c0df716bd65" +
+			"fa658ee69f3479f374138e02c60c60c2c3a5e5ba740661f598b6edf0cf3a";
 
 	private static final String _ICU_CHECKSUM =
-		"33c0899e6552ee3bdc9e0c7dbff8b111a33f82f6a802c8506260ba2367fdb75dec72" +
-			"e2378ef99a49a61a99b557b14b9999b5b64a56bf67c08bfb4af6cf19d0ce";
+		"10a5b1ae104ba5275e96df5e0632f0ce1474a29819320d39cd678c52dbe8fa48ad93" +
+			"f9b7e34e3fc213ed4e4ebad0282912c2592d20b807ca4e7118dea4ac3569";
 
 	private static final String _KUROMOJI_CHECKSUM =
-		"4c0311ae8a7f31caef64d1184899473b8439cee10b0b3c86204f6d86c5beec0f5278" +
-			"528e63cbf06e9280d8cf301219f32ebd3a2810d204369be1fa45d847e9cb";
+		"d827010e01230ac52e8340af4092e3754f6d8d017afe0e1a037f11ea68e255ff9b25" +
+			"150378a3f4398036ce6a199459447ceabab185ca99a560f86b833ffa8799";
 
 	private static final String _SMARTCN_CHECKSUM =
-		"f3afa5961e2a9673b11991eba0fffc01e442d9a23ad85e27b454d95a19146149badd" +
-			"81c2d0038e62bb7886db99ab4933d9948dc0d3f270049bb4e075008955e2";
+		"073231e4317906b4b299f8758a5f10db3958b2721e8d31853a158778d9632480cba6" +
+			"7f4c73adfc6cfb624cb89dfc53ae6297a6255d56cf9d983e1f86aa5482f2";
 
 	private static final String _STEMPEL_CHECKSUM =
-		"e9576d5c3b4c643cf1dc60f28baa8b1bec6daba514c90141dc5525b9d01521d543c2" +
-			"84750a00fa856d5f95c8cfadd5d44be2f3d89d1218f9e3951a3e69fdeb35";
+		"bef8f63bdb5d693d3067c952ddfe200173b233292649ed282ab9c152ff9f1ac26c27" +
+			"eb020544c124d19a11b08ef775a27a5388c75a8f7dbcc10192cf2ca57231";
 
 }

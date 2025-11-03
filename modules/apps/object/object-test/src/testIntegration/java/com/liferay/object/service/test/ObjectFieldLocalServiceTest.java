@@ -11,6 +11,7 @@ import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.list.type.entry.util.ListTypeEntryUtil;
 import com.liferay.list.type.model.ListTypeDefinition;
 import com.liferay.list.type.service.ListTypeDefinitionLocalService;
+import com.liferay.object.constants.ObjectActionNameConstants;
 import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.constants.ObjectEntryFolderConstants;
 import com.liferay.object.constants.ObjectFieldConstants;
@@ -33,6 +34,7 @@ import com.liferay.object.exception.ObjectFieldStateException;
 import com.liferay.object.exception.ObjectFieldSystemException;
 import com.liferay.object.exception.RequiredObjectFieldException;
 import com.liferay.object.field.builder.AggregationObjectFieldBuilder;
+import com.liferay.object.field.builder.AssigneeObjectFieldBuilder;
 import com.liferay.object.field.builder.AttachmentObjectFieldBuilder;
 import com.liferay.object.field.builder.AutoIncrementObjectFieldBuilder;
 import com.liferay.object.field.builder.BooleanObjectFieldBuilder;
@@ -55,6 +57,7 @@ import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
 import com.liferay.object.model.ObjectFilter;
 import com.liferay.object.model.ObjectRelationship;
+import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
@@ -63,8 +66,6 @@ import com.liferay.object.service.ObjectFilterLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.test.util.ObjectFieldTestUtil;
 import com.liferay.object.test.util.ObjectDefinitionTestUtil;
-import com.liferay.object.test.util.ObjectRelationshipTestUtil;
-import com.liferay.object.test.util.TreeTestUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DBInspector;
@@ -73,6 +74,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.test.AssertUtils;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -225,6 +230,33 @@ public class ObjectFieldLocalServiceTest {
 							).build())
 					).build())));
 
+		ObjectDefinition objectDefinition1 =
+			ObjectDefinitionTestUtil.addCustomObjectDefinition(
+				Collections.singletonList(
+					new AssigneeObjectFieldBuilder(
+					).labelMap(
+						RandomTestUtil.randomLocaleStringMap()
+					).name(
+						"a" + RandomTestUtil.randomString()
+					).build()));
+
+		AssertUtils.assertFailure(
+			ObjectFieldBusinessTypeException.class,
+			"An object definition can only have one assignee field",
+			() -> ObjectFieldUtil.addCustomObjectField(
+				new AssigneeObjectFieldBuilder(
+				).labelMap(
+					RandomTestUtil.randomLocaleStringMap()
+				).name(
+					"a" + RandomTestUtil.randomString()
+				).objectDefinitionId(
+					objectDefinition1.getObjectDefinitionId()
+				).userId(
+					TestPropsValues.getUserId()
+				).build()));
+
+		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition1);
+
 		AssertUtils.assertFailure(
 			ObjectFieldBusinessTypeException.class,
 			"Business type encrypted can only be used in object definitions " +
@@ -254,8 +286,8 @@ public class ObjectFieldLocalServiceTest {
 			"Salesforce storage type does not support aggregation and " +
 				"attachment business types",
 			() -> _objectDefinitionLocalService.addCustomObjectDefinition(
-				TestPropsValues.getUserId(), 0, null, false, false, true, true,
-				false, false, null,
+				null, TestPropsValues.getUserId(), 0, null, false, true, false,
+				true, true, false, false, false, false, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				ObjectDefinitionTestUtil.getRandomName(), null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
@@ -291,14 +323,15 @@ public class ObjectFieldLocalServiceTest {
 							).value(
 								"oneToManyRelationshipName"
 							).build())
-					).build())));
+					).build()),
+				Collections.emptyList()));
 		AssertUtils.assertFailure(
 			ObjectFieldBusinessTypeException.class,
 			"Salesforce storage type does not support aggregation and " +
 				"attachment business types",
 			() -> _objectDefinitionLocalService.addCustomObjectDefinition(
-				TestPropsValues.getUserId(), 0, null, false, false, true, true,
-				false, false, null,
+				null, TestPropsValues.getUserId(), 0, null, false, true, false,
+				true, true, false, false, false, false, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				ObjectDefinitionTestUtil.getRandomName(), null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
@@ -314,7 +347,8 @@ public class ObjectFieldLocalServiceTest {
 						_listTypeDefinition.getListTypeDefinitionId()
 					).name(
 						"a" + RandomTestUtil.randomString()
-					).build())));
+					).build()),
+				Collections.emptyList()));
 		AssertUtils.assertFailure(
 			ObjectFieldListTypeDefinitionIdException.class,
 			"List type definition ID is 0",
@@ -346,9 +380,9 @@ public class ObjectFieldLocalServiceTest {
 						true
 					).build())));
 
-		ObjectDefinition objectDefinition1 =
-			ObjectDefinitionTestUtil.addCustomObjectDefinition();
 		ObjectDefinition objectDefinition2 =
+			ObjectDefinitionTestUtil.addCustomObjectDefinition();
+		ObjectDefinition objectDefinition3 =
 			ObjectDefinitionTestUtil.addCustomObjectDefinition();
 
 		String objectRelationshipName = "a" + RandomTestUtil.randomString();
@@ -356,8 +390,8 @@ public class ObjectFieldLocalServiceTest {
 		ObjectRelationship objectRelationship =
 			_objectRelationshipLocalService.addObjectRelationship(
 				null, TestPropsValues.getUserId(),
-				objectDefinition1.getObjectDefinitionId(),
-				objectDefinition2.getObjectDefinitionId(), 0,
+				objectDefinition2.getObjectDefinitionId(),
+				objectDefinition3.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE, false,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				objectRelationshipName, false,
@@ -368,25 +402,7 @@ public class ObjectFieldLocalServiceTest {
 				class,
 			StringBundler.concat(
 				"There is already an object relationship with this name in ",
-				"the object definition \"", objectDefinition1.getShortName(),
-				".\" Object fields and object relationships cannot have the ",
-				"same name."),
-			() -> _addCustomObjectField(
-				new TextObjectFieldBuilder(
-				).labelMap(
-					LocalizedMapUtil.getLocalizedMap(
-						RandomTestUtil.randomString())
-				).name(
-					objectRelationshipName
-				).objectDefinitionId(
-					objectDefinition1.getObjectDefinitionId()
-				).build()));
-		AssertUtils.assertFailure(
-			ObjectFieldNameException.MustNotBeEqualToObjectRelationshipName.
-				class,
-			StringBundler.concat(
-				"There is already an object relationship with this name in ",
-				"the object definition \"", objectDefinition1.getShortName(),
+				"the object definition \"", objectDefinition2.getShortName(),
 				".\" Object fields and object relationships cannot have the ",
 				"same name."),
 			() -> _addCustomObjectField(
@@ -398,6 +414,24 @@ public class ObjectFieldLocalServiceTest {
 					objectRelationshipName
 				).objectDefinitionId(
 					objectDefinition2.getObjectDefinitionId()
+				).build()));
+		AssertUtils.assertFailure(
+			ObjectFieldNameException.MustNotBeEqualToObjectRelationshipName.
+				class,
+			StringBundler.concat(
+				"There is already an object relationship with this name in ",
+				"the object definition \"", objectDefinition2.getShortName(),
+				".\" Object fields and object relationships cannot have the ",
+				"same name."),
+			() -> _addCustomObjectField(
+				new TextObjectFieldBuilder(
+				).labelMap(
+					LocalizedMapUtil.getLocalizedMap(
+						RandomTestUtil.randomString())
+				).name(
+					objectRelationshipName
+				).objectDefinitionId(
+					objectDefinition3.getObjectDefinitionId()
 				).build()));
 
 		ObjectFilter objectFilter =
@@ -419,7 +453,7 @@ public class ObjectFieldLocalServiceTest {
 				).name(
 					"a" + RandomTestUtil.randomString()
 				).objectDefinitionId(
-					objectDefinition1.getObjectDefinitionId()
+					objectDefinition2.getObjectDefinitionId()
 				).objectFieldSettings(
 					Arrays.asList(
 						new ObjectFieldSettingBuilder(
@@ -455,8 +489,8 @@ public class ObjectFieldLocalServiceTest {
 		objectRelationship =
 			_objectRelationshipLocalService.addObjectRelationship(
 				null, TestPropsValues.getUserId(),
-				objectDefinition1.getObjectDefinitionId(),
-				objectDefinition2.getObjectDefinitionId(), 0,
+				objectDefinition2.getObjectDefinitionId(),
+				objectDefinition3.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE, false,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				objectRelationshipName, false,
@@ -467,25 +501,7 @@ public class ObjectFieldLocalServiceTest {
 				class,
 			StringBundler.concat(
 				"There is already an object relationship with this name in ",
-				"the object definition \"", objectDefinition1.getShortName(),
-				".\" Object fields and object relationships cannot have the ",
-				"same name."),
-			() -> _addCustomObjectField(
-				new TextObjectFieldBuilder(
-				).labelMap(
-					LocalizedMapUtil.getLocalizedMap(
-						RandomTestUtil.randomString())
-				).name(
-					objectRelationshipName
-				).objectDefinitionId(
-					objectDefinition1.getObjectDefinitionId()
-				).build()));
-		AssertUtils.assertFailure(
-			ObjectFieldNameException.MustNotBeEqualToObjectRelationshipName.
-				class,
-			StringBundler.concat(
-				"There is already an object relationship with this name in ",
-				"the object definition \"", objectDefinition1.getShortName(),
+				"the object definition \"", objectDefinition2.getShortName(),
 				".\" Object fields and object relationships cannot have the ",
 				"same name."),
 			() -> _addCustomObjectField(
@@ -498,18 +514,37 @@ public class ObjectFieldLocalServiceTest {
 				).objectDefinitionId(
 					objectDefinition2.getObjectDefinitionId()
 				).build()));
+		AssertUtils.assertFailure(
+			ObjectFieldNameException.MustNotBeEqualToObjectRelationshipName.
+				class,
+			StringBundler.concat(
+				"There is already an object relationship with this name in ",
+				"the object definition \"", objectDefinition2.getShortName(),
+				".\" Object fields and object relationships cannot have the ",
+				"same name."),
+			() -> _addCustomObjectField(
+				new TextObjectFieldBuilder(
+				).labelMap(
+					LocalizedMapUtil.getLocalizedMap(
+						RandomTestUtil.randomString())
+				).name(
+					objectRelationshipName
+				).objectDefinitionId(
+					objectDefinition3.getObjectDefinitionId()
+				).build()));
 
 		_objectRelationshipLocalService.deleteObjectRelationship(
 			objectRelationship);
 
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition1);
 		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition2);
+		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition3);
 
 		String[] reservedNames = {
 			"actions", "companyId", "createDate", "creator", "dateCreated",
 			"dateModified", "externalReferenceCode", "groupId", "id",
-			"lastPublishDate", "modifiedDate", "statusByUserId",
-			"statusByUserName", "statusDate", "userId", "userName"
+			"keywords", "lastPublishDate", "modifiedDate", "statusByUserId",
+			"statusByUserName", "statusDate", "taxonomycategoryids", "userId",
+			"userName"
 		};
 
 		for (String reservedName : reservedNames) {
@@ -890,6 +925,34 @@ public class ObjectFieldLocalServiceTest {
 		Assert.assertEquals("baker", objectField1.getName());
 		Assert.assertTrue(objectField1.isRequired());
 
+		// Object field business type assignee
+
+		objectField1 = ObjectFieldUtil.addCustomObjectField(
+			new AssigneeObjectFieldBuilder(
+			).labelMap(
+				RandomTestUtil.randomLocaleStringMap()
+			).name(
+				"assignee"
+			).objectDefinitionId(
+				objectDefinition.getObjectDefinitionId()
+			).userId(
+				TestPropsValues.getUserId()
+			).build());
+
+		Assert.assertNotNull(
+			_objectActionLocalService.fetchObjectAction(
+				objectDefinition.getObjectDefinitionId(),
+				ObjectActionNameConstants.NAME_ASSIGN_TO_ME));
+
+		objectField1.setBusinessType(ObjectFieldConstants.BUSINESS_TYPE_TEXT);
+
+		_objectFieldLocalService.updateObjectField(objectField1);
+
+		Assert.assertNull(
+			_objectActionLocalService.fetchObjectAction(
+				objectDefinition.getObjectDefinitionId(),
+				ObjectActionNameConstants.NAME_ASSIGN_TO_ME));
+
 		// Object field indexed language id
 
 		objectField1 = _addCustomObjectField(
@@ -1059,28 +1122,6 @@ public class ObjectFieldLocalServiceTest {
 		_objectDefinitionLocalService.deleteObjectDefinition(
 			relatedObjectDefinition);
 
-		objectRelationship = ObjectRelationshipTestUtil.addObjectRelationship(
-			_objectRelationshipLocalService,
-			ObjectDefinitionTestUtil.addCustomObjectDefinition("A"),
-			ObjectDefinitionTestUtil.addCustomObjectDefinition("AA"));
-
-		TreeTestUtil.bind(
-			_objectRelationshipLocalService,
-			Collections.singletonList(objectRelationship));
-
-		ObjectField objectField2 = _objectFieldLocalService.getObjectField(
-			objectRelationship.getObjectFieldId2());
-
-		objectField2.setRequired(false);
-
-		AssertUtils.assertFailure(
-			ObjectFieldRequiredException.class, null,
-			() -> _addOrUpdateCustomObjectField(objectField2));
-
-		TreeTestUtil.deleteObjectDefinitionHierarchy(
-			_objectDefinitionLocalService, new String[] {"C_A", "C_AA"},
-			_objectEntryLocalService, _objectRelationshipLocalService);
-
 		// Object field required
 
 		objectDefinition = ObjectDefinitionTestUtil.addCustomObjectDefinition();
@@ -1201,6 +1242,9 @@ public class ObjectFieldLocalServiceTest {
 				objectFieldBusinessTypes) {
 
 			if (Objects.equals(
+					objectFieldBusinessType.getName(),
+					ObjectFieldConstants.BUSINESS_TYPE_ASSIGNEE) ||
+				Objects.equals(
 					objectFieldBusinessType.getName(),
 					ObjectFieldConstants.BUSINESS_TYPE_ENCRYPTED) ||
 				Objects.equals(
@@ -1462,6 +1506,28 @@ public class ObjectFieldLocalServiceTest {
 
 		_assertDeleteObjectField(true, customObjectDefinition, "charlie");
 
+		// Delete object field business type assignee
+
+		ObjectField assigneeObjectField = ObjectFieldUtil.addCustomObjectField(
+			new AssigneeObjectFieldBuilder(
+			).labelMap(
+				RandomTestUtil.randomLocaleStringMap()
+			).name(
+				"assignee"
+			).objectDefinitionId(
+				customObjectDefinition.getObjectDefinitionId()
+			).userId(
+				TestPropsValues.getUserId()
+			).build());
+
+		_objectFieldLocalService.deleteObjectField(
+			assigneeObjectField.getObjectFieldId());
+
+		Assert.assertNull(
+			_objectActionLocalService.fetchObjectAction(
+				customObjectDefinition.getObjectDefinitionId(),
+				ObjectActionNameConstants.NAME_ASSIGN_TO_ME));
+
 		// Delete object field business type attachment
 
 		ObjectField attachmentObjectField = _addCustomObjectField(
@@ -1673,6 +1739,16 @@ public class ObjectFieldLocalServiceTest {
 	public void testObjectFieldSettings() throws Exception {
 
 		// Business type attachment
+
+		String originalName = PrincipalThreadLocal.getName();
+
+		PermissionChecker originalPermissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		PermissionThreadLocal.setPermissionChecker(
+			PermissionCheckerFactoryUtil.create(TestPropsValues.getUser()));
+
+		PrincipalThreadLocal.setName(TestPropsValues.getUserId());
 
 		ObjectDefinition objectDefinition =
 			ObjectDefinitionTestUtil.addCustomObjectDefinition(
@@ -2075,6 +2151,10 @@ public class ObjectFieldLocalServiceTest {
 			).build());
 
 		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+
+		PermissionThreadLocal.setPermissionChecker(originalPermissionChecker);
+
+		PrincipalThreadLocal.setName(originalName);
 	}
 
 	@Test
@@ -2160,8 +2240,8 @@ public class ObjectFieldLocalServiceTest {
 		ObjectFieldTestUtil.withEncryptedObjectFieldProperties(
 			algorithm, enabled, key,
 			() -> _objectDefinitionLocalService.addCustomObjectDefinition(
-				TestPropsValues.getUserId(), 0, null, false, false, true, true,
-				false, false, null,
+				null, TestPropsValues.getUserId(), 0, null, false, true, false,
+				true, true, false, false, false, false, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				ObjectDefinitionTestUtil.getRandomName(), null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
@@ -2174,7 +2254,8 @@ public class ObjectFieldLocalServiceTest {
 							RandomTestUtil.randomString())
 					).name(
 						"a" + RandomTestUtil.randomString()
-					).build())));
+					).build()),
+				Collections.emptyList()));
 	}
 
 	private void _addCustomObjectDefinitionWithPicklistObjectField(
@@ -2806,14 +2887,15 @@ public class ObjectFieldLocalServiceTest {
 
 		objectDefinition1 =
 			_objectDefinitionLocalService.addCustomObjectDefinition(
-				TestPropsValues.getUserId(), 0, null, false, false, true, true,
-				false, false, null,
+				null, TestPropsValues.getUserId(), 0, null, false, true, false,
+				true, true, false, false, false, false, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				"Test", null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				true, ObjectDefinitionConstants.SCOPE_COMPANY,
 				ObjectDefinitionConstants.STORAGE_TYPE_SALESFORCE,
-				Collections.emptyList(), Collections.emptyList());
+				Collections.emptyList(), Collections.emptyList(),
+				Collections.emptyList());
 
 		_assertReadOnlyFalse(
 			_addCustomObjectField(
@@ -2892,6 +2974,9 @@ public class ObjectFieldLocalServiceTest {
 	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
 
 	private String _listTypeEntryKey;
+
+	@Inject
+	private ObjectActionLocalService _objectActionLocalService;
 
 	@Inject
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;

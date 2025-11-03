@@ -91,7 +91,9 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'DELETE' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/{navigationMenuId}'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
 	@io.swagger.v3.oas.annotations.Operation(
+		deprecated = true,
 		description = "Deletes the navigation menu and returns a 204 if the operation succeeds"
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
@@ -124,6 +126,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'DELETE' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/batch'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -170,7 +174,9 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'DELETE' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/by-external-reference-code/{externalReferenceCode}'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
 	@io.swagger.v3.oas.annotations.Operation(
+		deprecated = true,
 		description = "Deletes the navigation menu by external reference code and returns a 204 if the operation succeeds"
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
@@ -213,6 +219,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'GET' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/{navigationMenuId}'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -257,6 +265,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'GET' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/{navigationMenuId}/permissions'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -300,25 +310,27 @@ public abstract class BaseNavigationMenuResourceImpl
 			String roleNames)
 		throws Exception {
 
+		Long groupId = getPermissionCheckerGroupId(navigationMenuId);
+		Long resourceId = getPermissionCheckerResourceId(navigationMenuId);
 		String resourceName = getPermissionCheckerResourceName(
 			navigationMenuId);
-		Long resourceId = getPermissionCheckerResourceId(navigationMenuId);
 
 		PermissionServiceUtil.checkPermission(
-			getPermissionCheckerGroupId(navigationMenuId), resourceName,
-			resourceId);
+			groupId, resourceName, resourceId);
 
 		return toPermissionPage(
 			HashMapBuilder.put(
 				"get",
 				addAction(
-					ActionKeys.PERMISSIONS, "getNavigationMenuPermissionsPage",
-					resourceName, resourceId)
+					ActionKeys.PERMISSIONS, resourceId,
+					"getNavigationMenuPermissionsPage", null, resourceName,
+					groupId)
 			).put(
 				"replace",
 				addAction(
-					ActionKeys.PERMISSIONS, "putNavigationMenuPermissionsPage",
-					resourceName, resourceId)
+					ActionKeys.PERMISSIONS, resourceId,
+					"putNavigationMenuPermissionsPage", null, resourceName,
+					groupId)
 			).build(),
 			resourceId, resourceName, roleNames);
 	}
@@ -328,7 +340,9 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'GET' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/by-external-reference-code/{externalReferenceCode}'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
 	@io.swagger.v3.oas.annotations.Operation(
+		deprecated = true,
 		description = "Retrieves the navigation menu by external reference code."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
@@ -385,6 +399,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'GET' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/permissions'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -436,13 +452,15 @@ public abstract class BaseNavigationMenuResourceImpl
 			HashMapBuilder.put(
 				"get",
 				addAction(
-					ActionKeys.PERMISSIONS,
-					"getSiteNavigationMenuPermissionsPage", portletName, siteId)
+					ActionKeys.PERMISSIONS, siteId,
+					"getSiteNavigationMenuPermissionsPage", null, portletName,
+					siteId)
 			).put(
 				"replace",
 				addAction(
-					ActionKeys.PERMISSIONS,
-					"putSiteNavigationMenuPermissionsPage", portletName, siteId)
+					ActionKeys.PERMISSIONS, siteId,
+					"putSiteNavigationMenuPermissionsPage", null, portletName,
+					siteId)
 			).build(),
 			siteId, portletName, roleNames);
 	}
@@ -452,6 +470,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'GET' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -524,8 +544,9 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'POST' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus' -d $'{"externalReferenceCode": ___, "name": ___, "navigationMenuItems": ___, "navigationType": ___, "permissions": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
+	@Deprecated
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Creates a new navigation menu."
+		deprecated = true, description = "Creates a new navigation menu."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -561,6 +582,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'POST' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/batch'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -615,6 +638,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'POST' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/export-batch'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -705,7 +730,9 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'PUT' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/{navigationMenuId}' -d $'{"externalReferenceCode": ___, "name": ___, "navigationMenuItems": ___, "navigationType": ___, "permissions": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
+	@Deprecated
 	@io.swagger.v3.oas.annotations.Operation(
+		deprecated = true,
 		description = "Replaces the navigation menu with the information sent in the request body. Any missing fields are deleted, unless they are required."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
@@ -742,6 +769,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'PUT' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/batch'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -788,6 +817,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'PUT' 'http://localhost:8080/o/headless-delivery/v1.0/navigation-menus/{navigationMenuId}/permissions'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -814,13 +845,13 @@ public abstract class BaseNavigationMenuResourceImpl
 			Permission[] permissions)
 		throws Exception {
 
+		Long groupId = getPermissionCheckerGroupId(navigationMenuId);
+		Long resourceId = getPermissionCheckerResourceId(navigationMenuId);
 		String resourceName = getPermissionCheckerResourceName(
 			navigationMenuId);
-		Long resourceId = getPermissionCheckerResourceId(navigationMenuId);
 
 		PermissionServiceUtil.checkPermission(
-			getPermissionCheckerGroupId(navigationMenuId), resourceName,
-			resourceId);
+			groupId, resourceName, resourceId);
 
 		ModelPermissions modelPermissions =
 			ModelPermissionsUtil.toModelPermissions(
@@ -856,21 +887,22 @@ public abstract class BaseNavigationMenuResourceImpl
 		}
 
 		resourcePermissionLocalService.updateResourcePermissions(
-			contextCompany.getCompanyId(),
-			getPermissionCheckerGroupId(navigationMenuId), resourceName,
+			contextCompany.getCompanyId(), groupId, resourceName,
 			String.valueOf(resourceId), modelPermissions);
 
 		return toPermissionPage(
 			HashMapBuilder.put(
 				"get",
 				addAction(
-					ActionKeys.PERMISSIONS, "getNavigationMenuPermissionsPage",
-					resourceName, resourceId)
+					ActionKeys.PERMISSIONS, resourceId,
+					"getNavigationMenuPermissionsPage", null, resourceName,
+					groupId)
 			).put(
 				"replace",
 				addAction(
-					ActionKeys.PERMISSIONS, "putNavigationMenuPermissionsPage",
-					resourceName, resourceId)
+					ActionKeys.PERMISSIONS, resourceId,
+					"putNavigationMenuPermissionsPage", null, resourceName,
+					groupId)
 			).build(),
 			resourceId, resourceName, null);
 	}
@@ -880,7 +912,9 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'PUT' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/by-external-reference-code/{externalReferenceCode}' -d $'{"externalReferenceCode": ___, "name": ___, "navigationMenuItems": ___, "navigationType": ___, "permissions": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
+	@Deprecated
 	@io.swagger.v3.oas.annotations.Operation(
+		deprecated = true,
 		description = "Updates the navigation menu with the given external reference code or creates it if it does not exist."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
@@ -927,6 +961,8 @@ public abstract class BaseNavigationMenuResourceImpl
 	 *
 	 * curl -X 'PUT' 'http://localhost:8080/o/headless-delivery/v1.0/sites/{siteId}/navigation-menus/permissions'  -u 'test@liferay.com:test'
 	 */
+	@Deprecated
+	@io.swagger.v3.oas.annotations.Operation(deprecated = true)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -997,13 +1033,15 @@ public abstract class BaseNavigationMenuResourceImpl
 			HashMapBuilder.put(
 				"get",
 				addAction(
-					ActionKeys.PERMISSIONS,
-					"getSiteNavigationMenuPermissionsPage", portletName, siteId)
+					ActionKeys.PERMISSIONS, siteId,
+					"getSiteNavigationMenuPermissionsPage", null, portletName,
+					siteId)
 			).put(
 				"replace",
 				addAction(
-					ActionKeys.PERMISSIONS,
-					"putSiteNavigationMenuPermissionsPage", portletName, siteId)
+					ActionKeys.PERMISSIONS, siteId,
+					"putSiteNavigationMenuPermissionsPage", null, portletName,
+					siteId)
 			).build(),
 			siteId, portletName, null);
 	}
@@ -1038,14 +1076,23 @@ public abstract class BaseNavigationMenuResourceImpl
 				"updateStrategy", "UPDATE");
 
 			if (StringUtil.equalsIgnoreCase(updateStrategy, "UPDATE")) {
-				navigationMenuUnsafeFunction =
-					navigationMenu ->
-						putSiteNavigationMenuByExternalReferenceCode(
-							navigationMenu.getSiteId() != null ?
-								navigationMenu.getSiteId() :
-									(Long)parameters.get("siteId"),
-							navigationMenu.getExternalReferenceCode(),
-							navigationMenu);
+				navigationMenuUnsafeFunction = navigationMenu -> {
+					NavigationMenu persistedNavigationMenu = null;
+
+					if (parameters.containsKey("siteId")) {
+						persistedNavigationMenu =
+							putSiteNavigationMenuByExternalReferenceCode(
+								(Long)parameters.get("siteId"),
+								navigationMenu.getExternalReferenceCode(),
+								navigationMenu);
+					}
+					else {
+						throw new NotSupportedException(
+							"One of the following parameters must be specified: [siteId]");
+					}
+
+					return persistedNavigationMenu;
+				};
 			}
 		}
 
@@ -1114,13 +1161,6 @@ public abstract class BaseNavigationMenuResourceImpl
 			new MultivaluedHashMap<String, Object>(multivaluedMap));
 	}
 
-	@Override
-	public EntityModel getEntityModel(MultivaluedMap multivaluedMap)
-		throws Exception {
-
-		return null;
-	}
-
 	public String getResourceName() {
 		return "NavigationMenu";
 	}
@@ -1184,9 +1224,7 @@ public abstract class BaseNavigationMenuResourceImpl
 
 		if (StringUtil.equalsIgnoreCase(updateStrategy, "UPDATE")) {
 			navigationMenuUnsafeFunction = navigationMenu -> putNavigationMenu(
-				navigationMenu.getId() != null ? navigationMenu.getId() :
-					_parseLong((String)parameters.get("navigationMenuId")),
-				navigationMenu);
+				navigationMenu.getId(), navigationMenu);
 		}
 
 		if (navigationMenuUnsafeFunction == null) {
@@ -1210,10 +1248,9 @@ public abstract class BaseNavigationMenuResourceImpl
 		}
 	}
 
-	private Long _parseLong(String value) {
-		if (value != null) {
-			return Long.parseLong(value);
-		}
+	@Override
+	public EntityModel getEntityModel(MultivaluedMap multivaluedMap)
+		throws Exception {
 
 		return null;
 	}
@@ -1604,6 +1641,20 @@ public abstract class BaseNavigationMenuResourceImpl
 		return TransformUtil.transform(collection, unsafeFunction);
 	}
 
+	public static <R, E extends Throwable> R[] transform(
+		int[] array, UnsafeFunction<Integer, R, E> unsafeFunction,
+		Class<? extends R> clazz) {
+
+		return TransformUtil.transform(array, unsafeFunction, clazz);
+	}
+
+	public static <R, E extends Throwable> R[] transform(
+		long[] array, UnsafeFunction<Long, R, E> unsafeFunction,
+		Class<? extends R> clazz) {
+
+		return TransformUtil.transform(array, unsafeFunction, clazz);
+	}
+
 	protected <T, R, E extends Throwable> R[] transform(
 		T[] array, UnsafeFunction<T, R, E> unsafeFunction,
 		Class<? extends R> clazz) {
@@ -1619,6 +1670,80 @@ public abstract class BaseNavigationMenuResourceImpl
 			collection, unsafeFunction, clazz);
 	}
 
+	public static <T, E extends Throwable> boolean[] transformToBooleanArray(
+		Collection<T> collection,
+		UnsafeFunction<T, Boolean, E> unsafeFunction) {
+
+		return TransformUtil.transformToBooleanArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> boolean[] transformToBooleanArray(
+		T[] array, UnsafeFunction<T, Boolean, E> unsafeFunction) {
+
+		return TransformUtil.transformToBooleanArray(array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> byte[] transformToByteArray(
+		Collection<T> collection, UnsafeFunction<T, Byte, E> unsafeFunction) {
+
+		return TransformUtil.transformToByteArray(collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> byte[] transformToByteArray(
+		T[] array, UnsafeFunction<T, Byte, E> unsafeFunction) {
+
+		return TransformUtil.transformToByteArray(array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> double[] transformToDoubleArray(
+		Collection<T> collection, UnsafeFunction<T, Double, E> unsafeFunction) {
+
+		return TransformUtil.transformToDoubleArray(collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> double[] transformToDoubleArray(
+		T[] array, UnsafeFunction<T, Double, E> unsafeFunction) {
+
+		return TransformUtil.transformToDoubleArray(array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> float[] transformToFloatArray(
+		Collection<T> collection, UnsafeFunction<T, Float, E> unsafeFunction) {
+
+		return TransformUtil.transformToFloatArray(collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> float[] transformToFloatArray(
+		T[] array, UnsafeFunction<T, Float, E> unsafeFunction) {
+
+		return TransformUtil.transformToFloatArray(array, unsafeFunction);
+	}
+
+	public static <T, R, E extends Throwable> int[] transformToIntArray(
+		Collection<T> collection, UnsafeFunction<T, R, E> unsafeFunction) {
+
+		return TransformUtil.transformToIntArray(collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> int[] transformToIntArray(
+		T[] array, UnsafeFunction<T, Integer, E> unsafeFunction) {
+
+		return TransformUtil.transformToIntArray(array, unsafeFunction);
+	}
+
+	public static <R, E extends Throwable> List<R> transformToList(
+		int[] array, UnsafeFunction<Integer, R, E> unsafeFunction) {
+
+		return TransformUtil.transformToList(array, unsafeFunction);
+	}
+
+	public static <R, E extends Throwable> List<R> transformToList(
+		long[] array, UnsafeFunction<Long, R, E> unsafeFunction) {
+
+		return TransformUtil.transformToList(array, unsafeFunction);
+	}
+
 	protected <T, R, E extends Throwable> List<R> transformToList(
 		T[] array, UnsafeFunction<T, R, E> unsafeFunction) {
 
@@ -1631,11 +1756,45 @@ public abstract class BaseNavigationMenuResourceImpl
 		return TransformUtil.transformToLongArray(collection, unsafeFunction);
 	}
 
+	public static <T, E extends Throwable> long[] transformToLongArray(
+		T[] array, UnsafeFunction<T, Long, E> unsafeFunction) {
+
+		return TransformUtil.transformToLongArray(array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> short[] transformToShortArray(
+		Collection<T> collection, UnsafeFunction<T, Short, E> unsafeFunction) {
+
+		return TransformUtil.transformToShortArray(collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> short[] transformToShortArray(
+		T[] array, UnsafeFunction<T, Short, E> unsafeFunction) {
+
+		return TransformUtil.transformToShortArray(array, unsafeFunction);
+	}
+
 	protected <T, R, E extends Throwable> List<R> unsafeTransform(
 			Collection<T> collection, UnsafeFunction<T, R, E> unsafeFunction)
 		throws E {
 
 		return TransformUtil.unsafeTransform(collection, unsafeFunction);
+	}
+
+	public static <R, E extends Throwable> R[] unsafeTransform(
+			int[] array, UnsafeFunction<Integer, R, E> unsafeFunction,
+			Class<? extends R> clazz)
+		throws E {
+
+		return TransformUtil.unsafeTransform(array, unsafeFunction, clazz);
+	}
+
+	public static <R, E extends Throwable> R[] unsafeTransform(
+			long[] array, UnsafeFunction<Long, R, E> unsafeFunction,
+			Class<? extends R> clazz)
+		throws E {
+
+		return TransformUtil.unsafeTransform(array, unsafeFunction, clazz);
 	}
 
 	protected <T, R, E extends Throwable> R[] unsafeTransform(
@@ -1655,6 +1814,104 @@ public abstract class BaseNavigationMenuResourceImpl
 			collection, unsafeFunction, clazz);
 	}
 
+	public static <T, E extends Throwable> boolean[]
+			unsafeTransformToBooleanArray(
+				Collection<T> collection,
+				UnsafeFunction<T, Boolean, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToBooleanArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> boolean[]
+			unsafeTransformToBooleanArray(
+				T[] array, UnsafeFunction<T, Boolean, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToBooleanArray(
+			array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> byte[] unsafeTransformToByteArray(
+			Collection<T> collection, UnsafeFunction<T, Byte, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToByteArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> byte[] unsafeTransformToByteArray(
+			T[] array, UnsafeFunction<T, Byte, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToByteArray(array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> double[]
+			unsafeTransformToDoubleArray(
+				Collection<T> collection,
+				UnsafeFunction<T, Double, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToDoubleArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> double[]
+			unsafeTransformToDoubleArray(
+				T[] array, UnsafeFunction<T, Double, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToDoubleArray(
+			array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> float[] unsafeTransformToFloatArray(
+			Collection<T> collection,
+			UnsafeFunction<T, Float, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToFloatArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> float[] unsafeTransformToFloatArray(
+			T[] array, UnsafeFunction<T, Float, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToFloatArray(array, unsafeFunction);
+	}
+
+	public static <T, R, E extends Throwable> int[] unsafeTransformToIntArray(
+			Collection<T> collection, UnsafeFunction<T, R, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToIntArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> int[] unsafeTransformToIntArray(
+			T[] array, UnsafeFunction<T, Integer, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToIntArray(array, unsafeFunction);
+	}
+
+	public static <R, E extends Throwable> List<R> unsafeTransformToList(
+			int[] array, UnsafeFunction<Integer, R, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToList(array, unsafeFunction);
+	}
+
+	public static <R, E extends Throwable> List<R> unsafeTransformToList(
+			long[] array, UnsafeFunction<Long, R, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToList(array, unsafeFunction);
+	}
+
 	protected <T, R, E extends Throwable> List<R> unsafeTransformToList(
 			T[] array, UnsafeFunction<T, R, E> unsafeFunction)
 		throws E {
@@ -1668,6 +1925,29 @@ public abstract class BaseNavigationMenuResourceImpl
 
 		return TransformUtil.unsafeTransformToLongArray(
 			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> long[] unsafeTransformToLongArray(
+			T[] array, UnsafeFunction<T, Long, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToLongArray(array, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> short[] unsafeTransformToShortArray(
+			Collection<T> collection,
+			UnsafeFunction<T, Short, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToShortArray(
+			collection, unsafeFunction);
+	}
+
+	public static <T, E extends Throwable> short[] unsafeTransformToShortArray(
+			T[] array, UnsafeFunction<T, Short, E> unsafeFunction)
+		throws E {
+
+		return TransformUtil.unsafeTransformToShortArray(array, unsafeFunction);
 	}
 
 	protected AcceptLanguage contextAcceptLanguage;

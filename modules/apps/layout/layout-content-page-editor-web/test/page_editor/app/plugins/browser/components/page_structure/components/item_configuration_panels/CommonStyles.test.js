@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import '@testing-library/jest-dom/extend-expect';
-import {render} from '@testing-library/react';
+import '@testing-library/jest-dom';
+import {render, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -169,16 +169,18 @@ describe('CommonStyles', () => {
 		await userEvent.click(getByLabelText('margin-left'));
 		await userEvent.click(getByLabelText('set-margin-left-to-1'));
 
-		expect(updateItemConfig).toHaveBeenCalledWith({
-			itemConfig: {
-				tablet: {
-					styles: {
-						marginLeft: '1',
+		await waitFor(() =>
+			expect(updateItemConfig).toHaveBeenCalledWith({
+				itemConfig: {
+					tablet: {
+						styles: {
+							marginLeft: '1',
+						},
 					},
 				},
-			},
-			itemIds: ['0'],
-		});
+				itemIds: ['0'],
+			})
+		);
 	});
 
 	it('disables left and right margin selecting fixed width for containers', async () => {

@@ -39,3 +39,18 @@
 		}
 	}
 }
+
+.data-set-wrapper {
+	&.drop-target {
+		&
+			*:not(.btn-primary):not(.lexicon-icon-plus):not(
+				.lexicon-icon-plus use
+			) {
+			@include common-drop-target;
+		}
+
+		@include common-drop-target;
+		border: 2px solid $info;
+		margin: -2px;
+	}
+}

@@ -41,11 +41,11 @@ import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.util.PropsUtil;
 
 import java.io.Serializable;
 
@@ -337,8 +337,8 @@ public class ClusterSchedulerEngineTest {
 
 		Assert.assertTrue(_memoryClusteredJobs.isEmpty());
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				ClusterSchedulerEngine.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				ClusterSchedulerEngine.class.getName(), LoggerTestUtil.OFF)) {
 
 			_mockClusterMasterExecutor.reset(false, 4, 2);
 
@@ -860,8 +860,8 @@ public class ClusterSchedulerEngineTest {
 			_TEST_JOB_NAME_0, _MEMORY_CLUSTER_TEST_GROUP_NAME,
 			StorageType.MEMORY_CLUSTERED);
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				ClusterSchedulerEngine.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				ClusterSchedulerEngine.class.getName(), LoggerTestUtil.OFF)) {
 
 			_mockClusterMasterExecutor.reset(true, 0, 0);
 
@@ -1201,8 +1201,6 @@ public class ClusterSchedulerEngineTest {
 
 		_clusterSchedulerEngine.setClusterMasterExecutor(
 			_mockClusterMasterExecutor);
-		_clusterSchedulerEngine.setProps(
-			com.liferay.portal.kernel.util.PropsUtil.getProps());
 
 		_memoryClusteredJobs = ReflectionTestUtil.getFieldValue(
 			_clusterSchedulerEngine, "_memoryClusteredJobs");

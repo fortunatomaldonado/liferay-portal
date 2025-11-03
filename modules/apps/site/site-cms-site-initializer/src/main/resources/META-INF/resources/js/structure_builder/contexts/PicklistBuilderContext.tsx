@@ -12,7 +12,7 @@ import React, {
 	useState,
 } from 'react';
 
-import {Option, Options, Picklist} from '../../types/Picklist';
+import {Option, Options, Picklist} from '../../common/types/Picklist';
 import getRandomId from '../utils/getRandomId';
 import normalizeI18n from '../utils/normalizeI18n';
 
@@ -110,12 +110,19 @@ const buildState = (picklist: Picklist): State => {
 const useAddOption = () => {
 	const {setOptions} = useContext(PicklistBuilderContext);
 
-	return ({erc, key, name}: Option) =>
-		setOptions((options) => {
+	return ({erc, key, name}: Option) => {
+		if (!erc || !key || !name) {
+			return;
+		}
+
+		return setOptions((previousOptions) => {
+			const options = new Map(previousOptions);
+
 			options.set(erc, {key, name});
 
 			return options;
 		});
+	};
 };
 
 const useDeletedOptions = () =>

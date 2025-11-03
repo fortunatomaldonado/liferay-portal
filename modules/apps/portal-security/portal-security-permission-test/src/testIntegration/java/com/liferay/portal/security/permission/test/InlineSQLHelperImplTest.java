@@ -6,12 +6,14 @@
 package com.liferay.portal.security.permission.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
 import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.petra.sql.dsl.spi.ast.DefaultASTNodeListener;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
@@ -43,6 +45,7 @@ import com.liferay.portal.kernel.test.util.RoleTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -50,6 +53,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -180,8 +184,94 @@ public class InlineSQLHelperImplTest {
 			sql,
 			sql.contains(
 				StringBundler.concat(
-					" OR (", _GROUP_ID_FIELD, " IN (", _groupOne.getGroupId(),
+					" OR (JournalArticle.groupId IN (", _groupOne.getGroupId(),
 					"))")));
+	}
+
+	@Test
+	public void testGroupResourcePermissionWithGroupScope() throws Exception {
+		_addGroupRole(_groupOne, RoleConstants.SITE_ADMINISTRATOR);
+		_addGroupRole(_groupTwo, RoleConstants.SITE_MEMBER);
+
+		_groupThree = GroupTestUtil.addGroup();
+
+		_role = RoleTestUtil.addRole(
+			"scopeGroupRole", RoleConstants.TYPE_REGULAR);
+
+		_roleLocalService.setUserRoles(
+			_user.getUserId(),
+			ArrayUtil.append(_user.getRoleIds(), _role.getRoleId()));
+
+		_resourcePermissionLocalService.addResourcePermission(
+			CompanyThreadLocal.getCompanyId(), _CLASS_NAME,
+			ResourceConstants.SCOPE_GROUP,
+			String.valueOf(_groupThree.getGroupId()), _role.getRoleId(),
+			ActionKeys.VIEW);
+
+		_setPermissionChecker();
+
+		String sql = _replacePermissionCheckJoin(
+			_SQL_PLAIN, ArrayUtil.append(_groupIds, _groupThree.getGroupId()));
+
+		int startPos = sql.indexOf(" OR (JournalArticle.groupId IN (");
+
+		Assert.assertTrue(startPos > 0);
+
+		int endPos = sql.indexOf("))", startPos);
+
+		Assert.assertTrue(endPos > startPos);
+
+		Assert.assertEquals(
+			Arrays.asList(_groupOne.getGroupId(), _groupThree.getGroupId()),
+			ListUtil.sort(
+				TransformUtil.transformToList(
+					StringUtil.split(
+						sql.substring(startPos + 32, endPos),
+						StringPool.COMMA_AND_SPACE, 0L),
+					Long::valueOf)));
+	}
+
+	@Test
+	public void testGroupResourcePermissionWithGroupTemplateScope()
+		throws Exception {
+
+		_addGroupRole(_groupOne, RoleConstants.SITE_ADMINISTRATOR);
+		_addGroupRole(_groupTwo, RoleConstants.SITE_MEMBER);
+
+		_groupThree = GroupTestUtil.addGroup();
+
+		_role = RoleTestUtil.addRole(
+			"scopeGroupTemplateRole", RoleConstants.TYPE_SITE);
+
+		_addGroupRole(_groupThree, "scopeGroupTemplateRole");
+
+		_resourcePermissionLocalService.addResourcePermission(
+			CompanyThreadLocal.getCompanyId(), _CLASS_NAME,
+			ResourceConstants.SCOPE_GROUP_TEMPLATE,
+			String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID),
+			_role.getRoleId(), ActionKeys.VIEW);
+
+		_setPermissionChecker();
+
+		String sql = _replacePermissionCheckJoin(
+			_SQL_PLAIN, ArrayUtil.append(_groupIds, _groupThree.getGroupId()));
+
+		int startPos = sql.indexOf(" OR (JournalArticle.groupId IN (");
+
+		Assert.assertTrue(startPos > 0);
+
+		int endPos = sql.indexOf("))", startPos);
+
+		Assert.assertTrue(endPos > startPos);
+
+		Assert.assertEquals(
+			Arrays.asList(_groupOne.getGroupId(), _groupThree.getGroupId()),
+			ListUtil.sort(
+				TransformUtil.transformToList(
+					StringUtil.split(
+						sql.substring(startPos + 32, endPos),
+						StringPool.COMMA_AND_SPACE, 0L),
+					Long::valueOf)));
 	}
 
 	@Test
@@ -199,8 +289,8 @@ public class InlineSQLHelperImplTest {
 		_setPermissionChecker();
 
 		String sql = _inlineSQLHelper.replacePermissionCheck(
-			_SQL_PLAIN, _CLASS_NAME, _CLASS_PK_FIELD, _USER_ID_FIELD,
-			_GROUP_ID_FIELD, new long[] {_groupOne.getGroupId()}, null);
+			_SQL_PLAIN, _CLASS_NAME, _CLASS_PK_FIELD,
+			new long[] {_groupOne.getGroupId()});
 
 		Assert.assertSame(_SQL_PLAIN, sql);
 
@@ -243,10 +333,8 @@ public class InlineSQLHelperImplTest {
 		_setPermissionChecker();
 
 		_inlineSQLHelper.replacePermissionCheck(
-			_SQL_PLAIN, _CLASS_NAME, _CLASS_PK_FIELD, _USER_ID_FIELD,
-			_GROUP_ID_FIELD,
-			new long[] {_groupOne.getGroupId(), _groupThree.getGroupId()},
-			null);
+			_SQL_PLAIN, _CLASS_NAME, _CLASS_PK_FIELD,
+			new long[] {_groupOne.getGroupId(), _groupThree.getGroupId()});
 	}
 
 	@Test
@@ -351,13 +439,13 @@ public class InlineSQLHelperImplTest {
 			StringBundler.concat(
 				"select * from Layout inner join PortletPreferences on ",
 				"PortletPreferences.plid = Layout.plid where Layout.companyId ",
-				"= ? and Layout.plid in (select distinct ",
+				"= ? and (Layout.plid in (select distinct ",
 				"ResourcePermission.primKeyId from ResourcePermission where ",
 				"ResourcePermission.companyId = ? and ResourcePermission.name ",
 				"= ? and ResourcePermission.scope = ? and ",
 				"ResourcePermission.viewActionId = ? and ",
 				"(ResourcePermission.roleId in (?, ?) or ",
-				"ResourcePermission.ownerId = ?))"),
+				"ResourcePermission.ownerId = ?)))"),
 			dslQuery.toString());
 
 		_assertValidSql(dslQuery);
@@ -491,19 +579,12 @@ public class InlineSQLHelperImplTest {
 					_RESOURCE_PERMISSION, ".companyId = ",
 					CompanyThreadLocal.getCompanyId())));
 
-		Assert.assertTrue(
-			sql,
-			sql.contains(
-				StringBundler.concat(
-					_USER_ID_FIELD, " = ", _user.getUserId())));
-
 		_assertValidSql(sql);
 	}
 
 	private String _replacePermissionCheckJoin(String sql, long... groupIds) {
 		return _inlineSQLHelper.replacePermissionCheck(
-			sql, _CLASS_NAME, _CLASS_PK_FIELD, _USER_ID_FIELD, _GROUP_ID_FIELD,
-			groupIds, null);
+			sql, _CLASS_NAME, _CLASS_PK_FIELD, groupIds);
 	}
 
 	private void _setPermissionChecker() throws Exception {
@@ -519,8 +600,6 @@ public class InlineSQLHelperImplTest {
 
 	private static final String _GROUP_BY_CLAUSE = " GROUP BY ";
 
-	private static final String _GROUP_ID_FIELD = "groupIdField";
-
 	private static final String _ORDER_BY_CLAUSE = " ORDER BY ";
 
 	private static final String _RESOURCE_PERMISSION = "ResourcePermission";
@@ -534,9 +613,6 @@ public class InlineSQLHelperImplTest {
 
 	private static final String _SQL_WHERE =
 		" WHERE " + _CLASS_PK_FIELD + " != 0";
-
-	private static final String _USER_ID_FIELD =
-		_RESOURCE_PERMISSION + ".ownerId";
 
 	private static final String _WHERE_CLAUSE = " WHERE ";
 

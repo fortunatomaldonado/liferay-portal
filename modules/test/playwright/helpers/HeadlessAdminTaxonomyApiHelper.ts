@@ -6,15 +6,25 @@
 import {ApiHelpers} from './ApiHelpers';
 
 interface postSiteTaxonomyVocabularyProps {
+	assetLibraries?: AssetLibrary[];
 	assetTypes?: AssetType[];
 	name: string;
 	siteId: string;
+	visibilityType?: string;
 }
 
 export interface postTaxonomyCategoryTaxonomyCategory {
 	name: string;
 	name_i18n?: {['ES-es']: string};
 	parentTaxonomyCategoryId: number;
+}
+
+export interface postTaxonomyVocabularyProps {
+	assetLibraries?: AssetLibrary[];
+	assetTypes?: AssetType[];
+	name: string;
+	name_i18n?: {['ES-es']: string};
+	visibilityType?: string;
 }
 
 export interface postTaxonomyVocabularyTaxonomyCategoryProps {
@@ -93,13 +103,15 @@ export class HeadlessAdminTaxonomyApiHelper {
 	 */
 
 	async postSiteTaxonomyVocabulary({
+		assetLibraries,
 		assetTypes,
 		name,
 		siteId,
+		visibilityType,
 	}: postSiteTaxonomyVocabularyProps): Promise<{id: number}> {
 		return this.apiHelpers.post(
 			`${this.apiHelpers.baseUrl}${this.basePath}/sites/${siteId}/taxonomy-vocabularies`,
-			{data: {assetTypes, name}}
+			{data: {assetLibraries, assetTypes, name, visibilityType}}
 		);
 	}
 

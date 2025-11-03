@@ -5,6 +5,10 @@
 
 package com.liferay.site.navigation.internal.upgrade.registry;
 
+import com.liferay.asset.kernel.service.AssetVocabularyLocalService;
+import com.liferay.journal.service.JournalArticleLocalService;
+import com.liferay.knowledge.base.service.KBArticleLocalService;
+import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.upgrade.BaseExternalReferenceCodeUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.BaseSQLServerDatetimeUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.CTModelUpgradeProcess;
@@ -13,8 +17,10 @@ import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 import com.liferay.site.navigation.internal.upgrade.v2_0_0.util.SiteNavigationMenuItemTable;
 import com.liferay.site.navigation.internal.upgrade.v2_0_0.util.SiteNavigationMenuTable;
 import com.liferay.site.navigation.internal.upgrade.v2_3_0.SiteNavigationMenuItemUpgradeProcess;
+import com.liferay.site.navigation.internal.upgrade.v3_0_0.SiteNavigationMenuItemExternalReferenceCodeUpgradeProcess;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author José Ángel Jiménez
@@ -59,10 +65,8 @@ public class SiteNavigationServiceUpgradeStepRegistrator
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"SiteNavigationMenuItem", "siteNavigationMenuItemId"}
-					};
+				protected String[] getTableNames() {
+					return new String[] {"SiteNavigationMenuItem"};
 				}
 
 			});
@@ -72,13 +76,29 @@ public class SiteNavigationServiceUpgradeStepRegistrator
 			new BaseExternalReferenceCodeUpgradeProcess() {
 
 				@Override
-				protected String[][] getTableAndPrimaryKeyColumnNames() {
-					return new String[][] {
-						{"SiteNavigationMenu", "siteNavigationMenuId"}
-					};
+				protected String[] getTableNames() {
+					return new String[] {"SiteNavigationMenu"};
 				}
 
 			});
+
+		registry.register(
+			"2.5.0", "3.0.0",
+			new SiteNavigationMenuItemExternalReferenceCodeUpgradeProcess(
+				_assetVocabularyLocalService, _journalArticleLocalService,
+				_kbArticleLocalService, _layoutLocalService));
 	}
+
+	@Reference
+	private AssetVocabularyLocalService _assetVocabularyLocalService;
+
+	@Reference
+	private JournalArticleLocalService _journalArticleLocalService;
+
+	@Reference
+	private KBArticleLocalService _kbArticleLocalService;
+
+	@Reference
+	private LayoutLocalService _layoutLocalService;
 
 }

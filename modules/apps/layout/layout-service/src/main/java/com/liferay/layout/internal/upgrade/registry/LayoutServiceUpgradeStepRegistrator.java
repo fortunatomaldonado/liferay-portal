@@ -132,6 +132,17 @@ public class LayoutServiceUpgradeStepRegistrator
 					"FragmentEntryLink.fragmentEntryLinkId = ",
 					"CAST_LONG(LayoutClassedModelUsage.containerKey) and ",
 					"FragmentEntryLink.plid = LayoutClassedModelUsage.plid)")));
+
+		registry.register(
+			"1.5.1", "2.0.0",
+			UpgradeProcessFactory.alterColumnName(
+				"LayoutClassedModelUsage", "cmExternalReferenceCode",
+				"classExternalReferenceCode VARCHAR(75) null"));
+
+		registry.register(
+			"2.0.0", "3.0.0",
+			new com.liferay.layout.internal.upgrade.v3_0_0.
+				LayoutUpgradeProcess());
 	}
 
 	@Reference
@@ -159,7 +170,7 @@ public class LayoutServiceUpgradeStepRegistrator
 	private CTEntryLocalService _ctEntryLocalService;
 
 	@Reference(
-		target = "(&(release.bundle.symbolic.name=com.liferay.fragment.service)(&(release.schema.version>=2.5.0)))"
+		target = "(&(release.bundle.symbolic.name=com.liferay.fragment.service)(release.schema.version>=2.5.0))"
 	)
 	private Release _fragmentServiceRelease;
 
@@ -176,7 +187,7 @@ public class LayoutServiceUpgradeStepRegistrator
 	private LayoutLocalService _layoutLocalService;
 
 	@Reference(
-		target = "(&(release.bundle.symbolic.name=com.liferay.layout.page.template.service)(&(release.schema.version>=2.1.0)))"
+		target = "(&(release.bundle.symbolic.name=com.liferay.layout.page.template.service)(release.schema.version>=2.1.0))"
 	)
 	private Release _layoutPageTemplateServiceRelease;
 
@@ -191,5 +202,10 @@ public class LayoutServiceUpgradeStepRegistrator
 
 	@Reference
 	private PortalPreferencesLocalService _portalPreferencesLocalService;
+
+	@Reference(
+		target = "(&(release.bundle.symbolic.name=com.liferay.style.book.service)(release.schema.version>=1.5.0))"
+	)
+	private Release _styleBookEntryServiceRelease;
 
 }

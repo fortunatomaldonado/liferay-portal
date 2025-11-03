@@ -289,6 +289,74 @@ public class Mutation {
 	}
 
 	@GraphQLField
+	public ObjectEntryFolder
+			createObjectEntryFolderByParentObjectEntryFolderCopy(
+				@GraphQLName("objectEntryFolderId") Long objectEntryFolderId,
+				@GraphQLName("parentObjectEntryFolderId") Long
+					parentObjectEntryFolderId)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postObjectEntryFolderByParentObjectEntryFolderCopy(
+						objectEntryFolderId, parentObjectEntryFolderId));
+	}
+
+	@GraphQLField
+	public ObjectEntryFolder
+			createObjectEntryFolderByParentObjectEntryFolderCopyReplace(
+				@GraphQLName("objectEntryFolderId") Long objectEntryFolderId,
+				@GraphQLName("parentObjectEntryFolderId") Long
+					parentObjectEntryFolderId)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postObjectEntryFolderByParentObjectEntryFolderCopyReplace(
+						objectEntryFolderId, parentObjectEntryFolderId));
+	}
+
+	@GraphQLField
+	public ObjectEntryFolder
+			createObjectEntryFolderByParentObjectEntryFolderMove(
+				@GraphQLName("objectEntryFolderId") Long objectEntryFolderId,
+				@GraphQLName("parentObjectEntryFolderId") Long
+					parentObjectEntryFolderId)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postObjectEntryFolderByParentObjectEntryFolderMove(
+						objectEntryFolderId, parentObjectEntryFolderId));
+	}
+
+	@GraphQLField
+	public ObjectEntryFolder
+			createObjectEntryFolderByParentObjectEntryFolderMoveReplace(
+				@GraphQLName("objectEntryFolderId") Long objectEntryFolderId,
+				@GraphQLName("parentObjectEntryFolderId") Long
+					parentObjectEntryFolderId)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postObjectEntryFolderByParentObjectEntryFolderMoveReplace(
+						objectEntryFolderId, parentObjectEntryFolderId));
+	}
+
+	@GraphQLField
 	public ObjectEntryFolder createScopeScopeKeyObjectEntryFolder(
 			@GraphQLName("scopeKey") String scopeKey,
 			@GraphQLName("objectEntryFolder") ObjectEntryFolder
@@ -301,6 +369,112 @@ public class Mutation {
 			objectEntryFolderResource ->
 				objectEntryFolderResource.postScopeScopeKeyObjectEntryFolder(
 					scopeKey, objectEntryFolder));
+	}
+
+	@GraphQLField
+	public ObjectEntryFolder
+			createScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore(
+				@GraphQLName("scopeKey") String scopeKey,
+				@GraphQLName("externalReferenceCode") String
+					externalReferenceCode)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore(
+						scopeKey, externalReferenceCode));
+	}
+
+	@GraphQLField
+	public boolean
+			createScopeScopeKeyObjectEntryFolderByExternalReferenceCodeSubscribe(
+				@GraphQLName("scopeKey") String scopeKey,
+				@GraphQLName("externalReferenceCode") String
+					externalReferenceCode)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postScopeScopeKeyObjectEntryFolderByExternalReferenceCodeSubscribe(
+						scopeKey, externalReferenceCode));
+
+		return true;
+	}
+
+	@GraphQLField
+	public boolean
+			createScopeScopeKeyObjectEntryFolderByExternalReferenceCodeUnsubscribe(
+				@GraphQLName("scopeKey") String scopeKey,
+				@GraphQLName("externalReferenceCode") String
+					externalReferenceCode)
+		throws Exception {
+
+		_applyVoidComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.
+					postScopeScopeKeyObjectEntryFolderByExternalReferenceCodeUnsubscribe(
+						scopeKey, externalReferenceCode));
+
+		return true;
+	}
+
+	@GraphQLField
+	public ObjectEntryFolder updateObjectEntryFolder(
+			@GraphQLName("objectEntryFolderId") Long objectEntryFolderId,
+			@GraphQLName("objectEntryFolder") ObjectEntryFolder
+				objectEntryFolder)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.putObjectEntryFolder(
+					objectEntryFolderId, objectEntryFolder));
+	}
+
+	@GraphQLField
+	public Response updateObjectEntryFolderBatch(
+			@GraphQLName("callbackURL") String callbackURL,
+			@GraphQLName("object") Object object)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource ->
+				objectEntryFolderResource.putObjectEntryFolderBatch(
+					callbackURL, object));
+	}
+
+	@GraphQLField
+	public java.util.Collection<com.liferay.portal.vulcan.permission.Permission>
+			updateObjectEntryFolderPermissionsPage(
+				@GraphQLName("objectEntryFolderId") Long objectEntryFolderId,
+				@GraphQLName("permissions")
+					com.liferay.portal.vulcan.permission.Permission[]
+						permissions)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_objectEntryFolderResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			objectEntryFolderResource -> {
+				Page paginationPage =
+					objectEntryFolderResource.
+						putObjectEntryFolderPermissionsPage(
+							objectEntryFolderId, permissions);
+
+				return paginationPage.getItems();
+			});
 	}
 
 	@GraphQLField

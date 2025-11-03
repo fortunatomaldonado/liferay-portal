@@ -142,10 +142,60 @@ public class ServletDataImpl implements ServletData {
 							ObjectEntryFolderResourceImpl.class,
 							"patchScopeScopeKeyObjectEntryFolderByExternalReferenceCode"));
 					put(
+						"mutation#createObjectEntryFolderByParentObjectEntryFolderCopy",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postObjectEntryFolderByParentObjectEntryFolderCopy"));
+					put(
+						"mutation#createObjectEntryFolderByParentObjectEntryFolderCopyReplace",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postObjectEntryFolderByParentObjectEntryFolderCopyReplace"));
+					put(
+						"mutation#createObjectEntryFolderByParentObjectEntryFolderMove",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postObjectEntryFolderByParentObjectEntryFolderMove"));
+					put(
+						"mutation#createObjectEntryFolderByParentObjectEntryFolderMoveReplace",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postObjectEntryFolderByParentObjectEntryFolderMoveReplace"));
+					put(
 						"mutation#createScopeScopeKeyObjectEntryFolder",
 						new ObjectValuePair<>(
 							ObjectEntryFolderResourceImpl.class,
 							"postScopeScopeKeyObjectEntryFolder"));
+					put(
+						"mutation#createScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore"));
+					put(
+						"mutation#createScopeScopeKeyObjectEntryFolderByExternalReferenceCodeSubscribe",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postScopeScopeKeyObjectEntryFolderByExternalReferenceCodeSubscribe"));
+					put(
+						"mutation#createScopeScopeKeyObjectEntryFolderByExternalReferenceCodeUnsubscribe",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"postScopeScopeKeyObjectEntryFolderByExternalReferenceCodeUnsubscribe"));
+					put(
+						"mutation#updateObjectEntryFolder",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"putObjectEntryFolder"));
+					put(
+						"mutation#updateObjectEntryFolderBatch",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"putObjectEntryFolderBatch"));
+					put(
+						"mutation#updateObjectEntryFolderPermissionsPage",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"putObjectEntryFolderPermissionsPage"));
 					put(
 						"mutation#updateScopeScopeKeyObjectEntryFolderByExternalReferenceCode",
 						new ObjectValuePair<>(
@@ -177,6 +227,11 @@ public class ServletDataImpl implements ServletData {
 						new ObjectValuePair<>(
 							ObjectEntryFolderResourceImpl.class,
 							"getObjectEntryFolder"));
+					put(
+						"query#objectEntryFolderPermissions",
+						new ObjectValuePair<>(
+							ObjectEntryFolderResourceImpl.class,
+							"getObjectEntryFolderPermissionsPage"));
 					put(
 						"query#scopeScopeKeyObjectEntryFolderByExternalReferenceCode",
 						new ObjectValuePair<>(

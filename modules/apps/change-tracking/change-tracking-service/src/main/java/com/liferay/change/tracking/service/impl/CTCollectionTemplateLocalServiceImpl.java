@@ -16,13 +16,13 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ResourceLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Validator;
@@ -83,6 +83,22 @@ public class CTCollectionTemplateLocalServiceImpl
 			_classNameLocalService.getClassNameId(
 				CTCollectionTemplate.class.getName()),
 			ctCollectionTemplateId, json);
+
+		return ctCollectionTemplate;
+	}
+
+	@Override
+	public CTCollectionTemplate deleteCTCollectionTemplate(
+			CTCollectionTemplate ctCollectionTemplate)
+		throws PortalException {
+
+		ctCollectionTemplatePersistence.remove(ctCollectionTemplate);
+
+		_resourceLocalService.deleteResource(
+			ctCollectionTemplate.getCompanyId(),
+			CTCollectionTemplate.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			ctCollectionTemplate.getCtCollectionTemplateId());
 
 		return ctCollectionTemplate;
 	}
@@ -196,7 +212,7 @@ public class CTCollectionTemplateLocalServiceImpl
 				Instant now = Instant.now();
 
 				return DigesterUtil.digestHex(
-					Digester.MD5, String.valueOf(ctCollectionTemplateId),
+					DigesterUtil.MD5, String.valueOf(ctCollectionTemplateId),
 					String.valueOf(now.getEpochSecond()));
 			}
 		).put(

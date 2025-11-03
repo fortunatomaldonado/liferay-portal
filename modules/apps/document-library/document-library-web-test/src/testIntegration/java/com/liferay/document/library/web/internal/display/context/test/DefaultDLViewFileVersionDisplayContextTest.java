@@ -129,10 +129,10 @@ public class DefaultDLViewFileVersionDisplayContextTest {
 		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
 
 		return _layoutClassedModelUsageLocalService.addLayoutClassedModelUsage(
-			_group.getGroupId(), PortalUtil.getClassNameId(FileEntry.class),
-			fileEntry.getFileEntryId(), StringPool.BLANK,
-			RandomTestUtil.randomString(), RandomTestUtil.randomLong(),
-			layout.getPlid(), _serviceContext);
+			_group.getGroupId(), StringPool.BLANK,
+			PortalUtil.getClassNameId(FileEntry.class),
+			fileEntry.getFileEntryId(), RandomTestUtil.randomString(),
+			RandomTestUtil.randomLong(), layout.getPlid(), _serviceContext);
 	}
 
 	private List<DropdownItem> _getDropdownGroupItems(
@@ -145,10 +145,9 @@ public class DefaultDLViewFileVersionDisplayContextTest {
 	}
 
 	private List<DropdownItem> _getDropdownItems() throws Exception {
-		HttpServletRequest mockHttpServletRequest =
-			new MockHttpServletRequest();
+		HttpServletRequest httpServletRequest = new MockHttpServletRequest();
 
-		mockHttpServletRequest.setAttribute(
+		httpServletRequest.setAttribute(
 			ItemSelector.class.getName(), _itemSelector);
 
 		String portletName = RandomTestUtil.randomString();
@@ -168,11 +167,11 @@ public class DefaultDLViewFileVersionDisplayContextTest {
 				portletName, StringPool.DASH, WebKeys.CURRENT_PORTLET_URL),
 			new MockLiferayPortletURL());
 
-		mockHttpServletRequest.setAttribute(
+		httpServletRequest.setAttribute(
 			JavaConstants.JAKARTA_PORTLET_REQUEST,
 			mockLiferayPortletRenderRequest);
 
-		mockHttpServletRequest.setAttribute(
+		httpServletRequest.setAttribute(
 			JavaConstants.JAKARTA_PORTLET_RESPONSE,
 			new MockLiferayPortletRenderResponse());
 
@@ -190,12 +189,11 @@ public class DefaultDLViewFileVersionDisplayContextTest {
 		themeDisplay.setSiteGroupId(_group.getGroupId());
 		themeDisplay.setUser(TestPropsValues.getUser());
 
-		mockHttpServletRequest.setAttribute(
-			WebKeys.THEME_DISPLAY, themeDisplay);
+		httpServletRequest.setAttribute(WebKeys.THEME_DISPLAY, themeDisplay);
 
 		DLViewFileVersionDisplayContext dLViewFileVersionDisplayContext =
 			_dLDisplayContextProvider.getDLViewFileVersionDisplayContext(
-				mockHttpServletRequest, new MockHttpServletResponse(),
+				httpServletRequest, new MockHttpServletResponse(),
 				_fileEntry.getFileVersion());
 
 		return dLViewFileVersionDisplayContext.getActionDropdownItems();

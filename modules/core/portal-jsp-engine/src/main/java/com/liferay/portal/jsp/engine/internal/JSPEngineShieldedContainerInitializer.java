@@ -11,7 +11,6 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.jsp.engine.internal.delegate.CheckEnabledServletDelegate;
 import com.liferay.portal.jsp.engine.internal.delegate.JspConfigDescriptorServletContextDelegate;
-import com.liferay.portal.jsp.engine.internal.jakarta.transformer.JakartaTransformerJDTCompiler;
 import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
@@ -19,7 +18,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
-import com.liferay.portal.util.PropsImpl;
 import com.liferay.shielded.container.Ordered;
 import com.liferay.shielded.container.ShieldedContainerInitializer;
 import com.liferay.taglib.servlet.JspFactorySwapper;
@@ -34,10 +32,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletRequestWrapper;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +40,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Map;
 
+import org.apache.jasper.compiler.JDTCompiler;
 import org.apache.jasper.servlet.JasperInitializer;
 import org.apache.jasper.servlet.JspServlet;
 import org.apache.tomcat.JarScanFilter;
@@ -86,8 +82,6 @@ public class JSPEngineShieldedContainerInitializer
 		ClassLoaderPool.register(
 			"ShieldedContainerClassLoader", servletContext.getClassLoader());
 
-		PropsUtil.setProps(new PropsImpl());
-
 		JarScanner jarScanner = new StandardJarScanner();
 
 		jarScanner.setJarScanFilter(
@@ -126,8 +120,7 @@ public class JSPEngineShieldedContainerInitializer
 		Map<String, String> initParameters = PropertiesUtil.toMap(
 			PropsUtil.getProperties("jsp.engine.", true));
 
-		initParameters.put(
-			"compilerClassName", JakartaTransformerJDTCompiler.class.getName());
+		initParameters.put("compilerClassName", JDTCompiler.class.getName());
 
 		JspServlet jspServlet = new JspServlet();
 
@@ -177,31 +170,8 @@ public class JSPEngineShieldedContainerInitializer
 							FilterChain filterChain)
 						throws IOException, ServletException {
 
-						if (servletRequest instanceof HttpServletRequest) {
-							portalJSPServlet.service(
-								new HttpServletRequestWrapper(
-									(HttpServletRequest)servletRequest) {
-
-									@Override
-									public ServletContext getServletContext() {
-										return servletContext;
-									}
-
-								},
-								servletResponse);
-						}
-						else {
-							portalJSPServlet.service(
-								new ServletRequestWrapper(servletRequest) {
-
-									@Override
-									public ServletContext getServletContext() {
-										return servletContext;
-									}
-
-								},
-								servletResponse);
-						}
+						portalJSPServlet.service(
+							servletRequest, servletResponse);
 					}
 
 					@Override
