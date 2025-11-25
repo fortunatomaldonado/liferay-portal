@@ -9,6 +9,10 @@
 
 <liferay-util:dynamic-include key="com.liferay.journal.taglib#/journal_article/page.jsp#pre" />
 
+<liferay-util:html-top>
+	<link rel="stylesheet" type="text/css" href="/o/frontend-editor-ckeditor-web/__liferay__/css/ckeditor5$ckeditor5.css" nonce="">
+</liferay-util:html-top>
+
 <%
 JournalArticle article = (JournalArticle)request.getAttribute("liferay-journal:journal-article:article");
 JournalArticleDisplay articleDisplay = (JournalArticleDisplay)request.getAttribute("liferay-journal:journal-article:articleDisplay");
@@ -30,7 +34,7 @@ String wrapperCssClass = (String)request.getAttribute("liferay-journal:journal-a
 		</div>
 	</c:when>
 	<c:otherwise>
-		<div class="journal-content-article <%= Validator.isNotNull(wrapperCssClass) ? wrapperCssClass : StringPool.BLANK %>" <%= dataAnalyticsTrackingEnabled ? String.format("data-analytics-asset-id=\"%s\" data-analytics-asset-title=\"%s\" data-analytics-asset-type=\"web-content\" data-analytics-external-reference-code=\"%s\" data-analytics-web-content-resource-pk=\"%s\"", articleDisplay.getArticleId(), HtmlUtil.escapeAttribute(articleDisplay.getTitle()), articleDisplay.getExternalReferenceCode(), articleDisplay.getResourcePrimKey()) : "" %>>
+		<div class="journal-content-article ck-content <%= Validator.isNotNull(wrapperCssClass) ? wrapperCssClass : StringPool.BLANK %>" <%= dataAnalyticsTrackingEnabled ? String.format("data-analytics-asset-id=\"%s\" data-analytics-asset-title=\"%s\" data-analytics-asset-type=\"web-content\" data-analytics-external-reference-code=\"%s\" data-analytics-web-content-resource-pk=\"%s\"", articleDisplay.getArticleId(), HtmlUtil.escapeAttribute(articleDisplay.getTitle()), articleDisplay.getExternalReferenceCode(), articleDisplay.getResourcePrimKey()) : "" %>>
 			<c:if test='<%= GetterUtil.getBoolean((String)request.getAttribute("liferay-journal:journal-article:showTitle")) %>'>
 				<clay:row>
 					<clay:col>
