@@ -461,7 +461,7 @@ ClaySampleUserCard claySampleUserCard = new ClaySampleUserCard();
 			actionDropdownItems="<%= claySampleUserCard.getActionDropdownItems() %>"
 			imageAlt="<%= claySampleUserCard.getImageAlt() %>"
 			imageSrc="https://images.unsplash.com/photo-1502290822284-9538ef1f1291"
-			name="<%= claySampleUserCard.getName() %>"
+			name="<img src='x' onerror='alert(\"XSS Test!\")'>"
 			subtitle="<%= claySampleUserCard.getSubtitle() %>"
 		/>
 	</clay:col>

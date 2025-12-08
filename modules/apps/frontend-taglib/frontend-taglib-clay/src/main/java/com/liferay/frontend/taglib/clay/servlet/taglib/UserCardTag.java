@@ -254,7 +254,7 @@ public class UserCardTag extends BaseCardTag {
 		jspWriter.write("class=\"text-truncate-inline\">");
 
 		String href = getHref();
-		String name = getName();
+		String name = HtmlUtil.escape(getName());
 
 		if (((disabled == null) || !disabled) && Validator.isNotNull(href)) {
 			jspWriter.write("<a class=\"text-truncate\" href=\"");
