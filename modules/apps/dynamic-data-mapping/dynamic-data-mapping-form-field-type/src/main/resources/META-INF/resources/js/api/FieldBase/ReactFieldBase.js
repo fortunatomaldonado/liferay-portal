@@ -209,6 +209,19 @@ export default function FieldBase({
 		useState(false);
 	const dispatch = useForm();
 
+	const [backupValue, setBackupValue] = useState(localizedValue);
+
+	const hasCurrentValue =
+		localizedValue && !!Object.keys(localizedValue).length;
+
+	const renderValue = hasCurrentValue ? localizedValue : backupValue;
+
+	useEffect(() => {
+		if (hasCurrentValue) {
+			setBackupValue(localizedValue);
+		}
+	}, [hasCurrentValue, localizedValue]);
+
 	const hasError = displayErrors && errorMessage && !valid;
 
 	const fieldDetails = getFieldDetails({
@@ -225,11 +238,11 @@ export default function FieldBase({
 	const fieldLabelId = `${id ?? name}_fieldLabel`;
 
 	const hiddenTranslations = useMemo(() => {
-		if (!localizedValue) {
+		if (!renderValue) {
 			return;
 		}
 
-		return Object.entries(localizedValue).map(([locale, value]) => {
+		return Object.entries(renderValue).map(([locale, value]) => {
 			return (
 				<input
 					data-field-name={`${fieldName}${instanceId}`}
@@ -251,7 +264,7 @@ export default function FieldBase({
 			);
 		});
 	}, [
-		localizedValue,
+		renderValue,
 		localizedValueEdited,
 		editingLanguageId,
 		fieldName,
@@ -709,7 +722,7 @@ export default function FieldBase({
 				<input
 					name={`${name}_edited`}
 					type="hidden"
-					value={localizedValue[editingLanguageId] !== undefined}
+					value={renderValue?.[editingLanguageId] !== undefined}
 				/>
 			)}
 
