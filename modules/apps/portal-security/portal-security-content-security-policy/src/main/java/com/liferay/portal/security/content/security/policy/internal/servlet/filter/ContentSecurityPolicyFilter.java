@@ -84,7 +84,7 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 		throws Exception {
 
 		String nonce = _contentSecurityPolicyNonceManager.setNonce(
-			httpServletRequest);
+			httpServletRequest, httpServletResponse);
 
 		try {
 			httpServletResponse.setContentType("text/html; charset=UTF-8");
