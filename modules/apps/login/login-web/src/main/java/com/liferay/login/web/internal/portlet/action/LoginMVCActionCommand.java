@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.exception.UserIdException;
 import com.liferay.portal.kernel.exception.UserLockoutException;
 import com.liferay.portal.kernel.exception.UserPasswordException;
 import com.liferay.portal.kernel.exception.UserScreenNameException;
+import com.liferay.portal.kernel.frontend.spa.FrontendSPAUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -39,7 +40,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropsValues;
@@ -254,16 +254,6 @@ public class LoginMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		if (Validator.isNotNull(redirect)) {
-			if (!themeDisplay.isSignedIn()) {
-				actionRequest.setAttribute(
-					WebKeys.REDIRECT,
-					HttpComponentsUtil.addParameter(
-						_portal.getPathMain() + "/portal/login", "redirect",
-						redirect));
-
-				return;
-			}
-
 			redirect = _portal.escapeRedirect(redirect);
 
 			if (Validator.isNotNull(redirect) &&
@@ -271,6 +261,19 @@ public class LoginMVCActionCommand extends BaseMVCActionCommand {
 
 				redirect = _portal.getPortalURL(httpServletRequest) + redirect;
 			}
+		}
+
+		if (FrontendSPAUtil.isEnabled(themeDisplay.getCompanyId())) {
+			HttpServletResponse httpServletResponse =
+				_portal.getHttpServletResponse(actionResponse);
+
+			String finalRedirect =
+				Validator.isNotNull(redirect) ? redirect : mainPath;
+
+			httpServletResponse.setHeader(
+				"X-Liferay-SPA-Force-Reload", finalRedirect);
+
+			return;
 		}
 
 		if (Validator.isNotNull(redirect)) {

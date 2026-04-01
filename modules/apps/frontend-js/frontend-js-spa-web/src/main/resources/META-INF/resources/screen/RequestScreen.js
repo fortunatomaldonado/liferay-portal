@@ -262,6 +262,16 @@ class RequestScreen extends Screen {
 				.then((resp) => {
 					this.assertValidResponseStatusCode(resp.status);
 
+					const forceReload = resp.headers.get(
+						'X-Liferay-SPA-Force-Reload'
+					);
+
+					if (forceReload) {
+						window.location.replace(forceReload);
+
+						return new Promise(() => {});
+					}
+
 					this.setResponse(resp);
 
 					return resp.clone().text();
