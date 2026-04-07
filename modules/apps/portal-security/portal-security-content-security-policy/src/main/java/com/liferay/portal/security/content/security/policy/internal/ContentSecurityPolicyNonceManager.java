@@ -11,10 +11,13 @@ import com.liferay.portal.kernel.security.SecureRandom;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.content.security.policy.internal.configuration.ContentSecurityPolicyConfiguration;
 import com.liferay.portal.security.content.security.policy.internal.configuration.ContentSecurityPolicyConfigurationUtil;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
@@ -49,7 +52,10 @@ public class ContentSecurityPolicyNonceManager {
 		return GetterUtil.getString(httpServletRequest.getAttribute(_NONCE));
 	}
 
-	public String setNonce(HttpServletRequest httpServletRequest) {
+	public String setNonce(
+		HttpServletRequest httpServletRequest,
+		HttpServletResponse httpServletResponse) {
+
 		String nonce = null;
 
 		httpServletRequest = _portal.getOriginalServletRequest(
@@ -70,14 +76,40 @@ public class ContentSecurityPolicyNonceManager {
 			nonce = (String)httpSession.getAttribute(_NONCE);
 
 			if (nonce == null) {
-				synchronized (httpSession) {
-					nonce = (String)httpSession.getAttribute(_NONCE);
+				nonce = _getNonceFromCookie(httpServletRequest);
 
-					if (nonce == null) {
-						nonce = _generateNonce();
+				if (nonce != null) {
+					httpSession.setAttribute(_NONCE, nonce);
 
-						httpSession.setAttribute(_NONCE, nonce);
+					_removeNonceCookie(httpServletRequest, httpServletResponse);
+				}
+				else {
+					synchronized (httpSession) {
+						nonce = (String)httpSession.getAttribute(_NONCE);
+
+						if (nonce == null) {
+							nonce = _generateNonce();
+
+							httpSession.setAttribute(_NONCE, nonce);
+						}
 					}
+				}
+			}
+
+			if (nonce != null) {
+				String requestURI = httpServletRequest.getRequestURI();
+
+				if (Validator.isNotNull(requestURI) &&
+					(requestURI.contains("/sign-in") ||
+					 requestURI.contains("/logout"))) {
+
+					_addNonceCookie(
+						httpServletRequest, httpServletResponse, nonce);
+				}
+				else if ((httpSession.getAttribute(_NONCE) != null) &&
+						 (_getNonceFromCookie(httpServletRequest) != null)) {
+
+					_removeNonceCookie(httpServletRequest, httpServletResponse);
 				}
 			}
 		}
@@ -92,6 +124,24 @@ public class ContentSecurityPolicyNonceManager {
 		return nonce;
 	}
 
+	private void _addNonceCookie(
+		HttpServletRequest httpServletRequest,
+		HttpServletResponse httpServletResponse, String nonce) {
+
+		if (httpServletResponse == null) {
+			return;
+		}
+
+		Cookie cookie = new Cookie(_CSP_COOKIE, nonce);
+
+		cookie.setHttpOnly(true);
+		cookie.setPath(StringPool.SLASH);
+		cookie.setSecure(httpServletRequest.isSecure());
+		cookie.setMaxAge(-1);
+
+		httpServletResponse.addCookie(cookie);
+	}
+
 	private String _generateNonce() {
 		SecureRandom secureRandom = new SecureRandom();
 
@@ -101,6 +151,42 @@ public class ContentSecurityPolicyNonceManager {
 
 		return Base64.encode(bytes);
 	}
+
+	private String _getNonceFromCookie(HttpServletRequest httpServletRequest) {
+		Cookie[] cookies = httpServletRequest.getCookies();
+
+		if (cookies == null) {
+			return null;
+		}
+
+		for (Cookie cookie : cookies) {
+			if (_CSP_COOKIE.equals(cookie.getName())) {
+				return cookie.getValue();
+			}
+		}
+
+		return null;
+	}
+
+	private void _removeNonceCookie(
+		HttpServletRequest httpServletRequest,
+		HttpServletResponse httpServletResponse) {
+
+		if (httpServletResponse == null) {
+			return;
+		}
+
+		Cookie cookie = new Cookie(_CSP_COOKIE, StringPool.BLANK);
+
+		cookie.setHttpOnly(true);
+		cookie.setPath(StringPool.SLASH);
+		cookie.setSecure(httpServletRequest.isSecure());
+		cookie.setMaxAge(0);
+
+		httpServletResponse.addCookie(cookie);
+	}
+
+	private static final String _CSP_COOKIE = "LFR_CSP_NONCE";
 
 	private static final String _NONCE =
 		ContentSecurityPolicyNonceManager.class.getName() + "#NONCE";
