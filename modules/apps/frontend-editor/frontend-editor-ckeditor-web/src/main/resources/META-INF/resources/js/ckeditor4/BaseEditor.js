@@ -52,27 +52,60 @@ const BaseEditor = forwardRef(
 		const firstRenderRef = useRef(true);
 
 		useEffect(() => {
-			Liferay.once('beforeScreenFlip', () => {
+			const handleBeforeScreenFlip = () => {
 				if (
 					window.CKEDITOR &&
 					!Object.keys(window.CKEDITOR.instances).length
 				) {
 					delete window.CKEDITOR;
 				}
-			});
 
-			Liferay.once('screenDeactivate', () => {
+				Liferay.detach('beforeScreenFlip', handleBeforeScreenFlip);
+			};
+
+			const handleScreenDeactivate = () => {
 				if (
 					window.CKEDITOR &&
 					Object.keys(window.CKEDITOR.instances).length
 				) {
 					Object.keys(window.CKEDITOR.instances).forEach(
 						(editorName) => {
-							window.CKEDITOR.instances[editorName].setData();
+							const editor =
+								window.CKEDITOR.instances[editorName];
+
+							if (!editor || !editor.window || !editor.document) {
+								return;
+							}
+
+							try {
+								editor.setData();
+							}
+							catch (error) {
+								console.warn(
+									'[LPD-CKEDITOR-CLEANUP] setData threw on screenDeactivate',
+									{
+										editorName,
+										hasDocument: !!editor.document,
+										hasWindow: !!editor.window,
+										message: error && error.message,
+										stack: error && error.stack,
+									}
+								);
+							}
 						}
 					);
 				}
-			});
+
+				Liferay.detach('screenDeactivate', handleScreenDeactivate);
+			};
+
+			Liferay.on('beforeScreenFlip', handleBeforeScreenFlip);
+			Liferay.on('screenDeactivate', handleScreenDeactivate);
+
+			return () => {
+				Liferay.detach('beforeScreenFlip', handleBeforeScreenFlip);
+				Liferay.detach('screenDeactivate', handleScreenDeactivate);
+			};
 		}, []);
 
 		useEffect(() => {
