@@ -5,12 +5,41 @@
 
 import JsonURL from '@jsonurl/jsonurl';
 
-import {EConfigInURLBehavior, IConfigInURL} from './types';
+import {EConfigInURLBehavior, EConfigInURLKeys, IConfigInURL} from './types';
 
 export const FDS_CONFIG_PARAM_NAME = '_fdsConfig';
 
+export const FDS_VIEW_STORAGE_KEY_PREFIX = 'liferay.frontend.data.set.view.';
+
 export function getConfigParamName(id: string): string {
 	return `${id}${FDS_CONFIG_PARAM_NAME}`;
+}
+
+function getViewStorageKey(id: string): string {
+	return `${FDS_VIEW_STORAGE_KEY_PREFIX}${id}`;
+}
+
+export function readViewFromStorage(id: string): string | null {
+	try {
+		return window.localStorage.getItem(getViewStorageKey(id));
+	}
+	catch (error) {
+		return null;
+	}
+}
+
+function writeViewToStorage(id: string, viewName: string | undefined): void {
+	try {
+		if (viewName === undefined) {
+			window.localStorage.removeItem(getViewStorageKey(id));
+		}
+		else {
+			window.localStorage.setItem(getViewStorageKey(id), viewName);
+		}
+	}
+	catch (error) {
+		return;
+	}
 }
 
 export function readConfigFromURL(id: string): Partial<IConfigInURL> | null {
@@ -44,6 +73,10 @@ export function writeConfigInURL(
 ) {
 	if (!config || configInURLBehavior === EConfigInURLBehavior.OFF) {
 		return;
+	}
+
+	if (EConfigInURLKeys.VIEW_NAME in config) {
+		writeViewToStorage(id, config[EConfigInURLKeys.VIEW_NAME]);
 	}
 
 	const currentConfig = readConfigFromURL(id);

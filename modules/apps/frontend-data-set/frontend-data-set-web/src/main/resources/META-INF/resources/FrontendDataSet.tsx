@@ -56,7 +56,7 @@ import Modal from './modal/Modal';
 
 import SidePanel from './side_panel/SidePanel';
 import filterCreationActions from './utils/actionItems/filterCreationActions';
-import {readConfigFromURL} from './utils/configInURL';
+import {readConfigFromURL, readViewFromStorage} from './utils/configInURL';
 import EVENTS from './utils/eventsDefinitions';
 import {activateFilter} from './utils/filters/activateFilter';
 import {deactivateFilter} from './utils/filters/deactivateFilter';
@@ -558,7 +558,11 @@ const FrontendDataSetContent = ({
 			initialVisibleFieldNames = visibleFieldNames;
 		}
 
-		const view = getView();
+		let view = getView();
+
+		if (!view && configInURLBehavior !== EConfigInURLBehavior.OFF) {
+			view = readViewFromStorage(id) || undefined;
+		}
 
 		if (view) {
 			const activeView = views.find(({name}) => name === view);
