@@ -3,8 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {contains} from '../../src/main/resources/META-INF/resources/utils/configInURL';
-import {EConfigInURLKeys} from '../../src/main/resources/META-INF/resources/utils/types';
+import {
+	contains,
+	readViewFromStorage,
+	writeConfigInURL,
+} from '../../src/main/resources/META-INF/resources/utils/configInURL';
+import {
+	EConfigInURLBehavior,
+	EConfigInURLKeys,
+} from '../../src/main/resources/META-INF/resources/utils/types';
 
 describe('contains utility', () => {
 	describe('emptiness', () => {
@@ -256,5 +263,63 @@ describe('contains utility', () => {
 				)
 			).toBeFalsy();
 		});
+	});
+});
+
+describe('active view storage persistence', () => {
+	const id = 'testFDS';
+
+	beforeEach(() => {
+		window.localStorage.clear();
+	});
+
+	it('returns null when no view has been persisted', () => {
+		expect(readViewFromStorage(id)).toBeNull();
+	});
+
+	it('persists the active view name written through writeConfigInURL', () => {
+		writeConfigInURL(
+			id,
+			{[EConfigInURLKeys.VIEW_NAME]: 'table'},
+			EConfigInURLBehavior.PUSH
+		);
+
+		expect(readViewFromStorage(id)).toBe('table');
+	});
+
+	it('scopes the persisted view by id', () => {
+		writeConfigInURL(
+			id,
+			{[EConfigInURLKeys.VIEW_NAME]: 'table'},
+			EConfigInURLBehavior.PUSH
+		);
+
+		expect(readViewFromStorage('anotherFDS')).toBeNull();
+	});
+
+	it('does not persist the active view when the behavior is off', () => {
+		writeConfigInURL(
+			id,
+			{[EConfigInURLKeys.VIEW_NAME]: 'table'},
+			EConfigInURLBehavior.OFF
+		);
+
+		expect(readViewFromStorage(id)).toBeNull();
+	});
+
+	it('clears the persisted view when the view name is undefined', () => {
+		writeConfigInURL(
+			id,
+			{[EConfigInURLKeys.VIEW_NAME]: 'table'},
+			EConfigInURLBehavior.PUSH
+		);
+
+		writeConfigInURL(
+			id,
+			{[EConfigInURLKeys.VIEW_NAME]: undefined},
+			EConfigInURLBehavior.PUSH
+		);
+
+		expect(readViewFromStorage(id)).toBeNull();
 	});
 });
